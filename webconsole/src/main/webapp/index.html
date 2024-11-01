@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-title" content="TESS TAS" />
+        <!-- 
+        <meta name="csrf-token" content="${CSRF_TOKEN}">
+         -->
+
+        <title>TESS TAS</title>
+        <script src="js/lib/jquery.js"></script>
+        <script type="text/javascript">
+            var LOGIN_MODE;
+            var LOCALE;
+        </script>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" media="screen">
+        <link rel="stylesheet" href="css/login-style.css">
+        <script data-main="js/appLogin" src="js/require.js"></script>
+        <script>
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: 'api/common/getLocale',
+                success: function (data) {
+                    LOCALE = data.locale;
+                }
+            });
+        </script>
+    </head>
+
+    <body>
+        <div id="content"></div>
+    </body>
+</html>

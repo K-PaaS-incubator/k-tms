@@ -1,0 +1,71 @@
+mkdir -p /logs/TESS/log/log
+mkdir -p /logs/TESS/log/core
+mkdir -p /logs/TESS/log/backup
+mkdir -p /logs/TESS/log/traffic
+mkdir -p /logs/TESS/log/session
+mkdir -p /logs/TESS/log/log/files
+mkdir -p /logs/TESS/log/log/filesbackup
+
+ln -s /opt/TESS/1.0.0 /opt/TESS/current
+ln -s /conf/TESS/1.0.0 /conf/TESS/current
+ln -s /opt/TESS/current/sensor /home/sensor
+ln -s /conf/TESS/current/sensor/cfg /home/sensor/cfg
+ln -s /conf/TESS/current/sensor/rule /home/sensor/rule
+ln -s /conf/TESS/current/sensor/CertKeys /home/sensor/CertKeys
+ln -s /logs/TESS/log /home/sensor/log
+
+if [ ! -e /lib/x86_64-linux-gnu/libc.so ]; then
+	ln -s /lib/x86_64-linux-gnu/libc.so.6 /lib/x86_64-linux-gnu/libc.so
+fi
+
+if [ -e /lib/x86_64-linux-gnu/libssl.so.3  ] ; then
+	cp /lib/x86_64-linux-gnu/libssl.so.3 /lib/x86_64-linux-gnu/libssl.so.3.bak
+	rm -rf /lib/x86_64-linux-gnu/libssl.so.3
+fi
+if [ -e /lib/x86_64-linux-gnu/libcrypto.so.3  ] ; then
+	cp /lib/x86_64-linux-gnu/libcrypto.so.3 /lib/x86_64-linux-gnu/libcrypto.so.3.bak
+	rm -rf /lib/x86_64-linux-gnu/libcrypto.so.3
+fi
+cp /tastmp/lib/x86_64-linux-gnu/libssl.so.3 /lib/x86_64-linux-gnu/libssl.so.3.0.12
+cp /tastmp/lib/x86_64-linux-gnu/libcrypto.so.3 /lib/x86_64-linux-gnu/libcrypto.so.3.0.12
+
+ln -s /lib/x86_64-linux-gnu/libssl.so.3.0.12 /lib/x86_64-linux-gnu/libssl.so.3
+ln -s /lib/x86_64-linux-gnu/libcrypto.so.3.0.12 /lib/x86_64-linux-gnu/libcrypto.so.3
+
+if [ -e /etc/rsyslog.d/50-default.conf  ] ; then
+	cp /etc/rsyslog.d/50-default.conf /etc/rsyslog.d/50-default.conf.bak
+fi
+cp /tastmp/etc/rsyslog.d/50-default.conf /etc/rsyslog.d/50-default.conf
+cp /tastmp/etc/profile /etc/profile
+cp /tastmp/etc/magic.mgc /etc/magic.mgc
+cp /tastmp/etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/20auto-upgrades
+cp /tastmp/etc/apt/apt.conf.d/10periodic /etc/apt/apt.conf.d/10periodic
+
+service apport stop
+cp /tastmp/etc/default/apport /etc/default/apport
+
+chown -R root:root /opt/TESS
+chown -R root:root /conf/TESS
+chown -R root:root /logs/TESS
+
+chmod -R 755 /opt/TESS
+chmod -R 755 /logs/TESS/log
+chmod -R 777 /logs/TESS/log/log/files
+chmod -R 777 /logs/TESS/log/log/filesbackup
+
+locale-gen ko_KR.UTF-8
+killall rsyslogd
+service rsyslog restart
+
+
+systemctl disable irqbalance
+systemctl stop irqbalance
+
+sudo ulimit -c 102400
+sudo cp -f /tastmp/etc/sysctl.conf /etc/
+sudo cp -f /tastmp/etc/security/limits.conf /etc/security/
+sudo sysctl -p
+echo "ulimit -c 102400" >> ~/.bashrc
+
+cp -r /tastmp/etc/tascloud_3rdparty /etc/
+chmod -R 755 /etc/tascloud_3rdparty/*

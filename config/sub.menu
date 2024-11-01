@@ -1,0 +1,103 @@
+#
+# 이 파일은 제품의 개발에 필요한 부가적인 환경을 설정하는 파일입니다.
+#
+
+config KGLORY
+	bool "KGLORY enable"
+	default y
+	help
+		수리카타 소스 원본에 코닉의 기능을 추가합니다. 기본은 예 입니다.
+
+config CONFIG_SUPPORT_CC
+	bool "Support CC"
+	default n
+	help
+		CC 인증용 제품일 때 선택합니다. 기본은 아니오 입니다.
+
+config VERSION_CC
+	depends on CONFIG_SUPPORT_CC
+	int "Support CC version (YYMM+INDEX)"
+	range 0 32768
+	default 12021
+	help
+		빌드월 + 빌드 인덱스 입력합니다. 이 번호는 CC 제품이 설치된 디렉토리에 사용됩니다.
+
+config CONFIG_NT20E_DRIVER_LOAD_SCRIPT_DRIVER
+	bool "Support Load Driver Call Script Version"
+	default n
+	help
+		제품에 NT20E 드라이버를 로딩 할때 Script 파일을 이용할 지 여부를 선택합니다. 기본은 아니오 입니다.
+
+config CONFIG_DEBUGGING_LOG
+	bool "Support Debugging LOG"
+	default n
+	help
+		제품에 디버깅 로그 출력 여부를 선택합니다. 기본은 아니오 입니다.
+
+
+#######################################################################
+menu "Tree selection"
+#######################################################################
+
+choice
+	prompt "Tree Algorism 선택"
+	default CONFIG_USE_BITREE
+
+config CONFIG_USE_BITREE
+	bool "Binary Tree"
+
+config CONFIG_USE_AVLTREE
+	bool "Avl Tree"
+
+endchoice
+
+endmenu
+
+#######################################################################
+menu 'Temporary memory pool'
+#######################################################################
+
+menu 'Network Monitoring Temporary memory pool'
+
+config CONFIG_NETMON_SESSION_DATA_TEMP_POOL
+	bool "Support Acquisition Session Temp Pool"
+	default y
+	help
+		미리 확보된 공간을 사용할지 여부를 선택합니다. 기본은 아니오 입니다.
+
+config CONFIG_NETMON_HOST_DATA_TEMP_POOL
+	bool "Support Acquisition Host Temp Pool"
+	default y
+	help
+		미리 확보된 공간을 사용할지 여부를 선택합니다. 기본은 아니오 입니다.
+
+config CONFIG_NETMON_SERVICE_DATA_TEMP_POOL
+	bool "Support Acquisition Service Temp Pool"
+	default y
+	help
+		미리 확보된 공간을 사용할지 여부를 선택합니다. 기본은 아니오 입니다.
+endmenu
+
+menu 'Algorism Temporary memory pool'
+
+config CONFIG_USE_TSLIST_TEMP_POOL
+	bool "Support Single list Temp Pool"
+	default n
+	help
+		미리 확보된 공간을 사용할지 여부를 선택합니다. 기본은 아니오 입니다.
+
+config CONFIG_USE_AVLTREE_TEMP_POOL
+	bool "Support AvlTree Temp Pool"
+	default n
+	help
+		미리 확보된 공간을 사용할지 여부를 선택합니다. 기본은 아니오 입니다.
+
+config CONFIG_USE_TREE_TEMP_POOL
+	bool "Support Tree Temp Pool"
+	default n
+	help
+		미리 확보된 공간을 사용할지 여부를 선택합니다. 기본은 아니오 입니다.
+
+endmenu
+
+endmenu

@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Project-Name: SensorWebConsole
+Buid-date:2019-06-17

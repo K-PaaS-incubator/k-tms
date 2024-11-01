@@ -1,0 +1,14 @@
+if [ -e /etc/rsyslog.d/50-default.conf.bak  ] ; then
+mv /etc/rsyslog.d/50-default.conf.bak /etc/rsyslog.d/50-default.conf
+fi
+if [ -e /lib/x86_64-linux-gnu/libssl.so.3.bak  ] ; then
+mv /lib/x86_64-linux-gnu/libssl.so.3.bak /lib/x86_64-linux-gnu/libssl.so.3
+rm -rf /lib/x86_64-linux-gnu/libssl.so.3.0.12
+fi
+if [ -e /lib/x86_64-linux-gnu/libcrypto.so.1.1.bak  ] ; then
+mv /lib/x86_64-linux-gnu/libcrypto.so.3.bak /lib/x86_64-linux-gnu/libcrypto.so.3
+rm -rf /lib/x86_64-linux-gnu/libcrypto.so.3.0.12
+fi
+rm -rf /etc/profile
+rm -rf /etc/magic.mgc
+rm -rf /etc/tascloud_3rdparty

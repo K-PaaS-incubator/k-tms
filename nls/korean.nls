@@ -1,0 +1,130 @@
+0000:정보보호기술
+0101:파일
+0102:센서
+0103:네트워크 모니터링
+0104:시그니처 Yara 탐지 정책
+0105:사용자정의 Yara 탐지 정책
+0106:예외 처리 정책
+0107:세션 모니터링 정책
+0108:패킷 필터링 정책
+0109:가상 네트워크 정책
+0110:NIC 구성 정책
+0111:센서 환경 설정 정책
+0112:인바운드 정책
+0113:시그니처 탐지 정책
+0114:시그니처 탐지 대응 정책
+0115:사용자정의 탐지 정책
+0116:사용자정의 탐지 대응 정책
+0117:key 정책
+0118:key key 정책
+0999:정의되지않은 정책
+1000:센서가 시작 되었습니다.
+1001:센서가 종료 되었습니다.
+1002:매니저와 연결 되었습니다.
+1003:매니저와 연결을 끊었습니다.
+1004:시간 동기화에 성공했습니다.
+1005:정책 동기화에 성공 했습니다.
+1006:세션을 종료 했습니다.
+1007:무결성 검사에 성공했습니다.
+1008:무결성 데이터값 생성에 성공 했습니다.
+1009:세션 자동 백업을 수행 했습니다.
+1010:가속기(하드웨어) 모듈을 구동했습니다
+1011:가속기(하드웨어) 모듈을 업데이트했습니다
+1012:센서가 종료 후 재 시작되었습니다
+1013:라이센스 업데이트에 성공 하였습니다
+1014:펌웨어 업데이트에 성공 하였습니다
+1015:메모리 할당에 실패 했습니다.
+1016:쓰레드 생성에 실패 했습니다.
+1017:시간 동기화에 실패 했습니다.
+1018:정책 동기화에 실패 했습니다.
+1019:무결성 검사에 실패 했습니다.
+1020:무결성 데이터값 생성에 실패 했습니다.
+1021:캡쳐 NIC 초기화에 실패 했습니다.
+1022:패킷 전송에 실패 했습니다.
+1023:세션 자동 백업에 실패 했습니다.
+1024:파일 가져오기에 실패 했습니다.
+1025:파일 전송에 실패 했습니다.
+1026:센서 데이터 전송에 실패 했습니다.
+1027:센서의 라이센스 검사에 실패 했습니다.
+1028:정책 로딩에 실패했습니다
+1029:가속기(하드웨어) 초기화에 실패했습니다
+1030:가속기(하드웨어) 정책 컴파일에 실패했습니다
+1031:가속기(하드웨어) 정책 로딩에 실패했습니다
+1032:가속기(하드웨어) 정책 업데이트에 실패했습니다
+1033:가속기(하드웨어)의 패킷 데이타 처리에 실패했습니다
+1034:잘못된 라이센스 입니다
+1035:라이센스 업데이트에 실패 하였습니다
+1036:펌웨어 업데이트에 실패 하였습니다
+1037:매니저와 연결 할 수 없습니다.
+1038:센서의 라이센스 기한이 지났습니다.
+1039:센서의 탐지 분석에 손실이 발생했습니다.
+1040:무결성이 훼손 되었습니다.
+1041:세션 관리 개수를 초과 했습니다.
+1042:매니저와 연결이 끊겼습니다
+1043:패킷 분석에 대한 처리누수가 발생 하였습니다.
+1044:수집 포트 상태가 변경 되었습니다.
+1045:전원 상태가 변경 되었습니다.
+1046:
+1047:하이퍼스캔 정책 컴파일에 실패하였습니다.
+1048:문법 검사에 실패하였습니다.
+1049:전처리기 히트수가 임계치를 초과 했습니다.
+1050:스왑 메모리를 사용합니다.
+1051:과도한 스왑 메모리 사용으로 센서가 재시작 되었습니다.
+1052:사용자가 접속했습니다.
+1053:사용자가 접속 해제했습니다.
+1054:사용자가 접속 중입니다.
+1055:
+1056:IP 모니터링기능으로 인해 패킷을 처리하지 못하고 있습니다.
+1057:SFTP 연결에 실패하였습니다.
+1058:
+1059:
+1060:
+1061:
+1062:
+1063:
+1064:
+1065:
+1066:
+1067:
+1068:
+1069:
+1200:명령어가 실행 되었습니다.
+1300:모니터가 프로세스를 재시작 시켰습니다.
+1301:파일을 다운 받았습니다.
+1400:SFTP 서버에 연결되었습니다.
+1401:SFTP 서버와 연결이 종료되었습니다.
+2000:failed to get sensor's environment data
+2001:invalid sensor license. need a license
+2002:failed to init modules
+2003:failed to sync policies with manager
+2004:failed to check integrity
+2005:failed to start the packet capturing service
+2006:success to start sensor service(monitor)
+2007:success to start sensor service
+2008:failed to init Audit module
+2009:failed to init Dispather module
+2010:failed to init except port policy module
+2011:failed to init sig scan module
+2012:failed to init hs scan module
+2013:failed to init  protocol analysis module
+2014:failed to init  session analysis module
+2015:failed to init crypto comm module
+2016:failed to init exception policy module
+2017:failed to init fragment module
+2018:failed to init in/outbound policy module
+2019:failed to init network monitoring module
+2020:failed to init statistics analysis module
+2021:failed to init virtual network module
+2022:failed to init traffic dump module
+2023:failed to sync signature policies
+2024:success to load exception rule
+2025:failed to load session monitoring policy
+2026:success to load session monitoring policy
+2027:failed to load virtual network monitoring policy
+2028:success to load virtual network monitoring policy
+2029:failed to load inbound policy
+2030:success to load inbound policy
+2051:failed to init streamer module
+2052:failed to init https module
+2053:success to start sensor service(swap)
+9999:정의되지 않은 감사로그입니다

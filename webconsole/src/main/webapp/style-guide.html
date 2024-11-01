@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-title" content="TESS TAS" />
+
+	<title>TESS TAS</title>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style-responsive.min.css">
+	<link rel="stylesheet" href="css/tms-style.css">
+
+	<style>
+		body {
+			padding: 15px;
+		}
+		h4 {
+			margin-top: 30px;
+		}
+		button .glyphicon {
+			top: 2px;
+		}
+		.samplebox1 span {
+			display: inline-block;
+			min-width: 75px;
+			min-height: 20px;
+			margin: 0px 5px 3px 0px;
+			padding: 3px 10px;
+			text-align: center;
+			color: #fff;
+		}
+		form input[type="text"],
+		form select,
+		form textarea,
+		.dropdown {
+			margin-bottom: 5px;
+		}
+
+	</style>
+</head>
+
+<body class="desktop-detected">
+	<!-- button style begin -->
+	<h4>default text button style</h4>
+	<button type="button" class="btn btn-default">default text button</button>
+
+	<h4>small text button style</h4>
+	<button type="button" class="btn btn-default btn-sm">Small button</button>
+
+	<h4>default icon button style</h4>
+	<button type="button" class="btn btn-default">
+		<span class="glyphicon glyphicon-check"></span> default icon text button
+	</button>
+
+	<h4>default icon style</h4>
+	<button type="button" class="btn btn-default btn-icon-only">
+		<span class="glyphicon glyphicon-check"></span>
+	</button>
+
+	<h4>color option icon style</h4>
+	<button type="button" class="btn btn-primary">Primary</button>
+	<button type="button" class="btn btn-success">Success</button>
+	<button type="button" class="btn btn-info">Info</button>
+	<button type="button" class="btn btn-warning">Warning</button>
+	<button type="button" class="btn btn-danger">Danger</button>
+	<!-- button style end -->
+
+	<!-- chart color style begin -->
+	<h4>chart color</h4>
+	<div class="samplebox1">
+		<span class="chart-bg-1">#d065e9</span>
+		<span class="chart-bg-2">#5599de</span>
+		<span class="chart-bg-3">#39c4e2</span>
+		<span class="chart-bg-4">#84da3e</span>
+		<span class="chart-bg-5">#cb9e48</span>
+		<span class="chart-bg-6">#b0b0b0</span>
+		<span class="chart-bg-7">#898989</span>
+		<span class="chart-bg-8">#ffc100</span>
+		<span class="chart-bg-9">#fc5f29</span>
+		<span class="chart-bg-10">#f7061d</span>
+	</div>
+	<div class="samplebox1">
+		<span class="chart-bg-1 opacity-050">50%</span>
+		<span class="chart-bg-2 opacity-050">50%</span>
+		<span class="chart-bg-3 opacity-050">50%</span>
+		<span class="chart-bg-4 opacity-050">50%</span>
+		<span class="chart-bg-5 opacity-050">50%</span>
+		<span class="chart-bg-6 opacity-050">50%</span>
+		<span class="chart-bg-7 opacity-050">50%</span>
+		<span class="chart-bg-8 opacity-050">50%</span>
+		<span class="chart-bg-9 opacity-050">50%</span>
+		<span class="chart-bg-10 opacity-050">50%</span>
+	</div>
+	<div class="samplebox1">
+		<span class="chart-bg-1 opacity-025">25%</span>
+		<span class="chart-bg-2 opacity-025">25%</span>
+		<span class="chart-bg-3 opacity-025">25%</span>
+		<span class="chart-bg-4 opacity-025">25%</span>
+		<span class="chart-bg-5 opacity-025">25%</span>
+		<span class="chart-bg-6 opacity-025">25%</span>
+		<span class="chart-bg-7 opacity-025">25%</span>
+		<span class="chart-bg-8 opacity-025">25%</span>
+		<span class="chart-bg-9 opacity-025">25%</span>
+		<span class="chart-bg-10 opacity-025">25%</span>
+	</div>
+	<div class="samplebox1">
+		<span class="chart-text-1">color text</span>
+		<span class="chart-text-2">color text</span>
+		<span class="chart-text-3">color text</span>
+		<span class="chart-text-4">color text</span>
+		<span class="chart-text-5">color text</span>
+		<span class="chart-text-6">color text</span>
+		<span class="chart-text-7">color text</span>
+		<span class="chart-text-8">color text</span>
+		<span class="chart-text-9">color text</span>
+		<span class="chart-text-10">color text</span>
+	</div>
+	<!-- chart color style end -->
+
+	<!--위협레벨 5 color style begin -->
+	<h4>위협레벨 5 color</h4>
+	<div class="samplebox1">
+		<span class="threat-bg-lv1">#7fad2f - label 1</span>
+		<span class="threat-bg-lv2">#898989 - label 2</span>
+		<span class="threat-bg-lv3">#ffc100 - label 3</span>
+		<span class="threat-bg-lv4">#f7612e - label 4</span>
+		<span class="threat-bg-lv5">#d63a54 - label 5</span>
+	</div>
+	<div class="samplebox1">
+		<span class="threat-text-lv1">level color text</span>
+		<span class="threat-text-lv2">level color text</span>
+		<span class="threat-text-lv3">level color text</span>
+		<span class="threat-text-lv4">level color text</span>
+		<span class="threat-text-lv5">level color text</span>
+	</div>
+	<!--위협레벨 5 color style end -->
+
+	<!--추이그래프 순위 blue color style begin -->
+	<h4>추이그래프 순위 blue color</h4>
+	<div class="samplebox1">
+		<span class="trend-blue-bg-lv1">#a3d6fd - label 1</span>
+		<span class="trend-blue-bg-lv2">#b8e0fe - label 2</span>
+		<span class="trend-blue-bg-lv3">#ceeaff - label 3</span>
+		<span class="trend-blue-bg-lv4">#e1f2ff - label 4</span>
+		<span class="trend-blue-bg-lv5">#f2f9ff - label 5</span>
+	</div>
+	<!--추이그래프 순위 blue color style end -->
+
+	<!--추이그래프 순위 red color style begin -->
+	<h4>추이그래프 순위 red color</h4>
+	<div class="samplebox1">
+		<span class="trend-red-bg-lv1">#fda3af - label 1</span>
+		<span class="trend-red-bg-lv2">#feb8c2 - label 2</span>
+		<span class="trend-red-bg-lv3">#ffced5 - label 3</span>
+		<span class="trend-red-bg-lv4">#ffe1e5 - label 4</span>
+		<span class="trend-red-bg-lv5">#fff2f3 - label 5</span>
+	</div>
+	<!--추이그래프 순위 red color style end -->
+
+	<!-- default table type 1 style begin -->
+	<h4>default table type 1</h4>
+	<div style="height:200px">
+		<table class="fancyTable table table-striped table-hover table-vertical-line" id="header-fix">
+			<!-- 행간 줄무늬 클래스명: table-striped , 마우스 오버 클래스명: table-hover, 종간 구별 라인 클래스명 : table-vertical-line, 테이블 헤더 고정 클래스명 : fancyTable -->
+			<thead>
+				<tr>
+					<th class="level-narrow"></th>
+					<th>item title 1</th>
+					<th>item title 2</th>
+					<th>item title 3</th>
+					<th>item title 4</th>
+					<th>item title 5</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td class="level-narrow threat-bg-lv5"></td>
+					<td>item id 1</td>
+					<td class="align-center">item name 1</td>
+					<td>item description 1</td>
+					<td class="align-right">70.00%</td>
+					<td class="align-right">32.61%</td>
+				</tr>
+				<tr>
+					<td class="level-narrow threat-bg-lv4"></td>
+					<td>item id 2</td>
+					<td class="align-center">item name 2</td>
+					<td>item description 2</td>
+					<td class="align-right">70.00%</td>
+					<td class="align-right">32.61%</td>
+				</tr>
+				<tr>
+					<td class="level-narrow threat-bg-lv3"></td>
+					<td>item id 3</td>
+					<td class="align-center">item name 3</td>
+					<td>item description 3</td>
+					<td class="align-right">70.00%</td>
+					<td class="align-right">32.61%</td>
+				</tr>
+				<tr>
+					<td class="level-narrow threat-bg-lv2"></td>
+					<td>item id 4</td>
+					<td class="align-center">item name 4</td>
+					<td>item description 4</td>
+					<td class="align-right">70.00%</td>
+					<td class="align-right">32.61%</td>
+				</tr>
+				<tr>
+					<td class="level-narrow threat-bg-lv5"></td>
+					<td>item id 5</td>
+					<td class="align-center">item name 5</td>
+					<td>item description 5</td>
+					<td class="align-right">70.00%</td>
+					<td class="align-right">32.61%</td>
+				</tr>
+				<tr>
+					<td class="level-narrow threat-bg-lv5"></td>
+					<td>item id 6</td>
+					<td class="align-center">item name 6</td>
+					<td>item description 6</td>
+					<td class="align-right">70.00%</td>
+					<td class="align-right">32.61%</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- default table type 1 style end -->
+
+	<!-- default table type 2 style begin -->
+	<!-- 어두운 해더 테이블 클래스명:table-darkheader , 행간 줄무늬 클래스명: table-striped , 마우스 오버 클래스명: table-hover, 종간 구별 라인 클래스명 : table-vertical-line  -->
+	<h4>default table type 2</h4>
+	<table class="table table-darkheader table-striped table-vertical-line">
+		<tr>
+			<th>table head 1</th>
+			<th>table head 2</th>
+			<th>table head 3</th>
+			<th>table head 4</th>
+		</tr>
+		<tr>
+			<td class="align-center">data title string / align center</td>
+			<!-- 하위 컨텐츠의 중앙정열 클래스명 :  align-center -->
+			<td>data title 1</td>
+			<td>data title 1</td>
+			<td class="align-right">number data / align right</td>
+			<!-- 하위 컨텐츠의 우측정열 클래스명 :  align-right -->
+		</tr>
+		<tr>
+			<td class="align-center">data title string / align center</td>
+			<td>data title 2</td>
+			<td>data title 2</td>
+			<td class="align-right">number data / align right</td>
+		</tr>
+		<tr>
+			<td class="align-center">data title string / align center</td>
+			<td>data title 3</td>
+			<td>data title 3</td>
+			<td class="align-right">number data / align right</td>
+		</tr>
+	</table>
+	<!-- default table type 2 style begin -->
+
+	<!-- form element style begin -->
+	<h4>form element</h4>
+	<form role="form">
+		<div class="row">
+			<div class="col-sm-4">
+				<input type="text" class="form-control" placeholder="Text input" />
+				<input type="text" id="disabledInput" class="form-control" placeholder="disabled" disabled/>
+				<input class="form-control input-sm" type="text" placeholder=".input-sm">
+
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value=""> checkbox
+					</label>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="" checked> checkbox checked
+					</label>
+				</div>
+				<div class="checkbox disabled">
+					<label>
+						<input type="checkbox" value="" disabled> checkbox disabled
+					</label>
+				</div>
+
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1"> radio
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" checked> radio checked
+					</label>
+				</div>
+				<div class="radio disabled">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled> radio disabled
+					</label>
+				</div>
+
+			</div>
+
+			<div class="col-sm-4">
+				<select class="form-control">
+					<option>single line select</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
+
+				<select class="form-control input-sm">
+					<option>small size single line select</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
+
+				<select multiple class="form-control">
+					<option>multiple line select</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
+
+				<textarea class="form-control" rows="3">textarea</textarea>
+
+			</div>
+
+			<div class="col-sm-4">
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+						default size Dropdown
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">item 1</a>
+						</li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">item 2</a>
+						</li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">item 3</a>
+						</li>
+						<li role="presentation" class="divider"></li>
+						<!-- 가로 경계선이 필요한 경우 사용 -->
+						<li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">item 4 - disable</a>
+						</li>
+						<!-- 하위메뉴 disabled인 경우 클래스명 disable를 li tag에 marking해주세요 -->
+					</ul>
+				</div>
+				<div class="dropdown">
+					<button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown">
+						small size Dropdown
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">item 1</a>
+						</li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">item 2</a>
+						</li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#">item 3</a>
+						</li>
+						<li role="presentation" class="divider"></li>
+						<!-- 가로 경계선이 필요한 경우 사용 -->
+						<li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">item 4 - disable</a>
+						</li>
+						<!-- 하위메뉴 disabled인 경우 클래스명 disable를 li tag에 marking해주세요 -->
+					</ul>
+				</div>
+
+			</div>
+		</div>
+	</form>
+	<!-- form element style end -->
+
+	<!-- default tab type begin -->
+	<h4>default tab type</h4>
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active"><a href="#tab1" role="tab" data-toggle="tab">default active tab 1</a>
+		</li>
+		<li><a href="#tab2" role="tab" data-toggle="tab">default tab 2</a>
+		</li>
+		<li><a href="#tab3" role="tab" data-toggle="tab">default tab 3</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab1">default tab 1 content</div>
+		<div class="tab-pane" id="tab2">default tab 2 content</div>
+		<div class="tab-pane" id="tab3">default tab 3 content</div>
+	</div>
+	<!-- default tab type end -->
+
+	<!-- scroll tab type begin -->
+	<!-- 스크롤 탭의 구조는 좀 복잡합니다. 하지만 구조가 지켜져야 스타일이 적용됩니다. 하단의 div id='scroll-tab' 으로 한번 싸주어야 작동, 스타일 적용됩니다.-->
+	<h4>scroll tab type</h4>
+	<div id="scroll-tab">
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="active"><span><a href="#tab111" role="tab" data-toggle="tab">default tab 1</a></span>
+			</li>
+			<li><span><a href="#tab222" role="tab" data-toggle="tab">default tab 2</a></span>
+			</li>
+			<li><span><a href="#tab333" role="tab" data-toggle="tab">default tab 3</a></span>
+			</li>
+			<li><span><a href="#tab444" role="tab" data-toggle="tab">default tab 4</a></span>
+			</li>
+			<li><span><a href="#tab555" role="tab" data-toggle="tab">default tab 5</a></span>
+			</li>
+			<li><span><a href="#tab666" role="tab" data-toggle="tab">default tab 6</a></span>
+			</li>
+			<li><span><a href="#tab777" role="tab" data-toggle="tab">default tab 7</a></span>
+			</li>
+			<li><span><a href="#tab888" role="tab" data-toggle="tab">default tab 8</a></span>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab111">default tab 111 content</div>
+			<div class="tab-pane" id="tab222">default tab 222 content</div>
+			<div class="tab-pane" id="tab333">default tab 333 content</div>
+			<div class="tab-pane" id="tab444">default tab 444 content</div>
+			<div class="tab-pane" id="tab555">default tab 555 content</div>
+			<div class="tab-pane" id="tab666">default tab 666 content</div>
+			<div class="tab-pane" id="tab777">default tab 777 content</div>
+			<div class="tab-pane" id="tab888">default tab 888 content</div>
+		</div>
+	</div>
+
+	<!-- scroll tab type begin -->
+
+	<!-- icon tab type begin -->
+	<h4>icon tab type</h4>
+	<ul class="nav nav-tabs nav-tabs-icon" role="tablist">
+		<li class="active"><a href="#tab11" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-ok-sign"></span>icon active tab 1</a>
+		</li>
+		<li><a href="#tab22" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-tasks"></span>icon tab 2</a>
+		</li>
+		<li><a href="#tab33" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-phone"></span>icon tab 3</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab11">icon tab 1 content</div>
+		<div class="tab-pane" id="tab22">icon tab 2 content</div>
+		<div class="tab-pane" id="tab33">icon tab 3 content</div>
+	</div>
+	<!-- icon tab type end -->
+
+	<!-- modal type begin -->
+	<h4>modal window type</h4>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title"><span class="modal-icon-chart"></span>모달 윈도우 타이틀</h4>
+				<!-- modal 성격에 따라.. 차트모달 클래스명 : modal-icon-chart, 조회모달 클래스명 : modal-icon-search, 정보모달 클래스명 : modal-icon-info -->
+			</div>
+			<div class="modal-body">
+				<p>모달 윈도우 컨텐츠..</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+	<!-- modal type end -->
+
+	<!-- ================== BASE JS beign ================== -->
+	<script src="js/lib/jquery.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<!--[if lt IE 9]>
+			<script src="assets/crossbrowserjs/html5shiv.js"></script>
+			<script src="assets/crossbrowserjs/respond.min.js"></script>
+			<script src="assets/crossbrowserjs/excanvas.min.js"></script>
+		<![endif]-->
+	<script src="js/lib/bootstrap-table.js"></script>
+	<script src="js/lib/jquery.scrolltabs.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/lib/jquery.mousewheel.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/lib/tms-js.js"></script>
+	<!-- ================== BASE JS end ================== -->
+
+	<script>
+		var tabs = null;
+		$(document).ready(function() {
+			$('#header-fix').fixedHeaderTable({
+				footer: false,
+				altClass: 'odd'
+			});
+			tabs = $('#scroll-tab').scrollTabs();
+		});
+
+	</script>
+
+</body>
+
+</html>
