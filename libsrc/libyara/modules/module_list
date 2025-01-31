@@ -1,8 +1,0 @@
-MODULE(tests)
-MODULE(pe)
-MODULE(elf)
-MODULE(math)
-
-//MODULE(cuckoo)
-//MODULE(magic)
-//MODULE(hash)

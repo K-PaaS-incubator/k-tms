@@ -1,5 +1,0 @@
-rm -rf /opt/TESS/current
-rm -rf /conf/TESS/current
-rm -rf /home/sensor
-rm -rf /logs/TESS/
-
