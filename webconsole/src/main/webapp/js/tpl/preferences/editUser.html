@@ -1,0 +1,157 @@
+<div>
+    <form class="form-inline" role="form">
+        <!-- 기본 정보 begin -->
+        <div class="icon-subtitle"><%=locale.generalUserInfo%><span class="pull-right">* <%=locale.required%></span></div>
+        <div class="border-dotted-all overflow-hidden padding-t5">
+            <table class="view-table">
+                <tr class="border-clear">
+                    <th width="20%"><%=locale.user%> ID *</th>
+                    <td><input type="text" id="userId" class="form-control col-xs-4 userId" value="<%= model.id %>" maxlength="15" <%= model.disabled %>/>
+                        <div class="btnContent">
+                            <!-- 완료 버튼 누를때 중복 검사하도록 변경 -->
+                            <!-- <button type="button" id="userIdCheckBtn" class="btn btn-default margin-l10 col-xs-3">중복 검사</button> -->
+                        </div>
+                    </td>
+                </tr>
+                <tr id="adminIdScriptRow" style="display: none;" class="border-clear">
+                    <th></th>
+                    <td id="adminIdScript">
+                    </td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.encryption%> *</th>
+                    <td>
+                        <input type="password" id="password" name="password" class="form-control col-xs-4" maxlength="20">
+                    </td>
+                </tr>
+                <tr id="passwordScriptRow" style="display: none;" class="border-clear">
+                    <th></th>
+                    <td id="adminPasswordScript">
+                    </td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.encryptionCheck%> *</th>
+                    <td><input type="password" id="comparePassword" name="comparePassword" class="form-control col-xs-4" maxlength="20"></td>
+                </tr>
+                <tr id="rePasswordScriptRow" style="display: none;" class="border-clear">
+                    <th></th>
+                    <td id="adminRePasswordScript">
+                    </td>
+                </tr>
+                <% if (SYSTEM_TYPE != 2) { %>
+                <tr class="border-clear">
+                    <th style="height: 80px">
+                        <%= locale.loginAuthIp %>&nbsp;*
+                    </th>
+                    <td>
+                        <input class="form-control col-xs-4 margin-r5 loginIpInput" type="text">
+                        <input class="btn btn-default loginIpInsertBtn margin-r5" type="button" value="<%=locale.add%>" />
+                        <input class="btn btn-default loginIpDeleteBtn" type="button" value="<%=locale.remove%>" />
+                        <select class="form-control float-clear col-xs-6 margin-t10 loginIpSelect" size="3" multiple="">
+                    </td>
+                </tr>
+                <tr id="userIpScriptRow" style="display:none;" class="border-clear">
+                    <th></th>
+                    <td id="userIpScript"></td>
+                </tr>
+                <% } %>
+                <tr class="border-clear">
+                    <th></th>
+                    <!-- <td><label><input type="checkbox"> 최초 로그인 시 암호 변경</label></td> -->
+                </tr>
+            </table>
+        </div>
+        <!-- 기본 정보 end -->
+
+        <!-- 추가 정보 begin -->
+        <div class="icon-subtitle"><%=locale.additionalInformation%></div>
+        <div class="border-dotted-all overflow-hidden padding-t5 padding-b5">
+            <table class="view-table">
+                <tr class="border-clear">
+                    <th width="20%"><%=locale.name%></th>
+                    <td><input type="text" id="userName" class="form-control col-xs-3" value="<%=model.name %>" maxlength="32"/></td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.affiliation%></th>
+                    <td><input type="text" id="company" class="form-control col-xs-3" value="<%=model.company %>" maxlength="20"/></td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.comment%></th>
+                    <td><input type="text" id="description" class="form-control col-xs-12" value="<%=model.description %>" maxlength="64"/></td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.telephone%></th>
+                    <td><input type="text" id="telephone" name="telephone" class="form-control col-xs-3" value="<%=model.telephone %>" max="99999999999"/></td>
+                </tr>
+                <tr id="telScriptRow" style="display: none;" class="border-clear">
+                    <th></th>
+                    <td id="adminTelScript">
+                    </td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.cellphone%></th>
+                    <td><input type="text" id="mobile" name="mobile" class="form-control col-xs-3" value="<%=model.mobile %>" max="99999999999"/></td>
+                </tr>
+                <tr id="mobileScriptRow" style="display: none;" class="border-clear">
+                    <th></th>
+                    <td id="adminMobileScript">
+                    </td>
+                </tr>
+                <tr class="border-clear">
+                    <th><%=locale.email%></th>
+                    <td><input type="text" id="email" name="email" class="form-control col-xs-5" value="<%=model.email %>" maxlength="50"/></td>
+                </tr>
+                <tr id="emailScriptRow" style="display: none;" class="border-clear">
+                    <th></th>
+                    <td id="adminEmailScript">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- 추가 정보 end -->
+
+        <!-- 범위 지정 begin -->
+        <div class="icon-subtitle"><%=locale.rangeTarget%></div>
+        <div class="border-dotted-all margin-t5 padding-t5 padding-b3">
+            <table class="view-table">
+                <tr class="border-clear">
+                    <th width="20%"><%=locale.classification%></th>
+                    <td>
+                        <div class="form-group col-xs-8 padding-clear" id="targetType"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- 범위 지정 end -->
+
+        <!-- 사용자 권한 begin -->
+        <!-- <div class="icon-subtitle">사용자 권한</div>
+        <div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+                <table class="view-table">
+                        <tr class="border-clear">
+                                <td class="padding-t5">
+                                        <label><input type="checkbox" class="defaultRole" value="1"<%=model.role3 %>/> 일반 조회</label> 
+                                        <label class="margin-l30"><input type="checkbox" class="settingsRole" value="2"<%=model.role2 %>/> 설정/관리</label> 
+                                        <label class="margin-l30"><input type="checkbox" class="reportRole" value="4"<%=model.role1 %>/> 보고서</label>
+                                </td>
+                        </tr>
+                </table>
+        </div> -->
+        <!-- 사용자 권한 end -->
+
+        <!-- 계정 상태 begin -->
+        <div class="icon-subtitle"><%=locale.accountStatus%></div>
+        <div class="border-dotted-all overflow-hidden">
+            <table class="view-table">
+                <tr class="border-clear">
+                    <td class="padding-t5">
+                        <label><input type="radio" name="lockout" id="lockout0" value="0" <%= model.checked %>/> <%=locale.loginAuth%></label> 
+                        <label class="margin-l30"><input type="radio" name="lockout" id="lockout2" value="2" <%= model.checked1%>/> <%=locale.accountBlock%>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- 계정 상태 end -->
+    </form>
+</div>

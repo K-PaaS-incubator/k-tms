@@ -1,0 +1,185 @@
+<!-- 등록정보 상세 table begin -->
+<form class="form-inline" role="form">
+	<table class="view-table col-xs-12">
+		<tr>
+			<th width="15%"><%=locale.attackType%></th>
+			<td>
+				<select class="form-control col-xs-8 margin-r5">
+					<option><%=locale.attackType%></option>
+					<option><%=locale.attackType%>1</option>
+					<option><%=locale.attackType%>2</option>
+				</select>
+				<button type="button" class="btn btn-default col-xs-3"><%=locale.typeAdd%></button>
+				<!-- 공격유형 dropdowns end -->
+			</td>
+		</tr>
+		
+		<tr>
+			<th><%=locale.attackName%></th>
+			<td>
+				<input type="text" class="form-control col-xs-8 margin-r5" placeholder="HTTP Moreover Shoping Cart Directory"/>
+				<button type="button" class="btn btn-default col-xs-3"><%=locale.duplicateCheck%></button>
+				<!-- 공격명 input end -->
+			</td>
+		</tr>
+		
+		<tr>
+			<th><%=locale.severity%></th>
+			<td>
+				<select class="form-control margin-r5 col-xs-5">
+					<option><%=locale.severity%></option>
+					<option><%=locale.severity%>1</option>
+					<option><%=locale.severity%>2</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<th>코드</th>
+			<td>
+				<input type="text" class="form-control col-xs-5" placeholder="1000000Z" readonly/>
+			</td>
+		</tr>
+		
+		<tr>
+			<th>탐지여부</th>
+			<td>
+				<!-- 탐지여부 begin -->
+				<div class="checkbox">
+				  <label>
+				    <input type="checkbox" value="" checked>
+				    사용
+				  </label>
+				</div>
+				<!-- 탐지여부 end -->
+			</td>
+		</tr>
+		
+		<tr>
+			<th>패킷저장</th>
+			<td>
+				<select class="form-control margin-r5 col-xs-5">
+					<option>패킷저장</option>
+					<option>패킷저장1</option>
+					<option>패킷저장2</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<th>임계값</th>
+			<td>
+				<!-- 임계값 begin -->
+				<div class="col-xs-12 padding-clear">
+				  <input type="text" class="form-control" placeholder="100000"/> 개
+					<input type="text" class="form-control margin-l10" placeholder="100000"/> 초
+					(100,000 미만 / 3,600 미만)
+				</div>
+				<!-- 임계값 end -->
+			</td>
+		</tr>
+		
+		<tr>
+			<th>
+				패턴입력
+				<button type="button" class="btn btn-default btn-sm">?</button>
+			</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+				<button type="button" class="btn btn-default btn-sm margin-t5 pull-right">패턴 검사</button>
+			</td>
+		</tr>
+		
+		<tr>
+			<th>
+				요약설명
+				<button type="button" class="btn btn-default btn-sm">?</button>
+			</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>상세설명</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>해결방법</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>참조</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		
+		<tr class="toggle-field">
+			<th>BugTrap ID</th>
+			<td>
+				<input type="text" class="form-control col-xs-8 margin-r5" placeholder="1762"/>
+				<button type="button" class="btn btn-default col-xs-3">선택</button>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>CVE ID</th>
+			<td>
+				<input type="text" class="form-control col-xs-8 margin-r5" placeholder="CAN-1000-0906"/>
+				<button type="button" class="btn btn-default col-xs-3">선택</button>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>취약 시스템</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>강화 시스템</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>주소 위장 가능성</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>Vulnerable</th>
+			<td>
+				<input type="text" class="form-control col-xs-12" placeholder="Cached_feed 1.0"/>
+			</td>
+		</tr>
+		
+		<tr class="toggle-field">
+			<th>False Positive</th>
+			<td>
+				<textarea class="form-control col-xs-12" rows="5"></textarea>
+			</td>
+		</tr>
+		
+		<tr>
+			<th></th>
+			<td>
+				<button type="button" class="btn btn-default col-xs-12" id="toggle-field">상세 정보 보기</button>
+			</td>
+		</tr>
+	</table>
+</form>
+<!-- 등록정보 상세 table end -->
+<!-- 등록정보 end -->

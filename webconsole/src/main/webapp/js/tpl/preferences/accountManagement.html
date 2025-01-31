@@ -1,0 +1,118 @@
+<!-- 계정관리 목록 리스트 begin -->
+<div class="content-gray col-lg-4 col-xs-4  border-solid-right content-list-setup-left">
+	<div class="title"><%= locale.list %></div>
+	<!-- 버튼 목록 begin -->
+	<div class="float-clear row content-tree-btn">
+	
+		<div class="col-sm-9 padding-clear">
+			<!-- 신규생성 목록 begin -->
+			<div class="btn-group padding-clear setting-dropdown">
+				<button type="button" class="btn btn-default col-xs-12" data-toggle="dropdown" id="setting-create" aria-expanded="true">
+					<%= locale.createNewItem %> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="setting-create">
+					<li role="presentation" id="userCreate"><a role="menuitem" tabindex="-1" href="#systemSettings_account" data-sgrouptype="2"><input type="hidden" id="groupType" value="2"/><%=locale.general%> <%=locale.user%></a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#systemSettings_account" data-sgrouptype="3"><input type="hidden" id="lIndex" value="3"/><%=locale.accountGroup%></a></li>
+				</ul>
+			</div>
+			<!-- 신규생성 목록 end -->
+		</div>
+		<!-- 아이콘 버튼 영역 begin -->
+		<div class="col-sm-3 padding-clear text-right">
+			<!-- 아코디언 모두펼치기 모두닫기 버튼 -->
+			<div class="btn btn-default icon-spread" id="accordion-open" title="<%= locale.accordionOpen %>"></div>
+			<div class="btn btn-default icon-fold" id="accordion-close" title="<%= locale.accordionClose %>"></div>
+		</div>
+		<!-- 아이콘 버튼 영역 end -->
+	</div>
+	<!-- 버튼 목록 end -->
+
+		<!-- 관리자 collapsible table begin -->
+		<div class="content-tree-list">
+		<div class="panel-group table-accordion dark-header-accordion has-gap preference-list" id="accordion">
+		  <!-- 매니저 collapse cell begin -->
+			<div class="panel panel-default panel-dp-selected">
+		    <!-- collapse header begin -->
+				<div class="panel-heading"> <!-- active 제거 TODO 추후 선택시 속성 추가해야함 -->
+		      	<h4 class="panel-title">
+					<a style="text-decoration:none" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="true" aria-controls="collapse1"><%=locale.admin%>
+						<span id="adminTotalCount" class="badge pull-right"></span>
+					</a>
+				</h4>
+		    </div>
+		    <div id="collapse1" class="panel-collapse collapse in">
+		    	<div id="admin" class="panel-body">
+				</div>
+			</div>
+				<!-- collapse content end -->
+			</div>
+			<!-- 관리자 collapse cell end -->
+
+		  	<!-- 사용자 collapse cell begin -->
+			<div class="panel panel-default panel-dp-selected">
+		    <!-- collapse header begin -->
+				<div class="panel-heading">
+		      	<h4 class="panel-title">
+					<a style="text-decoration:none" data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="true" aria-controls="collapse2" class="sensor"><%=locale.general%> <%=locale.user%>
+						<span id="userTotalCount" class="badge pull-right"></span>
+		        	</a>
+				</h4>
+		    </div>
+			<!-- collapse header end -->
+			<!-- collapse content begin -->
+		    <div id="collapse2" class="panel-collapse collapse">
+				<div id="user" class="panel-body">
+				</div>
+			</div>
+			<!-- collapse content end -->
+			</div>
+			<!-- 사용자 collapse cell end -->
+
+		  <!-- 계정그룹 collapse cell begin -->
+		  
+		   <!-- 가상센서 collapse cell begin -->
+			<div class="panel panel-default panel-dp-selected">
+		    <!-- collapse header begin -->
+			<div class="panel-heading">
+		      	<h4 class="panel-title">
+					<a style="text-decoration:none" data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="true" aria-controls="collapse3" class="sensorgroup"><%=locale.accountGroup%>
+						<span id="groupTotalCount" class="badge pull-right"></span>
+		        	</a>
+				</h4>
+		    </div>
+			<!-- collapse header end -->
+			<!-- collapse content begin -->
+		    <div id="collapse3" class="panel-collapse collapse">
+		    	<div id="group" class="panel-body">
+					<!-- 목록 begin -->
+					<!-- <ul>
+						<li class="has-subcategory-subitem"><a href="#preferences_account" id="selGroup"><span id="lindex" class="collapse-status"></span></a>
+							<ul>
+								<li><a href="#preferences_account">test user 1</a></li>
+								<li><a href="#preferences_account">test user 2</a></li>
+							</ul>
+						</li>
+						<li class="has-subcategory-subitem"><a href="#preferences_account">연구/개발<span class="collapse-status"></span></a>
+							<ul>
+								<li><a href="#preferences_account">dev user 1</a></li>
+								<li><a href="#preferences_account">dev user 2</a></li>
+							</ul>
+						</li>
+					</ul> -->
+					<!-- 목록 end -->
+				</div>
+			</div>
+			<!-- collapse content end -->
+			</div>
+			<!-- 계정그룹 collapse cell end -->
+		</div>
+			<!-- 계정그룹 설정 collapsible table end -->	
+	</div>
+</div>
+
+<!-- 등록정보 탭 뷰 begin -->
+<div class="content-white col-xs-8 height-100p">
+<input type="button" class="btn btn-default btn-sm margin-t5 margin-r5 changeBtn pull-right" value="<%= locale.modify %>" style="display:none"></input>
+<div id="tabs"></div>
+</div>
+<!-- 탭뷰 end -->

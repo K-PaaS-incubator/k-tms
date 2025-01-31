@@ -1,0 +1,71 @@
+<!-- 검색 조건 begin -->
+<div class="content-gray">
+	<form role="form" class="form-inline ipForm">
+		<div class="row">
+			<!-- search option set -->
+			<div class="sch_area_option border-dotted-right">
+				<!-- search option - default -->
+					<div class="sch_option_set">
+						<div class="sch_option_set_row">
+							<!-- 조회대상 -->
+							<label class="control-label col-xs-1"><%= locale.targetType %></label>
+							<div class="col-xs-3" id="targetType"></div>
+							<!-- / 조회대상 -->
+							
+							<!-- 분석기간 -->
+							<label class="control-label col-xs-1"><%= locale.search.period %></label>
+							<div class="col-xs-7" id="period"></div>
+							<!-- / 분석기간  -->
+						</div>
+							
+						<div class="sch_option_set_row margin-t10">
+							
+							<!-- 주소체계 begin -->
+							<!-- 
+					    	<label class="control-label col-xs-1"><%= locale.ipType %></label>
+					    	-->
+                            <div class="col-xs-4">
+	                            <div class="row_radio margin-t10">
+	                                <input type="radio" class="radio" name="ipType" id="ipType1" value="4" checked>&nbsp;<label for="ipType1" class="label-for-button">IPv4</label>&nbsp;&nbsp;
+	                                <input type="radio" class="radio" name="ipType" id="ipType2" value="6">&nbsp;<label for="ipType2" class="label-for-button">IPv6</label>&nbsp;
+	                            </div>
+							</div>
+							<!-- 주소체계 end -->
+							<!-- IP 선택 begin -->
+							<label class="control-label col-xs-1 margin-t10">IP</label>
+							<div class="col-xs-7 margin-t10">
+								<input type="text" class="form-control" id="ipInput" name="ipInput" placeholder="IP <%=locale.address%>"/>
+								<input type="text" class="form-control maxwidth-60" placeholder="MASK" name="maskInput" id="maskInput" maxlength="2"/>
+								
+								<input type="hidden" class="form-control" name="fromIpInput" id="fromIpInput" placeholder="From IP" id="fromIp" />
+								<input type="hidden" class="form-control" name="toIpInput" id="toIpInput" placeholder="TO IP" id="toIp" />
+							</div>
+							<!-- / IP 선택 end -->
+						</div>
+					</div>
+				<!-- / search option - default -->
+			</div>
+			<!-- / search option set -->
+			
+			<!-- search button -->
+			<div class="sch_area_btn text-right">
+				<button type="button" class="btn btn_sch_detail margin-r10 cancelBtn"><%= locale.reset %></button>
+				<button type="button" class="btn btn-primary" id="searchBtn"><i class="fa fa-search"></i><%= locale.search.search %></button>
+			</div>
+			<!-- / search button -->
+		</div>
+	</form>
+</div>
+<!-- 검색 조건 end -->
+
+<!-- 검색결과 begin -->
+<div class="content-white border-solid-top">
+	<div id="scroll-tab" role="tabpanel">
+		<ul class="nav nav-tabs" role="tablist">
+		</ul>
+	</div>
+	<!-- Tab panes -->
+	<div id="tabContent" class="tab-content">
+	</div>
+</div>
+<!-- 검색결과 end -->

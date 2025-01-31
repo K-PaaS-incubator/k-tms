@@ -1,0 +1,65 @@
+<!-- info table begin -->
+<table class="view-table">
+	<tr>
+		<th width="8%" class="padding-rl-clear">Service IP</th>
+		<td width="42%"><%= condition.strIp %></td>
+		<th width="8%" class="padding-rl-clear">Service</th>
+		<td width="42%"><%= condition.serverPort %>(<%= condition.session %>)</td>
+	</tr>
+	<tr>
+		<th width="12%" class="padding-rl-clear"><%= locale.search.period %></th>
+		<td width="76%" colspan="3"><%= condition.startDateInput %> ~ <%= condition.endDateInput %></td>
+	</tr>
+</table>
+<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+<!-- table begin -->
+<div class="row">
+	<!-- info line begin -->
+	<div class="col-xs-12 margin-b5">
+		<%= locale.all %> : <strong id="totalCount"></strong> <%= locale.dashboard.count %>
+	</div>
+	<!-- info line end -->
+
+	<!-- table begin -->
+	<div class="col-xs-12 margin-t5 margin-b5 progressbar">
+		<table class="table table-vertical-line table-fixed">
+                    <colgroup>
+                        <col width="7%"/>
+                        <col width="27%"/>
+                        <col width="20%"/>
+                        <col width="20%"/>
+                        <col width="13%"/>
+                        <col width="13%"/>
+                    </colgroup>
+			<thead>
+			<% if( condition.sessionDirection == 0 ) { %>
+				<tr>
+					<th class="width-number"><%= locale.rank %></th>
+					<th class="overflow-ellipsis" title="Client IP">Client IP</th>
+					<th class="overflow-ellipsis" title="Client → Server (byte)">Client→Server</br>(byte)</th>
+					<th class="overflow-ellipsis" title="Server → Client (byte)">Server→Client</br>(byte)</th>
+					<th class="overflow-ellipsis" title="<%=locale.totla%> (byte)"><%=locale.total%> (byte)</th>
+					<th>Session (<%=locale.dashboard.count%>)</th>
+				</tr>
+			<% } %>
+			<% if( condition.sessionDirection != 0 ) { %>
+				<tr>
+					<th class="width-number"><%= locale.rank %></th>
+					<th class="overflow-ellipsis" title="Server IP">Server IP</th>
+					<th class="overflow-ellipsis" title="Server → Client (byte)">Server→Client</br>(byte)</th>
+					<th class="overflow-ellipsis" title="Client → Server (byte)">Client→Server</br>(byte)</th>
+					<th class="overflow-ellipsis" title="<%=locale.totla%> (byte)"><%=locale.total%> (byte)</th>
+					<th>Session (<%=locale.dashboard.count%>)</th>
+				</tr>			
+			<% } %>	
+			</thead>
+			<tbody></tbody>
+		</table>
+		<!-- 더보기/pagination 옵션 begin -->
+		<div class="more-option align-center"></div>
+		<!-- 더보기/pagination 옵션 end -->
+	</div>
+	<!-- table end -->
+</div>
+<!-- table end -->

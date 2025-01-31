@@ -1,0 +1,20 @@
+<!-- 사이드 링크 begin-->
+<li class="subside">
+	<!-- 메뉴마다 각각 다른 아이콘이 들어가야하므로 위와 같이 menu-icon, s1~s3 의 클래스명이 추가됩니다. s2 : 공격정보 -->
+        <a class="menu-icon s2 cursor-pointer toolbarAttackInfo" title="<%=locale.attackInfo%>">
+		<span><%= locale.menu.attackInfo %></span>
+	</a>
+	<!-- 메뉴마다 각각 다른 아이콘이 들어가야하므로 위와 같이 menu-icon, s1~s3 의 클래스명이 추가됩니다. s3 : ip조회 -->
+        <a class="menu-icon s3 cursor-pointer toolbarIpRetrieve" title="<%=locale.ipSearch%>">
+		<span><%= locale.menu.ipRetrieve %></span>
+	</a>
+</li>
+ <!-- 사이드 링크 end-->
+<!-- 메뉴바 기능 begin-->
+<li class="etc padding-l10">
+				<form role="form">
+					<span class="padding-t10" style="position: absolute; margin-top: 0px;"><label style="display: none;"><input type="checkbox" id="fiveMinRefreshChk" style="vertical-align:bottom;display: none;">&nbsp;<%= locale.menu.fiveMin %> <span><%= locale.menu.refresh %></span></label></span>
+				</form>
+		<a href="#" class="sidebar-minify-btn padding-t10" data-click="sidebar-minify"></a>
+</li>
+<!-- 메뉴바 기능 end-->

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemStatus.AuditLogStatusMapper">
+
+	<resultMap type="AuditVO" id="auditResultMap">
+		<result property="lAuditLogIndex" column="LAUDITLOGINDEX" />
+		<result property="tmOccur" column="TMOCCUR" />
+		<result property="strContent" column="STRCONTENT" />
+		<result property="strOperator" column="STROPERATOR" />
+		<result property="lAuditSetIndex" column="LAUDITSETINDEX" />
+		<result property="ltype1" column="LTYPE1" />
+		<result property="ltype2" column="LTYPE2" />
+		<result property="strComment" column="STRCOMMENT" />
+		<result property="rNum" column="ROW_NUM" />
+		<result property="totalRowSize" column="TOTAL_ROWS"/>
+	</resultMap>
+	
+	<insert id="insertAuditLog" parameterType="AuditVO">
+            <selectKey resultType="long" keyProperty="lAuditLogIndex" order="BEFORE">
+                SELECT IFNULL(MAX(LAUDITLOGINDEX), 0) + 1 AS LAUDITLOGINDEX FROM ${tableName}
+            </selectKey>
+		INSERT INTO ${tableName} 
+		            (LAUDITLOGINDEX,
+		             TMOCCUR,
+		             STRCONTENT,
+		             STROPERATOR,
+		             LAUDITSETINDEX,
+		             LTYPE1,
+		             LTYPE2,
+		             STRCOMMENT)
+		VALUES      ( #{lAuditLogIndex},
+		              NOW(),
+		              #{strContent},
+		              #{strOperator},
+		              #{lAuditSetIndex},
+		              #{ltype1},
+		              #{ltype2},
+		              #{strComment, jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="selectAuditLogList" parameterType="com.kglory.tms.web.model.dto.AuditDto" resultMap="auditResultMap"> 
+            SELECT LAUDITLOGINDEX, DATE_FORMAT( TMOCCUR, '%Y-%m-%d %H:%i:%s') AS TMOCCUR, STRCONTENT, STROPERATOR, LAUDITSETINDEX, LTYPE1, LTYPE2
+            FROM 
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT * FROM ${item.name}
+                </foreach>
+            WHERE TMOCCUR <![CDATA[ > ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMOCCUR <![CDATA[ <= ]]> CAST( #{endDateInput} AS DATETIME)
+            AND LAUDITSETINDEX IS NOT NULL
+            <if test="auditType != 0">
+            AND LTYPE1 = #{auditType}
+            </if>
+            <if test="strContent != null and strContent != ''">
+            AND UPPER(STRCONTENT) LIKE CONCAT('%' , UPPER(#{strContent}) , '%')
+            </if>
+            <if test="strOperator != null and strOperator != ''">
+            AND UPPER(STROPERATOR) LIKE  CONCAT('%' , UPPER(#{strOperator}) , '%')
+            </if>
+            ORDER BY TMOCCUR DESC, LAUDITLOGINDEX DESC
+            <if test="isDownload neq 'Y'.toString()" >	
+            LIMIT #{rowSize} OFFSET #{startRowSize}
+            </if>
+	</select>
+        
+	<select id="selectAuditLogListTotalCount" parameterType="com.kglory.tms.web.model.dto.AuditDto" resultType="int"> 
+            SELECT COUNT(*)
+            FROM 
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT * FROM ${item.name}
+                </foreach>
+            WHERE TMOCCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMOCCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND LAUDITSETINDEX IS NOT NULL
+            <if test="auditType != 0">
+            AND LTYPE1 = #{auditType}
+            </if>
+            <if test="strContent != null and strContent != ''">
+            AND UPPER(STRCONTENT) LIKE  CONCAT('%' , UPPER(#{strContent}) , '%')
+            </if>
+            <if test="strOperator != null and strOperator != ''">
+            AND UPPER(STROPERATOR) LIKE  CONCAT('%' , UPPER(#{strOperator}) , '%')
+            </if>
+	</select>
+        
+	<select id="selectAuditSensorLogList" parameterType="com.kglory.tms.web.model.dto.AuditDto" resultMap="auditResultMap"> 
+            SELECT LAUDITLOGINDEX, DATE_FORMAT( TMOCCUR, '%Y-%m-%d %H:%i') AS TMOCCUR, STRCONTENT, STROPERATOR, LAUDITSETINDEX, LTYPE1, LTYPE2
+            FROM 
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT * FROM ${item.name}
+                </foreach>
+            WHERE TMOCCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMOCCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND LAUDITSETINDEX IS NOT NULL
+            AND LTYPE2 <![CDATA[ < ]]> 1000 
+            ORDER BY TMOCCUR ASC, LAUDITLOGINDEX ASC
+	</select>
+</mapper>

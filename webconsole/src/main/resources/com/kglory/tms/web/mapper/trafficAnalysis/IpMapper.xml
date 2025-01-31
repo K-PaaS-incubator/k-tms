@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.trafficAnalysis.IpMapper">
+
+	<resultMap type="IpVO" 					id="IpListResultMap">
+		<result property="ip" 				column="IP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="ipInput" 			column="IP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="bps" 				column="BPS"/>
+		<result property="pps" 				column="PPS"/>
+		<result property="sumBps" 			column="SUM_BPS"/>
+		<result property="sumPps" 			column="SUM_PPS"/>
+		<result property="totalRowSize" 	column="TOTAL_ROWS"/>
+		<result property="rNum" 			column="R_NUM"/>
+	</resultMap>
+
+	<select id="selectIpList" parameterType="com.kglory.tms.web.model.dto.IpDto" resultMap="IpListResultMap">
+            SELECT IP, BPS, PPS
+            FROM(
+                    SELECT IP, BPS, PPS
+                    FROM(
+                            SELECT IP, ROUND(AVG(BPS), 2) AS BPS, ROUND(AVG(PPS), 2) AS PPS
+                            FROM(
+                                SELECT DWIPADDR AS IP, 
+                                        SUM(DBLSRCBPS + DBLDSTBPS) / #{timeDifference} AS BPS, 
+                                        SUM(DBLSRCPPS + DBLDSTPPS) / #{timeDifference} AS PPS
+                                FROM 
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * 
+                                    FROM ${item.name}
+                                </foreach>
+                                WHERE TMEND <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMEND <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0 ">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+                                <if test="fromIp != null and ipType == 4">
+                                    AND DWIPADDR <![CDATA[ >= ]]>  #{fromIp}
+                                </if>
+                                <if test="toIp != null and ipType == 4">
+                                    AND #{toIp} <![CDATA[ >= ]]> DWIPADDR
+                                </if> 
+                                <if test="ipType == 6 and ipInput != null and ipInput != ''">
+                                    AND DWIPADDR =  #{ipInput}
+                                </if>
+                            GROUP BY DWIPADDR
+                            ) B
+                    GROUP  BY IP 
+                    ORDER  BY BPS DESC
+                    ) C
+            ) D
+            LIMIT #{rowSize} OFFSET #{startRowSize}
+	</select>
+        
+	<select id="selectIpListTotalRow" parameterType="com.kglory.tms.web.model.dto.IpDto" resultMap="IpListResultMap">
+            SELECT TOTAL_ROWS, SUM_BPS, SUM_PPS
+            FROM(
+                SELECT COUNT(IP) AS TOTAL_ROWS, SUM(BPS) AS SUM_BPS, SUM(PPS) AS SUM_PPS
+                FROM(
+                    SELECT DWIPADDR AS IP,
+                            SUM(DBLSRCBPS + DBLDSTBPS) / #{timeDifference} AS BPS, 
+                            SUM(DBLSRCPPS + DBLDSTPPS) / #{timeDifference} AS PPS
+                    FROM 
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT * 
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMEND <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                    AND TMEND <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                    <if test="lnetworkIndex != null and lnetworkIndex > 0 ">
+                        AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    <if test="lnetworkIndex == 0">
+                        AND LNETWORKINDEX = 0
+                    </if>
+                    <if test="fromIp != null and ipType == 4">
+                        AND DWIPADDR <![CDATA[ >= ]]>  #{fromIp}
+                    </if>
+                    <if test="toIp != null and ipType == 4">
+                        AND #{toIp} <![CDATA[ >= ]]> DWIPADDR
+                    </if> 
+                    <if test="ipType == 6 and ipInput != null and ipInput != ''">
+                        AND DWIPADDR =  #{ipInput}
+                    </if>
+                GROUP BY DWIPADDR
+                ) B
+            ) C
+	</select>
+        
+	<resultMap type="IpVO" 			id="IpTotalResultMap">
+		<result property="bps" 		column="BPS"/>
+		<result property="pps" 		column="PPS"/>
+	</resultMap>
+	
+	<select id="selectIpTotal" parameterType="com.kglory.tms.web.model.dto.IpDto" resultMap="IpTotalResultMap">
+            SELECT	ROUND(IFNULL(BPS/#{timeDifference},0), 2) AS BPS, 
+                        ROUND(IFNULL(PPS/#{timeDifference},0), 2) AS PPS
+            from (
+                SELECT	SUM(DBLSRCPPS + DBLDSTPPS) PPS, SUM(DBLSRCBPS + DBLDSTBPS) BPS, TMEND, LNETWORKINDEX
+                FROM
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT *
+                        FROM ${item.name}
+                    </foreach>
+                WHERE TMEND <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                AND TMEND <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                <if test="lnetworkIndex != null and lnetworkIndex > 0 ">
+                    AND LNETWORKINDEX = #{lnetworkIndex}
+                </if>
+                <if test="lnetworkIndex == 0">
+                    AND LNETWORKINDEX = 0
+                </if>
+            ) B
+ 	</select>
+        
+ 	<resultMap type="IpChartVO" 		id="ipChartMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="data" 		column="DATA" />
+		<result property="strName"		column="STRNAME"  typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler"/>
+	</resultMap>
+	
+	<select id="selectIpChart" parameterType="com.kglory.tms.web.model.dto.IpDto" resultMap="ipChartMap" >
+		SELECT TMSTART, IFNULL(DATA,0) AS DATA,
+                <if test="ipType == 4">
+                    #{graphLongItem} AS STRNAME
+                </if>
+                <if test="ipType == 6">
+                    #{strSourceIp} AS STRNAME
+                </if>
+		FROM (	
+			SELECT TMSTART, SUM(BPS) AS DATA 
+			FROM (
+                            SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, (DBLSRCBPS + DBLDSTBPS) AS BPS
+                            FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+                            </foreach>
+                            WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                            AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            <if test="graphLongItem != -1 and ipType == 4">
+                            AND DWIPADDR = #{graphLongItem}
+                            </if>
+                            <if test="graphLongItem != -1 and ipType == 6">
+                            AND DWIPADDR = #{strSourceIp}
+                            </if>
+                            <if test="lNetworkList != null and lNetworkList.size() > 0">
+                            AND
+                                <foreach item="network" collection="lNetworkList"  open="(" separator="OR" close=")">
+                                    LNETWORKINDEX = #{network}
+                                </foreach>
+                            </if>
+			) B
+			GROUP BY TMSTART
+		) C
+		ORDER BY TMSTART ASC
+	</select>
+        
+	<resultMap type="IpVO" 			id="IpServicePopupResultMap">
+		<result property="bps" 		column="BPS"/>
+		<result property="pps" 		column="PPS"/>
+		<result property="srcBps" 	column="SRC_BPS"/>
+		<result property="dstBps" 	column="DST_BPS"/>
+		<result property="srcPps" 	column="SRC_PPS"/>
+		<result property="dstPps" 	column="DST_PPS"/>
+		<result property="protocol" column="PROTOCOL"/>
+		<result property="port" 	column="PORT"/>
+		<result property="rNum" 	column="R_NUM"/>
+	</resultMap>
+	
+        <select id="selectTop5ServicePopup"  parameterType="com.kglory.tms.web.model.dto.IpDto" resultMap="IpServicePopupResultMap">
+            SELECT PROTOCOL, PORT, ROUND(BPS, 2) AS BPS, ROUND(PPS, 2) AS PPS, S_BPS AS SRC_BPS, S_PPS AS SRC_PPS, D_BPS AS DST_BPS, D_PPS AS DST_PPS
+            FROM (
+                SELECT NPROTOCOL AS PROTOCOL, WSRCPORT AS PORT, SUM(DBLSRCBPS + DBLDSTBPS) / #{timeDifference} AS BPS, SUM(DBLSRCPPS + DBLDSTPPS) / #{timeDifference} AS PPS, 
+                    SUM(DBLSRCBPS) / #{timeDifference} AS S_BPS, SUM(DBLDSTBPS) / #{timeDifference} AS D_BPS, 
+                    SUM(DBLSRCPPS) / #{timeDifference} AS S_PPS, SUM(DBLDSTPPS) / #{timeDifference} AS D_PPS,
+                    TMSTART, DWSOURCEIP, DWDESTINATIONIP, LNETWORKINDEX
+                FROM
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT NPROTOCOL, WSRCPORT, DBLSRCBPS, DBLDSTBPS, DBLSRCPPS, DBLDSTPPS, TMSTART, DWSOURCEIP, DWDESTINATIONIP, LNETWORKINDEX
+                    FROM   ${item.name}
+                </foreach>
+                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                <if test="longIp != null and ipType == 4">
+                AND (DWSOURCEIP = #{longIp} OR DWDESTINATIONIP = #{longIp})
+                </if>
+                <if test="ipInput != null and ipType == 6">
+                AND (DWSOURCEIP = #{ipInput} OR DWDESTINATIONIP = #{ipInput})
+                </if>
+                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND LNETWORKINDEX = #{lnetworkIndex}
+                </if>
+                GROUP BY NPROTOCOL, WSRCPORT
+                ORDER BY SUM(DBLSRCBPS + DBLDSTBPS) / #{timeDifference} DESC
+            ) B
+            LIMIT 5
+        </select>
+</mapper>

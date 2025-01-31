@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemSettings.NetworkMapper">
+	
+	<resultMap type="NetworkVO" id="networkResultMap">
+		<result property="lnetworkIndex" 	column="LNETWORKINDEX"/>
+		<result property="strName" 			column="STRNAME"/>
+                <result property="sType" 			column="STYPE"/>
+		<result property="lValue1" 			column="LVALUE1"/>
+		<result property="lValue2" 			column="LVALUE2"/>
+                <result property="strDescription" 	column="STRDESCRIPTION"/>
+		<result property="dbLbandWidth" 	column="DBLBANDWIDTH"/>
+	</resultMap>
+	
+	<select id="selectNetworkList" resultMap="networkResultMap">
+		SELECT  LNETWORKINDEX, 
+                        STRNAME,
+                        STRDESCRIPTION,
+                        STYPE,
+                        LVALUE1,
+                        LVALUE2,
+                        DBLBANDWIDTH
+		FROM   SYSTEM_NETWORK 
+		ORDER BY STRNAME ASC
+	</select>
+	
+	
+	<resultMap  id="networkDetailResultMap" type="NetworkVO">
+		<result property="lnetworkIndex" 	column="LNETWORKINDEX"/>
+		<result property="sType" 			column="STYPE"/>
+		<result property="lValue1" 			column="LVALUE1"/>
+		<result property="lValue2" 			column="LVALUE2"/>
+		<result property="strName" 			column="STRNAME"/>
+		<result property="strDescription" 	column="STRDESCRIPTION"/>
+		<result property="dbLbandWidth" 	column="DBLBANDWIDTH"/>
+	</resultMap>
+	
+	<select id="selectNetworkDetailList" parameterType="com.kglory.tms.web.model.dto.NetworkDto" resultMap="networkResultMap">
+		SELECT  LNETWORKINDEX,
+				STRNAME,
+				STRDESCRIPTION,
+				STYPE,
+				LVALUE1,
+				LVALUE2,
+				DBLBANDWIDTH
+		FROM SYSTEM_NETWORK
+		WHERE LNETWORKINDEX = #{lnetworkIndex}
+	</select>
+	
+	<resultMap  id="networkIpBlockListResultMap" type="NetworkVO">
+		<result property="index"				column="LINDEX" />
+		<result property="lId"				column="LID" />
+		<result property="dwFromIp" 		column="DWFROMIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="dwToIp" 			column="DWTOIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+	</resultMap>
+	
+	<select id="selectNetworkIpBlockList" parameterType="com.kglory.tms.web.model.dto.NetworkDto" resultMap="networkIpBlockListResultMap">
+		SELECT	LINDEX, LID, 
+                        IFNULL(DWFROMIP, STRFROMIPV6) AS DWFROMIP,
+                        IFNULL(DWTOIP, STRTOIPV6)  AS DWTOIP
+		FROM SYSTEM_NETIPBLOCK
+		WHERE LID = #{lnetworkIndex}
+	</select>
+        
+	<select id="selectNetworkIpBlock" parameterType="com.kglory.tms.web.model.dto.NetworkDto" resultMap="networkIpBlockListResultMap">
+		SELECT	LINDEX, LID, 
+                        IFNULL(DWFROMIP, STRFROMIPV6) AS DWFROMIP,
+                        IFNULL(DWTOIP, STRTOIPV6)  AS DWTOIP
+		FROM SYSTEM_NETIPBLOCK
+		WHERE LINDEX = #{index}
+	</select>
+	
+	<delete id="deleteNetworkIpBlockLid" parameterType="com.kglory.tms.web.model.dto.NetworkDto" >
+		DELETE FROM SYSTEM_NETIPBLOCK 
+		WHERE LID = #{lnetworkIndex}
+	</delete>
+        
+	<delete id="deleteNetworkIpBlockDetail" parameterType="com.kglory.tms.web.model.dto.IpBlockDto" >
+		DELETE FROM SYSTEM_NETIPBLOCK 
+		WHERE LINDEX = #{index}
+	</delete>
+	
+	<insert id="insertNetworkIpBlock" parameterType="com.kglory.tms.web.model.dto.IpBlockDto">
+		INSERT INTO SYSTEM_NETIPBLOCK (LID, DWFROMIP, DWTOIP, STRFROMIPV6, STRTOIPV6, BTYPE) 
+                VALUES (#{lId}, #{longFromIp, jdbcType=DOUBLE}, #{longToIp, jdbcType=DOUBLE}, 
+                        #{strFromIpv6, jdbcType=VARCHAR}, #{strToIpv6, jdbcType=VARCHAR}, #{bType})
+	</insert>
+        
+	<insert id="updateNetworkIpBlock" parameterType="com.kglory.tms.web.model.dto.IpBlockDto">
+		UPDATE SYSTEM_NETIPBLOCK SET
+                    DWFROMIP = #{longFromIp, jdbcType=DOUBLE},
+                    DWTOIP = #{longToIp, jdbcType=DOUBLE},
+                    STRFROMIPV6 = #{strFromIpv6, jdbcType=VARCHAR},
+                    STRTOIPV6 = #{strToIpv6, jdbcType=VARCHAR},
+                    BTYPE = #{bType}
+                WHERE LINDEX = #{index}
+	</insert>
+	
+	<update id="updateNetworkDetailInfo" parameterType="com.kglory.tms.web.model.dto.NetworkDto">
+		UPDATE SYSTEM_NETWORK 
+		SET    STRNAME = #{strName},
+		       STRDESCRIPTION = #{strDescription},
+		       LVALUE1 = #{lValue1},
+		       STYPE = #{sType}
+		WHERE LNETWORKINDEX = #{lnetworkIndex}
+	</update>
+	
+	<insert id="insertNetworkDetailInfo" parameterType="com.kglory.tms.web.model.dto.NetworkDto">
+                INSERT INTO SYSTEM_NETWORK (
+                        STRNAME,
+                        <if test="strDescription != null">
+                        STRDESCRIPTION,
+                        </if>
+                        LVALUE1,
+                        STYPE,
+                        LVALUE2,
+                        SZIP1
+                )
+                VALUES ( #{strName},
+                        <if test="strDescription != null">
+                        #{strDescription, jdbcType=VARCHAR},
+                        </if>
+                        #{lValue1},
+                        #{sType},
+                        0,
+                        0
+                )
+                <selectKey order="AFTER" keyProperty="lnetworkIndex" resultType="long">
+                        SELECT MAX(LNETWORKINDEX) FROM SYSTEM_NETWORK
+                </selectKey>
+	</insert>
+	
+	<delete id="deleteNetworkSettingInfo" parameterType="com.kglory.tms.web.model.dto.NetworkDto" >
+                DELETE FROM SYSTEM_NETWORK 
+                WHERE LNETWORKINDEX = #{lnetworkIndex}
+	</delete>
+	
+	<select id="isDuplicatelnetworkIndex" parameterType="com.kglory.tms.web.model.dto.NetworkDto" resultType="Integer">
+                SELECT COUNT(LNETWORKINDEX) FROM SYSTEM_NETWORK WHERE LNETWORKINDEX = #{lnetworkIndex}
+	</select>
+	
+	<select id="isDuplicateNetworkName" parameterType="com.kglory.tms.web.model.dto.NetworkDto" resultMap="networkResultMap">
+		SELECT STRNAME
+			FROM SYSTEM_NETWORK
+		WHERE STRNAME = #{strName}	
+	</select>
+</mapper>

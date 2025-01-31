@@ -1,0 +1,238 @@
+<!-- 좌측 챠트 컨텐츠 begin -->
+<div class="container-fluid" style="background:#f3f3f4;padding: 10px;">
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="x_panel">
+				<div class="title pull-left padding-l5">분석기간 (rev02)</div>
+				<div class="pull-left col-xs-4 padding-t2 padding-l10 align-left" id="chartDateTotMal"></div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-4">
+		<div class="x_panel">
+			<div class="x_title">
+				<div class="title pull-left"><%=locale.dashboard.totalTraffic%>/<%=locale.dashboard.maliciousTraffic%></div>
+				<div class="chart-legend pull-right">
+					<span class="chart-bg-6"></span><%=locale.dashboard.totalTraffic%>
+					<span class="chart-bg-9 margin-l10"></span><%=locale.dashboard.maliciousTraffic%>
+				</div>
+			</div>
+			<div class="x_content">			
+				<div id="totMalTrafficChart"></div>
+			</div>
+		</div>	 
+	</div>
+	<div class="col-lg-4">
+		<div class="x_panel">
+			<div class="x_title">
+				<div class="title pull-left"><%=locale.dashboard.totalEventCount%>/<%=locale.dashboard.maliciousTraffic%></div>
+				<div class="chart-legend pull-right">
+					<span class="chart-bg-6"></span><%=locale.dashboard.totalTraffic%>
+					<span class="chart-bg-9 margin-l10"></span><%=locale.dashboard.maliciousTraffic%>
+				</div>
+			</div>
+			<div class="x_content">			
+				<div id="malTrafficEventChart"></div>
+			</div>
+		</div>	 
+	</div>
+	<div class="col-lg-4">
+		<div class="x_panel" style="height:322px;">
+			<div class="x_title">
+				<div class="title pull-left">프로토콜별 추이 그래프</div>
+			</div>
+			<div class="x_content">			
+				<div id="" class="col-lg-12" style="overflow:hidden;">
+					<div id="protocolChart"></div>
+				</div>
+			</div>
+		</div>	 
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-4">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2><%=locale.dashboard.serviceTopN%></h2>
+			</div>
+			<div class="x_content">
+				<div class="col-lg-5">
+					<div style="width:100%;height: 220px" class="pull-left" id="" >
+						<img src="images/beta/dashboard_graph0201.png" style="width:100%;">
+					</div>
+				</div>
+				<div class="col-lg-7 padding-clear">
+					<div style="width:100%" class="pull-right" id="tableServiceTopN"></div>
+				</div>
+			</div>
+		</div>	 
+	</div>
+	<div class="col-lg-4">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2><%=locale.dashboard.eventTopN%></h2>
+			</div>
+			<div class="x_content">
+				<div class="col-lg-5">
+					<div style="width:100%;height: 220px" class="pull-left" id="" >
+						<img src="images/beta/dashboard_graph0202.png" style="width:100%;">
+					</div>
+				</div>
+				<div class="col-lg-7 padding-clear">
+					<div style="width:100%" class="pull-right" id="tableEventTopN"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>기타 서비스 Top5</h2>
+			</div>
+			<div class="x_content">
+				<div class="col-lg-5">
+					<div style="width:100%;height: 220px" class="pull-left" id="" >
+						<img src="images/beta/dashboard_graph0203.png" style="width:100%;">
+					</div>
+				</div>
+				<div class="col-lg-7 padding-clear">
+					<div style="width:100%" class="pull-right" id="">
+					
+						<table class="table rank-table inside-iconbtn table-fixed dashboard-table-fixed tbl-blank ">
+							<colgroup>
+							    <col width="36%">
+								<col width="15%">
+								<col width="25%">
+								<col width="24%">
+							    <col>
+							</colgroup>
+							<thead>
+								<tr>
+									<th colspan="2" class="overflow-ellipsis" title="공격명">공격명</th>
+									<th colspan="2" class="overflow-ellipsis" title="공격건수 (건)">공격건수 (건)</th>
+								</tr>
+							</thead>
+							<tbody id="tbody">
+								<tr>
+									<td class="overflow-ellipsis font-size-11"><span title="Test01"><a id="attackName">Test01</a></span></td>
+									<td>
+										<button type="button" class="btn-intable-chart cursor-pointer attackCountPopup" data-toggle="modal" data-target="#modal-trend"></button>
+									</td><!-- modal 띄우는 button -->
+									<td class="align-right font-size-11"><a id="originalLogPopup">26.98K</a></td>
+									<td class="align-right chart-text-5 font-size-11">46.27%</td></tr><tr><td class="overflow-ellipsis font-size-11">
+										<span title="Test02"><a id="attackName">Test02</a></span>
+									</td>
+									<td>
+										<button type="button" class="btn-intable-chart cursor-pointer attackCountPopup" data-toggle="modal" data-target="#modal-trend"></button>
+									</td><!-- modal 띄우는 button -->
+									<td class="align-right font-size-11"><a id="originalLogPopup">22.66K</a></td>
+									<td class="align-right chart-text-5 font-size-11">38.86%</td></tr><tr><td class="overflow-ellipsis font-size-11">
+										<span title="tcp flag syn/data"><a id="attackName">tcp flag syn/data</a></span>
+									</td>
+									<td>
+										<button type="button" class="btn-intable-chart cursor-pointer attackCountPopup" data-toggle="modal" data-target="#modal-trend"></button>
+									</td><!-- modal 띄우는 button -->
+									<td class="align-right font-size-11"><a id="originalLogPopup">2.16K</a></td>
+									<td class="align-right chart-text-5 font-size-11">3.71%</td></tr><tr><td class="overflow-ellipsis font-size-11">
+										<span title="ftp syst"><a id="attackName">ftp syst</a></span>
+									</td>
+									<td>
+										<button type="button" class="btn-intable-chart cursor-pointer attackCountPopup" data-toggle="modal" data-target="#modal-trend"></button>
+									</td><!-- modal 띄우는 button -->
+									<td class="align-right font-size-11"><a id="originalLogPopup">2.16K</a></td>
+									<td class="align-right chart-text-5 font-size-11">3.71%</td></tr><tr><td class="overflow-ellipsis font-size-11">
+										<span title="ftp pasv"><a id="attackName">ftp pasv</a></span>
+									</td>
+									<td>
+										<button type="button" class="btn-intable-chart cursor-pointer attackCountPopup" data-toggle="modal" data-target="#modal-trend"></button>
+									</td><!-- modal 띄우는 button -->
+									<td class="align-right font-size-11"><a id="originalLogPopup">2.16K</a></td>
+									<td class="align-right chart-text-5 font-size-11">3.71%</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-8">
+		<div class="x_panel" style="height:330px;">
+			<div class="x_title">
+				<h2><%=locale.dashboard.victimIpTopN%></h2>
+			</div>
+			<div class="x_content">
+				<div class="col-lg-4">
+					<div style="width:100%;height: 270px" class="pull-left" id="victimIpChart" >
+					</div>
+					<!--div style="width:100%;height: 270px" class="pull-left" id="" >
+						<img src="images/beta/dashboard_graph0201.png" style="width:100%;">
+					</div-->					
+				</div>
+				<div class="col-lg-8 padding-clear">
+					<div style="width:100%" class="pull-right" id="tableVictimIpTopN"></div>
+				</div>				
+			</div>
+		</div>
+	</div>
+	<% if(targetCategory == 0){%>
+	<div class="col-lg-4">
+		<div class="x_panel" style="height:330px;">
+			<div class="x_title">
+				<h2><%=locale.dashboard.auditTopN%></h2>
+			</div>	
+			<div class="x_content">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="col-lg-4 count_set2" >
+							<div class="count_top"><i class="fa fa-hand-paper-o"></i>&nbsp;행위</div>
+							<div class="count audit_action">372</div>
+						</div>
+						<div class="col-lg-4 count_set2 count_border_left2" >
+							<div class="count_top"><i class="fa fa-warning"></i>&nbsp;경고</div>
+							<div class="count audit_warning">178</div>
+						</div>
+						<div class="col-lg-4 count_set2 count_border_left2" >
+							<div class="count_top"><i class="fa fa-arrows-alt"></i>&nbsp;오류</div>
+							<div class="count audit_error">4</div>
+						</div>
+					</div>
+				</div>				
+				<div class="row">					
+					<div class="col-lg-12">
+						<!--div id="tableAuditTopN"></div-->
+						<table class="table">
+							<tbody id="">
+								<tr>
+									<td class="overflow-ellipsis">[매니저]테이블스페이스(TESS_LOG)의 사용량이 허용량(90%)을 초과하여 90.48% 사용중 입니다.</td>
+								</tr>
+								<tr>
+									<td class="overflow-ellipsis">[매니저]테이블스페이스(TESS_LOG)의 사용량이 허용량(90%)을 초과하여 90.48% 사용중 입니다.</td>
+								</tr>
+								<tr>
+									<td class="overflow-ellipsis">[매니저]테이블스페이스(TESS_LOG)의 사용량이 허용량(90%)을 초과하여 90.48% 사용중 입니다.</td>
+								</tr>
+								<tr>
+									<td class="overflow-ellipsis">[매니저]테이블스페이스(TESS_LOG)의 사용량이 허용량(90%)을 초과하여 90.48% 사용중 입니다.</td>
+								</tr>
+								<tr>
+									<td class="overflow-ellipsis">[매니저]테이블스페이스(TESS_LOG)의 사용량이 허용량(90%)을 초과하여 90.48% 사용중 입니다.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>			
+				
+			</div>		
+		</div>
+	</div>
+	<% }%>
+</div>
+
+</div>

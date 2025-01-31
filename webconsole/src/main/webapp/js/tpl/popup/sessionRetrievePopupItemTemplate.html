@@ -1,0 +1,29 @@
+<% if( condition.sessionDirection == 0 ) { %>
+<!-- 순위 -->
+<td class="align-center"><%= data.rNum %></td>
+<!-- client IP -->
+<td class="ipRetrievePopupLink cursor-pointer overflow-ellipsis"><a title="<%= data.client %>"><%= data.client %></a></td>
+<!-- Client -> Server -->
+<td class="align-right"><%= data.clientBytes %></td>
+<!-- Server -> Client -->
+<td class="align-right"><%= data.serverBytes %></td>
+<!-- Total Bytes -->
+<td class="align-right"><%= data.totalBytes %></td>
+<!-- Sessoin -->
+<td class="align-right ipCountPopupLink cursor-pointer" ><%= data.count %></td>
+<% } %>
+<% if( condition.sessionDirection != 0 ) { %>
+<!-- 순위 -->
+<td class="align-center"><%= data.rNum %></td>
+<!-- Server IP -->
+<td class="ipRetrievePopupLink cursor-pointer"><a><%= data.server %></a></td>
+<!-- Server -> Client -->
+<td class="align-right"><%= data.serverBytes %></td>
+<!-- Client -> Server -->
+<td class="align-right"><%= data.clientBytes %></td>
+<!-- Total Bytes -->
+<td class="align-right"><%= data.totalBytes %></td>
+<!-- Sessoin -->
+<td class="align-right ipCountPopupLink cursor-pointer"><%= data.count %></td>		
+<% } %>	
+

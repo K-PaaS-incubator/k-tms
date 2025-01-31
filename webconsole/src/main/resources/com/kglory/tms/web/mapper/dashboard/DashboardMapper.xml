@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.dashboard.DashboardMapper">
+	
+	<resultMap type="ServiceVO" 			id="serviceMap">
+		<result property="nprotocol" 		column="NPROTOCOL" />
+		<result property="wservice" 		column="WSERVICE" />
+		<result property="dblbps"		column="DBLBPS" />
+		<result property="sumDblbps"		column="SUM_DBLBPS" />
+		<result property="totalbps"		column="TOTALBPS" />
+	</resultMap>
+        
+	<select id="selectServiceTopN" parameterType="com.kglory.tms.web.model.dto.ServiceDto" resultMap="serviceMap">
+		SELECT /*--[초기페이지]TOP5 서비스--*/ 
+		NPROTOCOL, WSERVICE, ROUND(SUM_DBLBPS / 720,2) AS DBLBPS, ROUND(SUM_DBLBPS,2) AS SUM_DBLBPS
+		FROM( 
+		    SELECT WSERVICE, NPROTOCOL, IFNULL(SUM(DBLSRCBPS+DBLDSTBPS), 0) AS SUM_DBLBPS, TMSTART, LNETWORKINDEX
+		    FROM 
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT NPROTOCOL, WSERVICE, DBLSRCBPS, DBLDSTBPS, TMSTART, LNETWORKINDEX
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    <if test="lnetworkIndex != null">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    GROUP BY WSERVICE, NPROTOCOL
+		) B
+                ORDER BY SUM_DBLBPS DESC
+                LIMIT #{topN}
+	</select>
+        
+	<select id="selectServiceTopNTotal" parameterType="com.kglory.tms.web.model.dto.ServiceDto" resultType="long">
+                SELECT TOTALBPS
+                FROM ( 
+                  SELECT SUM(DBLSRCBPS+DBLDSTBPS) AS TOTALBPS, TMSTART, LNETWORKINDEX
+                  FROM 
+                  <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                      SELECT NPROTOCOL, WSERVICE, DBLSRCBPS, DBLDSTBPS, TMSTART, LNETWORKINDEX
+                      FROM ${item.name}
+                  </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                  <if test="lnetworkIndex != null">
+                          AND LNETWORKINDEX = #{lnetworkIndex}
+                  </if>
+                ) B
+	</select>
+        
+	<resultMap type="StatEPVO" 				id="StatEPMap">
+		<result property="lcode" 			column="LCODE" />
+		<result property="strTitle" 		column="STRTITLE" />
+		<result property="eventCount"		column="EVENTCOUNT" />
+		<result property="totalCount"		column="TOTALCOUNT" />
+	</resultMap>
+	
+	<select id="selectEventTopN" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultMap="StatEPMap">
+		SELECT /*--[초기페이지]TOP5 공격--*/ LCODE, STRTITLE, EVENTCOUNT
+		FROM (
+		    SELECT LCODE, STRTITLE, IFNULL(SUM(DWEVENTNUM), 0) AS EVENTCOUNT
+		    FROM 
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT LCODE, STRTITLE, DWEVENTNUM, TMSTART, LSRCNETINDEX, LDSTNETINDEX, WINBOUND
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                        AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                    </if>
+                    AND LCODE <![CDATA[ > ]]> 0
+                    GROUP BY LCODE, STRTITLE
+		) B
+                ORDER BY EVENTCOUNT DESC, STRTITLE ASC
+                LIMIT #{topN}
+	</select>
+        	
+	<select id="selectEventTopNTotal" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultType="long">
+		SELECT TOTALCOUNT 
+		FROM (
+		    SELECT LCODE, STRTITLE, SUM(DWEVENTNUM) TOTALCOUNT, LSRCNETINDEX, LDSTNETINDEX, WINBOUND
+		    FROM 
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT LCODE, STRTITLE, DWEVENTNUM, TMSTART, LSRCNETINDEX, LDSTNETINDEX, WINBOUND
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                        AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                    </if>
+                    AND LCODE <![CDATA[ > ]]> 0
+		) B
+	</select>	
+        
+	<resultMap type="VictimIpVO" 				id="VictimIpMap">
+		<result property="dwDestinationIp" 		column="DWDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="nSum" 				column="NSUM" />
+		<result property="bps"					column="BPS" />
+		<result property="totalNSum" 			column="TOTAL_NSUM" />
+		<result property="totalBps"				column="TOTAL_BPS" />
+		<result property="rNum"					column="R_NUM" />
+	</resultMap>
+	
+	<select id="selectVictimIpTopN" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultMap="VictimIpMap">
+		SELECT /*--[탐지분석/피해자IP]--*/ DWDESTINATIONIP, NSUM, BPS
+		FROM (
+                    SELECT DWDESTINATIONIP, NSUM, BPS/720 AS BPS
+                    FROM (
+                        SELECT 	DWDESTINATIONIP, NSUM, 	BPS
+                        FROM (
+                            SELECT  DWDESTINATIONIP,IFNULL(SUM(NSUM), 0) AS NSUM, IFNULL(SUM(BPS), 0) AS BPS
+                            FROM (
+                                SELECT DWDESTINATIONIP, LCODE, NPROTOCOL, NDESTINATIONPORT, 
+                                CONCAT(NPROTOCOL , ',' , NDESTINATIONPORT) AS D_PORT, 
+                                SUM(DWEVENTNUM) AS NSUM, SUM(DBLBPS) AS BPS, TMSTART, WINBOUND
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT DWDESTINATIONIP, LCODE, NPROTOCOL, NDESTINATIONPORT, DWEVENTNUM, DWPKTSIZE AS DBLBPS, TMSTART, LSRCNETINDEX, LDSTNETINDEX, WINBOUND
+                                    FROM ${item.name}
+                                </foreach>
+                                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                                </if>
+                                AND LCODE <![CDATA[ > ]]> 0
+			        GROUP BY LCODE, NPROTOCOL, NDESTINATIONPORT, CONCAT(NPROTOCOL , ',' , NDESTINATIONPORT), DWDESTINATIONIP
+                            ) B
+                            GROUP BY DWDESTINATIONIP
+                        ) C
+                        ORDER BY NSUM DESC, BPS DESC
+                    ) D
+                ) E
+                ORDER BY NSUM DESC, BPS DESC
+                LIMIT #{topN}
+	</select>
+        	
+	<select id="selectVictimIpTopNTotal" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultMap="VictimIpMap">
+		SELECT /*--[탐지분석/피해자IP]--*/ DWDESTINATIONIP, NSUM, BPS, SUM(NSUM) AS TOTAL_NSUM, TOTAL_BPS
+		FROM (
+                    SELECT DWDESTINATIONIP, NSUM, BPS/720 AS BPS, TOTAL_BPS/720 AS TOTAL_BPS
+                    FROM (
+                        SELECT 	DWDESTINATIONIP, NSUM, 	BPS, SUM(BPS) AS  TOTAL_BPS
+                        FROM (
+                            SELECT  DWDESTINATIONIP,IFNULL(SUM(NSUM), 0) AS NSUM, IFNULL(SUM(BPS), 0) AS BPS
+                            FROM (
+                                SELECT DWDESTINATIONIP, LCODE, NPROTOCOL, NDESTINATIONPORT, 
+                                CONCAT(NPROTOCOL , ',' , NDESTINATIONPORT) AS D_PORT, 
+                                SUM(DWEVENTNUM) AS NSUM, SUM(DBLBPS) AS BPS, TMSTART, WINBOUND
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT DWDESTINATIONIP, LCODE, NPROTOCOL, NDESTINATIONPORT, DWEVENTNUM, DWPKTSIZE AS DBLBPS, TMSTART, LSRCNETINDEX, LDSTNETINDEX, WINBOUND
+                                    FROM ${item.name}
+                                </foreach>
+                                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                                </if>
+                                AND LCODE <![CDATA[ > ]]> 0
+                            ) B
+                        ) C
+                        ORDER BY NSUM DESC, BPS DESC
+                    ) D
+                ) E
+	</select>
+        	
+	<resultMap type="AuditVO" 				id="auditMap">
+		<result property="tmOccur" 			column="TMOCCUR" />
+		<result property="strContent" 		column="STRCONTENT" />
+		<result property="cntAction"		column="CNT_ACTION" />
+		<result property="cntError" 		column="CNT_ERROR" />
+		<result property="cntWarning"		column="CNT_WARNING" />
+		<result property="ltype1"		column="LTYPE1" />
+		<result property="ltype2"		column="LTYPE2" />
+	</resultMap>
+	
+	<select id="selectAuditTopN" parameterType="com.kglory.tms.web.model.dto.AuditDto" resultMap="auditMap">
+		SELECT /*--[초기페이지] 감사로그 TOP5--*/ DATE_FORMAT( TMOCCUR, '%Y-%m-%d %H:%i') AS TMOCCUR, STRCONTENT, LAUDITSETINDEX, LTYPE1, LTYPE2
+		FROM (
+                    SELECT TMOCCUR, STRCONTENT, LAUDITSETINDEX, LTYPE1, LTYPE2
+                    FROM (
+			SELECT LAUDITLOGINDEX, TMOCCUR, STRCONTENT, STROPERATOR, LAUDITSETINDEX, LTYPE1, LTYPE2, STRCOMMENT
+		  	FROM 
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                            SELECT * 
+                            FROM ${item.name}
+                        </foreach>
+                        WHERE TMOCCUR <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                        AND TMOCCUR <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    ) B  	
+                    ORDER BY TMOCCUR DESC 
+		) C
+     		WHERE LAUDITSETINDEX IS NOT NULL
+                ORDER BY TMOCCUR DESC
+     		LIMIT #{topN}
+	</select>
+        
+	<select id="selectAuditCount" parameterType="com.kglory.tms.web.model.dto.AuditDto" resultMap="auditMap">
+                SELECT
+                    COUNT(CASE WHEN LTYPE1 = 1 THEN 1 END) AS CNT_ACTION,
+                    COUNT(CASE WHEN LTYPE1 = 2 THEN 1 END) AS CNT_ERROR,
+                    COUNT(CASE WHEN LTYPE1 = 3 THEN 1 END) AS CNT_WARNING
+                FROM 
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT * 
+                    FROM ${item.name}
+                </foreach>
+                WHERE TMOCCUR <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                AND TMOCCUR <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                AND LAUDITSETINDEX IS NOT NULL 
+	</select>
+        
+	<resultMap type="ProtocolVO" 		id="protocolMap">
+		<result property="tmstart" 		column="TMSTART" />
+		<result property="dblbps" 		column="DBLBPS" />
+	</resultMap>
+	
+	<select id="selectProtocolTraffic" parameterType="com.kglory.tms.web.model.dto.ProtocolDto" resultMap="protocolMap">
+		SELECT TMSTART, IFNULL(DBLBPS,0) AS DBLBPS
+		FROM
+		(	
+                    SELECT /*--[초기페이지]전체 트래픽 총/IN/OUT--*/ 
+                    SUBSTR(DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i'), 3) AS TMSTART,SUM(DBLBPS) AS DBLBPS
+                    FROM 
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT TMSTART, DBLBPS, LNETWORKINDEX, UCTYPE, NPROTOCOL
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    AND UCTYPE = 10 AND NPROTOCOL = 0 
+                    <if test="lnetworkIndex != null">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    GROUP BY TMSTART 
+		) B
+		ORDER BY TMSTART ASC
+	</select>
+        
+	<resultMap type="ProtocolVO" 			id="protocolsTrafficMap">
+		<result property="tmstart" 			column="TMSTART" />
+		<result property="dblbps" 			column="DBLBPS" />
+		<result property="nProtocol" 		column="NPROTOCOL" />
+		<result property="protocolName" 	column="STRNAME" />
+	</resultMap>
+	
+	<select id="protocolsTraffic" parameterType="com.kglory.tms.web.model.dto.ProtocolDto" resultMap="protocolsTrafficMap">
+		SELECT /*--[초기페이지] 프로토콜 추이 그래프--*/ TMSTART, IFNULL(DBLBPS,0) DBLBPS, IFNULL(NPROTOCOL, #{nProtocol}) NPROTOCOL, IFNULL(STRNAME, #{protocolName}) STRNAME
+		FROM
+		(	
+                    SELECT TMSTART, SUM(DBLBPS) AS DBLBPS, NPROTOCOL, STRNAME
+                    FROM 
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART,  DBLBPS, NPROTOCOL, STRNAME, UCTYPE, LNETWORKINDEX
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    AND (UCTYPE = 21 OR (UCTYPE = 11 AND NPROTOCOL != 1))
+                    AND NPROTOCOL = #{nProtocol}
+                    <if test="lnetworkIndex != null">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    GROUP BY TMSTART
+		) B
+		ORDER BY TMSTART ASC
+	</select>
+        
+	<resultMap type="ProtocolVO" 			id="protocolListMap">
+		<result property="nProtocol" 		column="NPROTOCOL" />
+		<result property="protocolName" 	column="STRNAME" />
+	</resultMap>
+	
+        <select id="selectProtocolList" parameterType="com.kglory.tms.web.model.dto.ProtocolDto" resultMap="protocolListMap">
+            SELECT NPROTOCOL, STRNAME, SUM(DBLBPS) AS DBLBPS
+            FROM 
+            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                SELECT NPROTOCOL, STRNAME, TMSTART, UCTYPE, DBLBPS
+                FROM ${item.name}
+            </foreach>
+            WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+            AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+            AND (UCTYPE = 21 OR (UCTYPE = 11 AND NPROTOCOL != 1))
+            GROUP BY NPROTOCOL, STRNAME
+            ORDER BY DBLBPS DESC
+            LIMIT 5
+        </select>
+	
+	<resultMap type="StatEPVO" 			id="statEPMap">
+		<result property="tmstart" 		column="TMSTART" />
+		<result property="eventDblbps" 	column="EVENTDBLBPS" />
+		<result property="eventCount" 	column="EVENTCOUNT" />
+	</resultMap>
+	
+	<select id="selectStatTraffic" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultMap="statEPMap">
+            SELECT SUBSTR(DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i'), 3) AS TMSTART, IFNULL(EVENTDBLBPS,0) AS EVENTDBLBPS
+            FROM
+		(	
+	        SELECT /*--[초기페이지] 유해트래픽 그래프--*/
+                    TMSTART, SUM(DBLBPS) AS EVENTDBLBPS 
+	        FROM 
+	        <foreach item="item" index="index" collection="protocolTableNames"  open="(" separator="UNION ALL" close=") A">
+	            SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, DBLBPS, NPROTOCOL, UCTYPE, LNETWORKINDEX
+	            FROM ${item.name}
+	        </foreach>
+                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                AND NPROTOCOL = 0 
+                AND UCTYPE = 60
+                <if test="lnetworkIndex != null">
+                    AND LNETWORKINDEX = #{lnetworkIndex}
+                </if>
+	        GROUP BY TMSTART
+            ) B
+            ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectStatEvent" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultMap="statEPMap">
+		SELECT TMSTART, IFNULL(EVENTCOUNT,0) AS EVENTCOUNT
+		FROM
+		(	
+                    SELECT /*--[초기페이지] 공격건수 그래프--*/
+                        SUBSTR(DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i'), 3) AS TMSTART, SUM(DWEVENTNUM) AS EVENTCOUNT
+                    FROM 
+                    <foreach item="item" index="index" collection="statEPTableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, DWEVENTNUM, LCODE, WINBOUND, LSRCNETINDEX, LDSTNETINDEX
+                        FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                    AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                    </if>
+                    GROUP BY TMSTART
+                ) B
+		ORDER BY TMSTART ASC
+	</select>
+        
+	<resultMap type="StatEPVO" 				id="orgMap">
+		<result property="lvsensorindex" 	column="LVSENSORINDEX" />
+		<result property="strName" 			column="STRNAME" />
+		<result property="eventDblbps" 		column="EVENTDBLBPS" />
+		<result property="eventCount" 		column="EVENTCOUNT" />
+		<result property="dblbps" 			column="DBLBPS" />
+	</resultMap>
+	
+	<select id="selectOrg" parameterType="com.kglory.tms.web.model.dto.StatEPDto" resultMap="orgMap">
+		SELECT /*--[초기페이지] 공격 TOP5--*/ EVENTCOUNT, EVENTDBLBPS, DBLBPS
+                FROM (            
+                    SELECT MAX(EVENTCOUNT) AS EVENTCOUNT, MAX(EVENTDBLBPS)  AS EVENTDBLBPS, MAX(DBLBPS) AS DBLBPS
+                    FROM (
+                        SELECT EVENTCOUNT, EVENTDBLBPS, DBLBPS
+                        FROM (
+                            SELECT IFNULL(EVENTCOUNT, 0) AS EVENTCOUNT, IFNULL(EVENTDBLBPS, 0) AS EVENTDBLBPS, IFNULL(DBLBPS, 0) AS DBLBPS
+                            FROM (
+                                SELECT EVENTCOUNT, EVENTDBLBPS, DBLBPS
+                                FROM (
+                                    SELECT IFNULL(DWEVENTNUM,0) AS EVENTCOUNT, IFNULL(DBLBPS,0) AS EVENTDBLBPS
+                                    FROM    
+                                    <foreach item="item" index="index" collection="statEPTableNames"  open="(" separator="UNION ALL" close=") AA">
+                                        SELECT DWEVENTNUM, DBLBPS, TMSTART, WINBOUND
+                                        FROM ${item.name}
+                                    </foreach>
+                                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                                ) A
+                                FULL OUTER JOIN
+                                (
+                                SELECT IFNULL(DBLBPS, 0) AS DBLBPS
+                                FROM   
+                                    <foreach item="item" index="index" collection="protocolTableNames"  open="(" separator="UNION ALL" close=")">
+                                        SELECT  DBLBPS, TMSTART FROM ${item.name}
+                                    </foreach>
+                                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{tmstart} AS DATETIME)
+                                    AND TMSTART <![CDATA[ < ]]> CAST( #{tmend} AS DATETIME)
+                                ) B
+                                ON 1 = 1
+                            ) C
+                            ORDER BY EVENTCOUNT DESC, DBLBPS DESC, EVENTDBLBPS DESC 
+                        ) D
+                    ) E
+                    ORDER BY  EVENTCOUNT DESC,
+                              DBLBPS DESC,
+                              EVENTDBLBPS DESC 
+                ) F
+                ORDER BY  EVENTCOUNT DESC, DBLBPS DESC, EVENTDBLBPS DESC
+                LIMIT 5 
+	</select>
+        
+	<resultMap type="ApplicationVO" 			id="applicationMap">
+		<result property="lIndex" 				column="LINDEX" />
+		<result property="tmLogTime" 			column="TMLOGTIME" />
+		<result property="nProtocol"			column="NPROTOCOL" />
+		<result property="bType" 				column="BTYPE" />
+		<result property="bIpType" 				column="BIPTYPE" />
+		<result property="lSrcNetIndex" 		column="LSRCNETINDEX" />
+		<result property="lDstNetIndex" 		column="LDSTNETINDEX" />
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX" />
+		<result property="lsensorIndex" 		column="LSENSORINDEX" />
+		<result property="rNum" 				column="R_NUM" />
+		<result property="tmDbTime" 			column="TMDBTIME" />
+		<result property="totalCount"			column="TOTALCOUNT" />
+		<result property="sumCount"				column="SUMCOUNT" />
+		<result property="nType" 				column="NTYPE" />
+		<result property="nIpType" 				column="NIPTYPE" />
+		<result property="lTotCount"			column="LTOTCOUNT" />
+	</resultMap>
+	
+	<select id="selectApplicationTopN" parameterType="com.kglory.tms.web.model.dto.ApplicationSearchDto" resultMap="applicationMap">
+		SELECT BTYPE AS NTYPE, SUMCOUNT, LTOTCOUNT
+		FROM   (
+		        SELECT BTYPE, SUM(LTOTCOUNT) AS SUMCOUNT, MAX(LTOTCOUNT) AS LTOTCOUNT
+		        FROM   (
+		                SELECT BTYPE, SUM(BTYPE) AS LTOTCOUNT
+		                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT BTYPE, TMDBTIME, BIPTYPE, LSRCNETINDEX, LDSTNETINDEX
+                                    FROM ${item.name}
+                                </foreach>
+                                WHERE TMDBTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMDBTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                AND BIPTYPE = #{ipType}
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                                </if>
+		                GROUP  BY BTYPE
+                        ) B
+                        GROUP BY BTYPE
+                ) C
+		ORDER BY LTOTCOUNT DESC
+                LIMIT 5 
+	</select>
+        
+	<select id="selectApplicationTopNTotal" parameterType="com.kglory.tms.web.model.dto.ApplicationSearchDto" resultType="long">
+            SELECT SUM(SUMCOUNT) AS SUMCOUNT
+            FROM   (
+                SELECT SUM(BTYPE) AS SUMCOUNT
+                FROM
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT BTYPE, TMDBTIME, BIPTYPE, LSRCNETINDEX, LDSTNETINDEX
+                    FROM ${item.name}
+                </foreach>
+                WHERE TMDBTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                AND TMDBTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                AND BIPTYPE = #{ipType}
+                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                    AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+                </if>
+            ) B
+	</select>
+        
+</mapper>

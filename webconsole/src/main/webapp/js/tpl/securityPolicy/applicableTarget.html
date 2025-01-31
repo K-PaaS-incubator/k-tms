@@ -1,0 +1,59 @@
+<!-- 카테고리 선택 begin -->
+<form class="form-inline margin-t5 margin-b5 targetForm" role="form">
+	<div class="radio">
+		<label>
+		    <input type="radio" name="targetGroup" id="totalRadioBtn" value="total">
+			<%= locale.all %>
+		</label>
+	</div>
+	<div class="radio margin-l20">
+		<label>
+		    <input type="radio" name="targetGroup" id="vSensorRadioBtn" value="vsensor">
+			<%= locale.vsensor %>
+		</label>
+	</div>
+	<div class="radio margin-l20">
+		<label>
+		    <input type="radio" name="targetGroup" id="networkRadioBtn" value="network">
+			<%= locale.network %>
+		</label>
+	</div>
+	<div class="radio margin-l20">
+		<label>
+		    <input type="radio" name="targetGroup" id="unUsedRadioBtn" value="unUsed">
+			<%= locale.beNotInUse %>
+		</label>
+	</div>
+	<div class="pull-right">
+<!-- 		적용 <strong>13</strong> / 전체 16 -->
+	</div>
+</form>
+<!-- 카테고리 선택 end -->	
+<!-- 카테고리 가상센서 목록 보기 begin -->
+<table class="table table-vertical-line margin-t10 audit-log-table">
+	<thead>
+	    <tr>
+	    	<th class="width-check"><input type="checkbox" class="editlvSensorAll" ></th>
+	    	<th><%= locale.vsensor %></th>
+	    </tr>
+	</thead>
+    <tbody id="sensorTbody">
+    	
+	</tbody>
+</table>
+<!-- 카테고리 가상센서 목록 보기 end -->
+		
+<!-- 카테고리 네트워크 목록 보기 begin -->
+<table class="table table-vertical-line margin-t10 audit-log-table">
+    <thead>
+    	<tr>
+    		<th class="width-check"><input type="checkbox" class="editlNetworkAll" ></th>
+    		<th><%= locale.network %></th>
+			<th><%= locale.bandWidth %></th>
+    	</tr>
+    </thead>
+    <tbody id="networkTbody">
+	</tbody>
+</table>	
+<!-- 카테고리 네트워크 목록 보기 end -->
+<!-- 적용대상 end -->

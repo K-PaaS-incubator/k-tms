@@ -1,0 +1,101 @@
+<!-- 매니저 연결 설정 begin -->
+<form class="form-inline managerForm" role="form">
+    <!--센서 설정정보-->
+    <div class="icon-subtitle"><%= locale.sensorInfo %></div>
+    <div class="border-dotted-all overflow-hidden padding-t5">
+        <span class="col-xs-12 description"><%= locale.setSensorEthInfo %></span>
+        <table class="view-table col-xs-12 etherNet" id="etherNet">
+<!--            <tr class="border-clear etherNetName">
+                <th width="30%"><%= locale.privateIp %></th>
+                <td><%= sensorModel.lPrivateIp %></td>
+            </tr>-->
+            <%= etherNetNameTr %>
+            <%= etherNetIpTr %>
+        </table>
+    </div>
+    
+    <!--로그인 설정정보-->
+    <div class="icon-subtitle"><%= locale.loginConfig %></div>
+    <div class="border-dotted-all overflow-hidden padding-t5">
+        <span class="col-xs-12 description"><%= locale.loginConfigInfo %></span>
+        <table class="view-table col-xs-12">
+            <tr class="border-clear">
+                <th width="30%"><%= locale.lockFailCount %></th>
+                <td><%= loginFailCountModel.value %>&nbsp;(<%= locale.loginCount %>)</td>
+            </tr>
+            <tr class="border-clear">
+                <th width="30%"><%= locale.lockTime %></th>
+                <td><%= loginLockTimeModel.value %>&nbsp;(<%= locale.timeMin %>)</td>
+            </tr>
+            <tr class="border-clear">
+                <th width="30%"><%= locale.sessionTime %></th>
+                <td><%= sessionModel.value %>&nbsp;(<%= locale.timeMin %>)</td>
+            </tr>
+            <tr>
+                <th style="height: 80px">
+                    <%= locale.loginAuthIp %>
+                </th>
+                <td>
+                    <select class="form-control col-xs-4 loginIpSelect" size="3" multiple="" disabled></select>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <!-- 이메일 서버 설정 begin -->
+    <div class="icon-subtitle"><%= locale.emailServerSettings %></div>
+    <div class="border-dotted-all overflow-hidden padding-t5">
+        <span class="col-xs-12 description"><%= locale.setUpAnEmailServerForSendingEmailAlerts %></span>
+        <table class="view-table col-xs-12">
+            <tr class="border-clear">
+                <th width="30%"><%= locale.emailServer %></th>
+                <td><%= model.emailServer %></td>
+            </tr>
+            <tr class="border-clear">
+                <th width="30%"><%= locale.emailAccount %></th>
+                <td><%= model.emailUserId %></td>
+            </tr>
+            <tr class="border-clear">
+                <th width="30%"><%= locale.emailPwd %></th>
+                <td><%= model.strEmailUserPwdView %></td>
+            </tr>
+            <tr class="border-clear">
+                <th width="30%"><%= locale.protocol %> / <%= locale.port %></th>
+                <td><%= model.emailSecurity %> / <%= model.emailPort %></td>
+            </tr>
+        </table>
+    </div>
+    <!-- 이메일 서버 설정 end -->
+    
+    <!--SFTP 설정-->
+    <div class="icon-subtitle"><%= locale.sftpSetting %></div>
+    <div class="border-dotted-all overflow-hidden padding-t5">
+        <span class="col-xs-12 description"><%= locale.sftpComment %></span>
+        <table class="view-table col-xs-12">
+            <tr class="border-clear">
+                <th width="30%"><%= locale.sftpId %></th>
+                <td><%= sftpId.value %></td>
+            </tr>
+            <tr class="border-clear">
+                <th width="30%"><%= locale.sftpPwd %></th>
+                <td><%= sftpPwd %></td>
+            </tr>
+        </table>
+    </div>
+    <!--SFTP 설정 END-->
+    
+    <!-- 센서 전처리기 히트 수 begin -->
+<!--    <div class="icon-subtitle"><%= locale.preProcessCount %>&nbsp;<%= locale.setting%></div>
+    <div class="border-dotted-all overflow-hidden padding-t5">
+        <span class="col-xs-12 description"><%= locale.setPreProcessCount %></span>
+        <table class="view-table col-xs-12">
+            <tr class="border-clear">
+                <th width="30%"><%= locale.preProcessCount %></th>
+                <td><%= sensorModel.nHyperScanHitCount %></td>
+            </tr>
+        </table>
+    </div>-->
+    <!-- 센서 전처리기 히트 수 end -->
+
+</form>

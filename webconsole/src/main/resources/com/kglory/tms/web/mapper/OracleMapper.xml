@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.OracleMapper">
+
+	<select id="selectTable" parameterType="string">
+            SELECT count(1)
+            FROM   TAB 
+            WHERE  TNAME = #{string}
+	</select>
+	
+	<select id="selectTables" parameterType="java.util.List" resultType="hashmap">
+            SELECT TABLE_NAME AS name FROM Information_schema.TABLES WHERE TABLE_NAME IN
+            <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                   #{item}
+            </foreach>
+	</select>
+        
+        <select id="selectNowDbDateTime" resultType="String">
+                SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')
+        </select>
+        
+        <select id="isTable" parameterType="string" resultType="string">
+            SELECT TABLE_NAME AS name FROM Information_schema.TABLES WHERE TABLE_NAME = #{tableName};
+        </select>
+        
+        <select id="selectTableNames" parameterType="hashmap" resultType="string">
+            SELECT TABLE_NAME FROM 
+            (   
+                SELECT TABLE_NAME, SUBSTR(TABLE_NAME, -8, 8) AS TNAME 
+                FROM Information_schema.TABLES 
+                WHERE TABLE_NAME LIKE CONCAT(#{tableName} , '%')
+                <if test="excludTable != null and excludTable != ''">
+                    AND TABLE_NAME NOT LIKE CONCAT(#{excludTable} , '%')
+                </if>
+            ) A
+            WHERE STR_TO_DATE(TNAME, '%Y_%m_%d') <![CDATA[ <= ]]> STR_TO_DATE(#{tableDate}, '%Y_%m_%d')
+            <if test="startTableDate != null and startTableDate != ''">
+                AND STR_TO_DATE(TNAME, '%Y_%m_%d') <![CDATA[ >= ]]> STR_TO_DATE(#{startTableDate}, '%Y_%m_%d')
+            </if>
+        </select>
+        
+        <select id="selectTableDeleteNames" parameterType="hashmap" resultType="string">
+            SELECT TABLE_NAME FROM 
+            (   
+                SELECT TABLE_NAME, SUBSTR(TABLE_NAME, -8, 8) AS TNAME 
+                FROM Information_schema.TABLES 
+                WHERE TABLE_NAME LIKE CONCAT(#{tableName} , '%')
+                <if test="excludTable != null and excludTable != ''">
+                    AND TABLE_NAME NOT LIKE CONCAT(#{excludTable} , '%')
+                </if>
+            ) A
+            WHERE STR_TO_DATE(TNAME, '%Y_%m_%d') <![CDATA[ <= ]]> STR_TO_DATE(#{tableDate}, '%Y_%m_%d')
+            <if test="startTableDate != null and startTableDate != ''">
+                AND STR_TO_DATE(TNAME, '%Y_%m_%d') <![CDATA[ >= ]]> STR_TO_DATE(#{startTableDate}, '%Y_%m_%d')
+            </if>
+            AND STR_TO_DATE(TNAME, '%Y_%m_%d') <![CDATA[ < ]]> STR_TO_DATE(SUBSTR(DATE_FORMAT(NOW(), '%Y_%m_%d'), -8, 8), '%Y_%m_%d')
+        </select>
+        
+        <delete id="dropTables" parameterType="java.util.List">
+            DROP TABLE IF EXISTS
+            <foreach item="item" index="index" collection="list" open="" separator="," close="">
+                   ${item}
+            </foreach>
+        </delete>
+        
+        <delete id="dropTableIndex" parameterType="map">
+            DROP INDEX IF EXISTS ${tableIndex} ON ${tableName}
+        </delete>
+        
+        <delete id="dropTable" parameterType="string">
+            DROP TABLE IF EXISTS ${tableName}
+        </delete>
+        
+        <select id="selectTableDateList" resultType="string">
+            SELECT NAMEDATE FROM (
+            SELECT SUBSTR(TABLE_NAME, -8, 8) AS NAMEDATE FROM Information_schema.TABLES
+            WHERE TABLE_NAME LIKE 'APPLAYER_%' 
+                OR TABLE_NAME LIKE 'AUDIT_%'
+                OR TABLE_NAME LIKE 'AUDIT_RESULT_%' 
+                OR TABLE_NAME LIKE 'FILEMETA_%' 
+                OR TABLE_NAME LIKE 'LOG_%'
+                OR TABLE_NAME LIKE 'RAWDATA_%' 
+                OR (TABLE_NAME LIKE 'SENSOR_ALIVE_%' AND TABLE_NAME != 'SENSOR_ALIVE_STAT_INFO') 
+                OR TABLE_NAME LIKE 'SENSOR_SESSION_%'
+                OR TABLE_NAME LIKE 'SYSTEMLOG_SENSOR_%' 
+                OR (TABLE_NAME LIKE 'SESSION_%' AND TABLE_NAME != 'SESSION_SERVICE_DATA') 
+                OR TABLE_NAME LIKE 'IP_TRAFFIC_%'
+                OR (TABLE_NAME LIKE 'PROTOCOL_%' AND TABLE_NAME != 'PROTOCOL_CONFIG') 
+                OR (TABLE_NAME LIKE 'SERVICE_%' AND TABLE_NAME != 'SERVICEINFO_LOG') 
+                OR TABLE_NAME LIKE 'TRAFFIC_IP_%'
+                OR TABLE_NAME LIKE 'TRAFFIC_DETECTION_%'
+            GROUP BY NAMEDATE
+            ) A
+            WHERE STR_TO_DATE(NAMEDATE, '%Y_%m_%d') <![CDATA[ < ]]> STR_TO_DATE(SUBSTR(DATE_FORMAT(NOW(), '%Y_%m_%d'), -8, 8), '%Y_%m_%d')
+            ORDER BY NAMEDATE ASC
+        </select>
+        
+        <select id="selectTableNameList" parameterType="string" resultType="string">
+            SELECT TABLE_NAME FROM Information_schema.TABLES
+            WHERE SUBSTR(TABLE_NAME, -8, 8) = #{tableDate}
+        </select>
+</mapper>

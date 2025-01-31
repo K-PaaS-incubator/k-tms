@@ -1,0 +1,108 @@
+<!-- tab content begin -->
+<div class="tab-content">
+<!-- 등록정보 begin -->
+	<div class="tab-pane active" id="tab1">
+	<div class="title"><%=locale.filemetaFilterviewSetting%></div>
+		<div class="icon-subtitle"><%= locale.outline %></div>
+		<table class="table table-vertical-line table-striped">
+			<tbody>
+				<tr>
+					<td width="20%"><%= locale.filterviewName %></td>
+					<td><span id=""><%= model.strFilterViewName %></span></td>
+				</tr>
+				<tr>
+					<td><%= locale.comment %></td>
+					<td><span id=""><%= model.strDescription %></span></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="icon-subtitle"><%= locale.detailSetting %></div>
+		
+		<table class="table table-vertical-line table-striped">
+			<thead>
+				<tr>
+					<th style="width:10%;"></th>
+					<th style="width:20%;"><%= locale.type %></th>
+					<th style="width:35%;"><%= locale.searchCondition %></th>
+					<th style="width:35%;"><%= locale.selectColor %></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="align-center"><div class="<%= model.strNTargetEnabled %> align-center"></div></td>
+					<td><%= locale.targetType %></td>
+					<td><span id=""><%= model.strTargetName %></span></td>
+					<td class="align-center">											
+						<input type="radio" class="hidden cursor-none" name="orgSensorBackground" id="orgSensorBackground0" value="gray" disabled><label for="orgSensorBackground0" class="threat-bg-<%= model.orgSensorBg[0] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="orgSensorBackground" id="orgSensorBackground1" value="red" disabled><label for="orgSensorBackground1" class="threat-bg-<%= model.orgSensorBg[1] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="orgSensorBackground" id="orgSensorBackground2" value="orange" disabled><label for="orgSensorBackground2" class="threat-bg-<%= model.orgSensorBg[2] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="orgSensorBackground" id="orgSensorBackground3" value="green" disabled><label for="orgSensorBackground3" class="threat-bg-<%= model.orgSensorBg[3] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="orgSensorBackground" id="orgSensorBackground4" value="blue" disabled><label for="orgSensorBackground4" class="threat-bg-<%= model.orgSensorBg[4] %>"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><div class="<%= model.strNFileNameEnabled %> align-center"></div></td>
+					<td><%= locale.fileNaming %></td>
+					<td><span id=""><%= model.strFileName %></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden cursor-none" name="fileNameBackground" id="fileNameBackground0" value="gray" disabled><label for="fileNameBackground0" class="threat-bg-<%= model.fileNameBg[0] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="fileNameBackground" id="fileNameBackground1" value="red" disabled><label for="fileNameBackground1" class="threat-bg-<%= model.fileNameBg[1] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="fileNameBackground" id="fileNameBackground2" value="orange" disabled><label for="fileNameBackground2" class="threat-bg-<%= model.fileNameBg[2] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="fileNameBackground" id="fileNameBackground3" value="green" disabled><label for="fileNameBackground3" class="threat-bg-<%= model.fileNameBg[3] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="fileNameBackground" id="fileNameBackground4" value="blue" disabled><label for="fileNameBackground4" class="threat-bg-<%= model.fileNameBg[4] %>"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><div class="<%= model.strNSrcIpEnabled %> align-center"></div></td>
+					<td><%= locale.dwSourceIp %></td>
+					<td><span id=""><%= model.strSrcIp %></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden cursor-none" name="srcIpBackground" id="srcIpBackground0" value="gray" disabled><label for="srcIpBackground0" class="threat-bg-<%= model.srcIpBg[0] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcIpBackground" id="srcIpBackground1" value="red" disabled><label for="srcIpBackground1" class="threat-bg-<%= model.srcIpBg[1] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcIpBackground" id="srcIpBackground2" value="orange" disabled><label for="srcIpBackground2" class="threat-bg-<%= model.srcIpBg[2] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcIpBackground" id="srcIpBackground3" value="green" disabled><label for="srcIpBackground3" class="threat-bg-<%= model.srcIpBg[3] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcIpBackground" id="srcIpBackground4" value="blue" disabled><label for="srcIpBackground4" class="threat-bg-<%= model.srcIpBg[4] %>"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><div class="<%= model.strNDstIpEnabled %> align-center"></div></td>
+					<td><%= locale.destinationIp %></td>
+					<td><span id=""><%= model.strDstIp %></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden cursor-none" name="dstIpBackground" id="dstIpBackground0" value="gray" disabled><label for="dstIpBackground0" class="threat-bg-<%= model.dstIpBg[0] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstIpBackground" id="dstIpBackground1" value="red" disabled><label for="dstIpBackground1" class="threat-bg-<%= model.dstIpBg[1] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstIpBackground" id="dstIpBackground2" value="orange" disabled><label for="dstIpBackground2" class="threat-bg-<%= model.dstIpBg[2] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstIpBackground" id="dstIpBackground3" value="green" disabled><label for="dstIpBackground3" class="threat-bg-<%= model.dstIpBg[3] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstIpBackground" id="dstIpBackground4" value="blue" disabled><label for="dstIpBackground4" class="threat-bg-<%= model.dstIpBg[4] %>"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><div class="<%= model.strNSrcPortEnabled %> align-center"></div></td>
+					<td><%= locale.nSourcePort %></td>
+					<td><span id=""><%= model.nSrcPort %></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden cursor-none" name="srcPortBackground" id="srcPortBackground0" value="gray" disabled><label for="srcPortBackground0" class="threat-bg-<%= model.srcPortBg[0] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcPortBackground" id="srcPortBackground1" value="red" disabled><label for="srcPortBackground1" class="threat-bg-<%= model.srcPortBg[1] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcPortBackground" id="srcPortBackground2" value="orange" disabled><label for="srcPortBackground2" class="threat-bg-<%= model.srcPortBg[2] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcPortBackground" id="srcPortBackground3" value="green" disabled><label for="srcPortBackground3" class="threat-bg-<%= model.srcPortBg[3] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="srcPortBackground" id="srcPortBackground4" value="blue" disabled><label for="srcPortBackground4" class="threat-bg-<%= model.srcPortBg[4] %>"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><div class="<%= model.strNDstPortEnabled %> align-center"></div></td>
+					<td><%= locale.destinationPort %></td>
+					<td><span id=""><%= model.nDstPort %></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden cursor-none" name="dstPortBackground" id="dstPortBackground0" value="gray" disabled><label for="dstPortBackground0" class="threat-bg-<%= model.dstPortBg[0] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstPortBackground" id="dstPortBackground1" value="red" disabled><label for="dstPortBackground1" class="threat-bg-<%= model.dstPortBg[1] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstPortBackground" id="dstPortBackground2" value="orange" disabled><label for="dstPortBackground2" class="threat-bg-<%= model.dstPortBg[2] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstPortBackground" id="dstPortBackground3" value="green" disabled><label for="dstPortBackground3" class="threat-bg-<%= model.dstPortBg[3] %>"></label>
+						<input type="radio" class="hidden cursor-none" name="dstPortBackground" id="dstPortBackground4" value="blue" disabled><label for="dstPortBackground4" class="threat-bg-<%= model.dstPortBg[4] %>"></label>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- 등록정보 end -->

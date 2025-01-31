@@ -1,0 +1,93 @@
+<div id="chart"></div>
+
+<!-- 건수 및 버튼 영역  begin -->
+<div class="row margin-t30">
+
+	<!-- 건수 표시 begin -->
+	<div class="col-xs-6">
+		<!-- <div class="col-xs-12">
+			<div class="pull-left minwidth-60 text-primary">조회 기간</div>
+			<div class="pull-left" id="listDate"></div>
+		</div> -->
+		<div class="col-xs-12">
+			<div class="pull-left minwidth-60 margin-t25 text-primary"><%= locale.searchSection %>&nbsp;</div>
+			
+			<div class="pull-left margin-t25" id="listDate">
+				<!-- <strong class="chart-text-10" id="totalRowSize"></strong> -->
+			</div>
+		</div>
+	</div>
+	<!-- 건수 표시 end -->
+	
+	<!-- 버튼 영역 begin -->
+	<!-- <div class="col-xs-6">
+		<form class="form-inline" role="form">
+			<div class="pull-right">
+				<div class="pull-left">
+					<div>선택 항목</div>
+					<div class="margin-t5">
+						<button type="button" class="btn btn-labeled btn-primary-fill btnGraph"><span class="btn-label"><i class="fa fa-area-chart"></i></span><%=locale.makeGraph%></button>
+					</div>					
+				</div>
+				<div class="pull-left margin-l20 margin-r10">
+					<div>					
+						<input type="radio" class="radio" name="exportRange" id="exportRange2" value="currentPage" checked>&nbsp;<label for="exportRange2" class="label-for-button">현재페이지</label>&nbsp;&nbsp;
+						<input type="radio" class="radio" name="exportRange" id="exportRange1" value="all">&nbsp;<label for="exportRange1" class="label-for-button">전체</label>&nbsp;
+						다운로드
+					</div>
+					<div class="margin-t5">
+						<button type="button" class="btn btn-labeled btn-success-fill btnExport" data-format="excel"><span class="btn-label"><i class="fa fa-file-excel-o"></i></span>excel</button>
+						<button type="button" class="btn btn-labeled btn-primary-fill btnExport" data-format="word"><span class="btn-label"><i class="fa fa-file-word-o"></i></span>word</button>
+						<button type="button" class="btn btn-labeled btn-info-fill btnExport" data-format="html"><span class="btn-label"><i class="fa fa-internet-explorer"></i></span>html</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div> -->
+	<div class="col-xs-6">
+		<form class="form-inline" role="form">
+			<div class="pull-right">
+				<div class="pull-left">
+					<div><%= locale.makeGraph %></div>
+					<div class="margin-t5">
+						<button type="button" class="btn btn-labeled btn-primary-fill btnGraph"><span class="btn-label"><i class="fa fa-area-chart"></i></span><%=locale.makeGraph%></button>
+					</div>
+				</div>
+				<div class="pull-left margin-l20 margin-r10">
+					<div>
+						<%= locale.download %>
+					</div>
+					<div class="margin-t5">
+						<button type="button" class="btn btn-labeled btn-success-fill btnExport" data-format="excel"><span class="btn-label"><i class="fa fa-file-excel-o"></i></span>excel</button>
+						<button type="button" class="btn btn-labeled btn-primary-fill btnExport" data-format="word"><span class="btn-label"><i class="fa fa-file-word-o"></i></span>word</button>
+						<button type="button" class="btn btn-labeled btn-info-fill btnExport" data-format="html"><span class="btn-label"><i class="fa fa-file-code-o"></i></span>html</button>
+					</div>
+				</div>
+				</div>
+			</form>
+		</div>
+	<!-- 버튼 영역 begin -->
+</div>
+<!-- 건수 및 버튼 영역  end -->
+
+<!-- 최종5분평균 table begin -->
+<div class="progressbar margin-t10">
+	<table class="table table-striped table-hover table-vertical-line inside-iconbtn">
+	<thead>
+		<tr>
+			<th class="align-center"></th>
+<!-- 			<th class="align-center summary "><input type="checkbox" id="graphItemCheckTotal" name="graphItemCheckTotal" value="-1"></th> -->
+			<th><%= locale.item%></th>
+			<th colspan="2" class="bps border-right-clear">Inbound + Outbound (bps)</th>
+			<th class="bps border-right-clear">Inbound</th>
+			<th class="bps">Outbound</th>
+			<th colspan="2" class="pps border-right-clear">Inbound + Outbound (pps)</th>
+			<th class="pps border-right-clear">Inbound</th>
+			<th class="pps">Outbound</th>
+		</tr>
+	</thead>
+	<tbody id="list"></tbody>
+	</table>
+</div>
+<!-- 최종5분평균 table end -->
+<!-- 최종5분평균 end -->

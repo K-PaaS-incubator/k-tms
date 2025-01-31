@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.monitor.IntrusionDetectionMapper">
+
+	<resultMap type="DetectionEventVO" 			id="detectionEventResultMap">
+		<result property="lIndex" 				column="LINDEX" />
+		<result property="lCode" 				column="LCODE" />
+		<result property="tmStart" 				column="TMSTART" />
+		<result property="tmEnd" 				column="TMEND" />
+        <result property="dwSourceIp" 			column="DWSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="deDestinationIp" 		column="DWDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+        <result property="nProtocol" 			column="NPROTOCOL" />
+		<result property="bType" 				column="BTYPE" />
+		<result property="strTitle" 			column="STRTITLE" />
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX" />
+		<result property="vsensorName" 			column="VSENSORNAME" />
+		<result property="strSourceMac" 		column="STRSOURCEMAC" />
+		<result property="strDestinationMac" 	column="STRDESTINATIONMAC" />
+		<result property="nSourcePort" 			column="NSOURCEPORT" />
+		<result property="nDestinationPort" 	column="NDESTINATIONPORT" />
+		<result property="dwPacketCounter" 		column="DWPACKETCOUNTER" />
+		<result property="deSrcPortCounter" 	column="DWSRCPORTCOUNTER" />
+		<result property="dwDstPortCounter" 	column="DWDSTPORTCOUNTER" />
+		<result property="dwSrcIpCounter" 		column="DWSRCIPCOUNTER" />
+		<result property="dwDstIpCounter" 		column="DWDSTIPCOUNTER" />
+		<result property="bSeverity" 			column="BSEVERITY" />
+		<result property="ucCreateLogType"		column="UCCREATELOGTYPE" />
+		<result property="nTtl" 				column="NTTL" />
+		<result property="lAlertResponse1" 		column="LALERTRESPONSE1" />
+		<result property="lResetResponse1" 		column="LRESETRESPONSE1" />
+		<result property="lEmailResponse1" 		column="LEMAILRESPONSE1" />
+		<result property="lSnmpResponse1" 		column="LSNMPRESPONSE1" />
+		<result property="lIwResponse1" 		column="LIWRESPONSE1" />
+		<result property="lIwResponse2" 		column="LIWRESPONSE2" />
+		<result property="lFwResponse1" 		column="LFWRESPONSE1" />
+		<result property="lFwResponse2" 		column="LFWRESPONSE2" />
+		<result property="dwEventNum" 			column="DWEVENTNUM" />
+		<result property="wInbound" 			column="WINBOUND" />
+		<result property="wVlanInfo" 			column="WVLANINFO" />
+		<result property="dwPktSize" 			column="DWPKTSIZE" />
+		<result property="dwMaliciousSrvFrame" 	column="DWMALICIOUSSRVFRAME" />
+		<result property="dwMaliciousCliFrame" 	column="DWMALICIOUSCLIFRAME" />
+		<result property="dwMaliciousSrvByte" 	column="DWMALICIOUSSRVBYTE" />
+		<result property="dwMaliciousCliByte" 	column="DWMALICIOUSCLIBYTE" />
+		<result property="ucIntrusionDir" 		column="UCINTRUSIONDIR" />
+		<result property="ucAccessDir" 			column="UCACCESSDIR" />
+		<result property="lSrcNetIndex" 		column="LSRCNETINDEX" />
+		<result property="srcNetworkName" 		column="SRCNETNAME" />
+		<result property="lDstNetIndex" 		column="LDSTNETINDEX" />
+		<result property="dstNetworkName" 		column="DSTNETNAME" />
+		<result property="lSrcUserIndex" 		column="LSRCUSERINDEX" />
+		<result property="lDstUserIndex" 		column="LDSTUSERINDEX" />
+		<result property="lUrlIndex" 			column="LURLINDEX" />
+		<result property="strSrcNationIso" 		column="STRSRCNATIONISO" />
+		<result property="strDestNationIso" 	column="STRDESTNATIONISO" />
+		<result property="lSensorIndex" 		column="LSENSORINDEX" />
+		<result property="sensorName" 			column="SENSORNAME" />
+		<result property="tmDbTime" 			column="TMDBTIME" />
+		<result property="srcService" 			column="SRCSERVICE" />
+		<result property="dstService" 			column="DSTSERVICE" />
+		<result property="rawdata" 				column="RAWDATA" />
+		<result property="lNetGroupIndex" 		column="LNETGROUPINDEX" />
+		<result property="srclNetGroupIndex" 	column="SRCLNETGROUPINDEX" />
+		<result property="desclNetGroupIndex" 	column="DESCLNETGROUPINDEX" />
+		<result property="strSrcCategory" 		column="STRSRCCATEGORY" />
+		<result property="nSrcScore"            column="NSRCSCORE" />
+		<result property="strDestCategory" 		column="STRDSTCATEGORY" />
+		<result property="nDestScore"           column="NDSTSCORE" />
+	</resultMap>
+        
+        
+        <select id="selectDetectionEvent" parameterType="com.kglory.tms.web.model.dto.DetectionMonitorSearchDto" resultMap="detectionEventResultMap">
+            SELECT LINDEX, LCODE, DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i:%s') AS TMSTART, DATE_FORMAT( TMEND, '%Y-%m-%d %H:%i:%s') AS TMEND, DWSOURCEIP, DWDESTINATIONIP, DWDESTINATIONIP, NPROTOCOL, 
+                   (SELECT STRNAME FROM SYSTEM_SIGCLASSTYPE WHERE  NCLASSTYPE = BTYPE) AS BTYPE, STRTITLE,
+                   STRSOURCEMAC, STRDESTINATIONMAC, NSOURCEPORT, NDESTINATIONPORT, DWPACKETCOUNTER, DWDSTPORTCOUNTER, DWSRCIPCOUNTER,
+                   BSEVERITY, NTTL, DWDSTIPCOUNTER, DWSRCPORTCOUNTER, DWEVENTNUM, WINBOUND, UCCREATELOGTYPE, WVLANINFO, DWPKTSIZE, DWMALICIOUSSRVFRAME, DWMALICIOUSCLIFRAME,
+                   DWMALICIOUSSRVBYTE, DWMALICIOUSCLIBYTE, UCINTRUSIONDIR, UCACCESSDIR, LSRCNETINDEX, LDSTNETINDEX, LURLINDEX, STRSRCNATIONISO, STRDESTNATIONISO, TMDBTIME,
+                   (SELECT CONCAT(STRPROTOCOL , '|' , STRAPPLICATION) FROM SERVICEINFO_LOG WHERE NPORT = NSOURCEPORT 
+                        AND STRIP = DWSOURCEIP GROUP BY CONCAT(STRPROTOCOL , '|' , STRAPPLICATION) LIMIT 1) AS SRCSERVICE,
+                    (SELECT CONCAT(STRPROTOCOL , '|' , STRAPPLICATION) FROM SERVICEINFO_LOG WHERE NPORT = NSOURCEPORT
+                        AND STRIP = DWDESTINATIONIP GROUP BY CONCAT(STRPROTOCOL , '|' , STRAPPLICATION) LIMIT 1) AS DSTSERVICE,
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE A.LSRCNETINDEX = LNETWORKINDEX) AS SRCNETNAME,
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE A.LDSTNETINDEX = LNETWORKINDEX) AS DSTNETNAME,
+                    (SELECT LINDEX FROM ${querySubTableName} WHERE LINDEX = A.LINDEX LIMIT 1) AS RAWDATA
+            FROM ${queryTableName} A
+            WHERE TMDBTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMDBTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            <if test="winBoundSelect != null and winBoundSelect == 3">
+                AND WINBOUND IN (259, 771) 
+            </if>
+            <if test="winBoundSelect != null and winBoundSelect == 2">
+                AND WINBOUND IN (258,768,770,0) 
+            </if>
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND (
+                    LSRCNETINDEX = #{lnetworkIndex}
+                    OR LDSTNETINDEX = #{lnetworkIndex}
+                )
+            </if>
+            <if test="severities.size() > 0">
+                AND BSEVERITY IN
+                <foreach item="item" index="index" collection="severities"  open="(" separator="," close=")">
+                      #{item}
+                </foreach>
+            </if>
+            <if test="srcPortInput != null">
+                AND NSOURCEPORT = #{srcPortInput} 
+            </if>
+            <if test="destPortInput != null">
+                AND NDESTINATIONPORT = #{destPortInput} 
+            </if>
+            <if test="attackSearchKeyword != null">
+                AND UPPER(STRTITLE) LIKE CONCAT('%', UPPER(#{attackSearchKeyword}) ,'%')
+            </if>
+            <if test="destinationIp != null">
+                AND DWDESTINATIONIP = #{destinationIp}
+            </if>
+            <if test="strDestinationIp != null and ipType == 6">
+                AND DWDESTINATIONIP = #{strDestinationIp}
+            </if>
+            <if test="sourceIp != null">
+                AND DWSOURCEIP = #{sourceIp}
+            </if>
+            <if test="strSourceIp != null and ipType == 6">
+                AND DWSOURCEIP = #{strSourceIp}
+            </if>
+            <if test="attackTypeSelect != null and attackTypeSelect != ''">
+                AND BTYPE = #{attackTypeSelect}
+	    </if>
+	    <if test="ucCreateLogTypeSelect != null">
+                AND UCCREATELOGTYPE = #{ucCreateLogTypeSelect}
+            </if>
+            ORDER BY TMSTART ASC
+            LIMIT #{monitorLimitLength}         
+        </select>
+            
+</mapper>

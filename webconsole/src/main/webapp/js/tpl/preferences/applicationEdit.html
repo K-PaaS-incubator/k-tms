@@ -1,0 +1,119 @@
+<!-- tab content begin -->
+<div class="tab-content">
+<form class="form-inline applicationCreationForm" role="form">
+<!-- 등록정보 begin -->
+	<div class="tab-pane active" id="tab1">
+	<div class="title"><%=locale.applicationFilterviewSetting%></div>
+		<div class="icon-subtitle"><%= locale.outline %></div>
+		<table class="table table-vertical-line table-striped">
+			<tbody>
+				<tr>
+					<td width="20%"><%= locale.filterviewName %> *</td>
+					<td><input type="text" class="form-control col-xs-4" name="strFilterViewName" id="strFilterViewName" value="<%= model.strFilterViewName %>" maxlength="50" ></td>
+				</tr>
+				<tr>
+					<td><%= locale.comment %></td>
+					<td><textarea class="form-control col-xs-10" rows="7" name="strDescription" id="strDescription"><%= model.strDescription %></textarea></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="icon-subtitle"><%= locale.detailSetting %></div>
+
+		<table class="table table-vertical-line table-striped">
+			<thead>
+				<tr>
+					<th style="width:10%;"></th>
+					<th style="width:20%;"><%= locale.type %></th>
+					<th style="width:35%;"><%= locale.searchCondition %></th>
+					<th style="width:35%;"><%= locale.selectColor %></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="orgSensor-toggle" name="orgSensor-toggle" <%= model.strNTargetEnabledEdit %>></td>
+					<td><%= locale.targetType %></td>
+					<td><span id="targetType"></span></td>
+					<td class="align-center">											
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground0" value="0" checked><label for="orgSensorBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground1" value="1"><label for="orgSensorBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground2" value="2"><label for="orgSensorBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground3" value="3"><label for="orgSensorBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground4" value="4"><label for="orgSensorBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="appType-toggle" name="appType-toggle" <%= model.strNAppTypeEnabledEdit %>></td>
+					<td>타입</td>
+					<td><span id="">
+						<select class="form-control minwidth-150" id="appTypeSelect" name="appTypeSelect">
+							<option value=""><%= locale.noSelect %></option>
+							<option value="1">http</option>
+							<option value="2">dns</option>
+							<option value="3">tls</option>
+							<option value="4">smtp</option>
+							<option value="5">ftp</option>
+						</select>
+					</span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="appTypeBackground" id="appTypeBackground0" value="0" checked><label for="appTypeBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="appTypeBackground" id="appTypeBackground1" value="1"><label for="appTypeBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="appTypeBackground" id="appTypeBackground2" value="2"><label for="appTypeBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="appTypeBackground" id="appTypeBackground3" value="3"><label for="appTypeBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="appTypeBackground" id="appTypeBackground4" value="4"><label for="appTypeBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="srcIp-toggle" name="srcIp-toggle" <%= model.strNSrcIpEnabledEdit %>></td>
+					<td><%= locale.dwSourceIp %></td>
+					<td><span id=""><input type="text" class="form-control" id="srcIpInput" value="<%= model.strSrcIp %>"></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="srcIpBackground" id="srcIpBackground0" value="0" checked><label for="srcIpBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="srcIpBackground" id="srcIpBackground1" value="1"><label for="srcIpBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="srcIpBackground" id="srcIpBackground2" value="2"><label for="srcIpBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="srcIpBackground" id="srcIpBackground3" value="3"><label for="srcIpBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="srcIpBackground" id="srcIpBackground4" value="4"><label for="srcIpBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="dstIp-toggle" id="dstIp-toggle" <%= model.strNDstIpEnabledEdit %>></td>
+					<td><%= locale.destinationIp %></td>
+					<td><span id=""><input type="text" class="form-control" id="dstIpInput" value="<%= model.strDstIp %>"></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="dstIpBackground" id="dstIpBackground0" value="0" checked><label for="dstIpBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="dstIpBackground" id="dstIpBackground1" value="1"><label for="dstIpBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="dstIpBackground" id="dstIpBackground2" value="2"><label for="dstIpBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="dstIpBackground" id="dstIpBackground3" value="3"><label for="dstIpBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="dstIpBackground" id="dstIpBackground4" value="4"><label for="dstIpBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="srcPort-toggle" name="srcPort-toggle" <%= model.strNSrcPortEnabledEdit %>></td>
+					<td><%= locale.nSourcePort %></td>
+					<td><span id=""><input type="text" class="form-control" id="srcPortInput" value="<%= model.nSrcPort %>"></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="srcPortBackground" id="srcPortBackground0" value="0" checked><label for="srcPortBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="srcPortBackground" id="srcPortBackground1" value="1"><label for="srcPortBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="srcPortBackground" id="srcPortBackground2" value="2"><label for="srcPortBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="srcPortBackground" id="srcPortBackground3" value="3"><label for="srcPortBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="srcPortBackground" id="srcPortBackground4" value="4"><label for="srcPortBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="dstPort-toggle" name="dstPort-toggle" <%= model.strNDstPortEnabledEdit %>></td>
+					<td><%= locale.destinationPort %></td>
+					<td><span id=""><input type="text" class="form-control" id="dstPortInput" value="<%= model.nDstPort %>"></span></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="dstPortBackground" id="dstPortBackground0" value="0" checked><label for="dstPortBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="dstPortBackground" id="dstPortBackground1" value="1"><label for="dstPortBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="dstPortBackground" id="dstPortBackground2" value="2"><label for="dstPortBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="dstPortBackground" id="dstPortBackground3" value="3"><label for="dstPortBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="dstPortBackground" id="dstPortBackground4" value="4"><label for="dstPortBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+<!-- 등록정보 end -->
+</div>	

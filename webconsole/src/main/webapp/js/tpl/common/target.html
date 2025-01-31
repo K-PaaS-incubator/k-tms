@@ -1,0 +1,52 @@
+<!-- 타겟 선택 begin -->
+<!--
+<label class="control-label col-lg-2"><%= locale.targetType %></label>
+-->
+<!-- <select class="form-control pull-left" id="targetTypeSelect" name="targetTypeSelect">
+        
+        category : 3(가상센서), 4(센서) 제외
+        <% if( targetCategory == 0 || targetCategory == 1 || targetCategory == 2 ){ %>
+        <option value="0"  <% if( targetCategory != 3 ){ 'selected' } %> ><%= locale.institution %></option>
+        <% } %>
+        category : 1(네트워크그룹) 제외
+        <% if( targetCategory == 0 || targetCategory == 2 || targetCategory == 3 || targetCategory == 4 ){ %>
+        <option value="1" ><%= locale.sensor %></option>
+        <% } %>
+</select> -->
+<!-- 타겟 선택 end -->
+
+<div class="col-lg-12 padding-clear" id="target">
+    <!-- tree dropdown begin -->
+    <div class="dropdown">
+        <% if (targetCategory == 0 || targetCategory == 1 || targetCategory == 4) { %>
+        <button type="button" class="btn btn-default btn-root-tree" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+        <% } %>
+        <div class="dropdown-menu root-tree minwidth-300 padding-rl-clear padding-r10 padding-l10 padding-t10 dropdown-target">
+            <% if (targetCategory == 0) { %>
+            <div class="border-dotted-all padding-l15 padding-b5">
+                <label class="icon-subtitle"><a id="allChk" class="cursor-pointer"><%=locale.all%></a></label>
+                <span class="all">&nbsp;&nbsp;</span>
+            </div><br>
+            <% if(viewType == 0 || viewType == 2) { %>
+            <div class="border-dotted-all padding-l15 padding-b5 tree networkTree">
+                <label class="col-xs-12 icon-subtitle"><%=locale.network%></label>
+                <ul class="targetOrgTree"></ul>
+            </div>	
+            <% } %>
+            <% } %>
+            <% if (targetCategory == 1 || targetCategory == 2) { %>
+            <% if (viewType != 1) { %>
+            <div class="border-dotted-all padding-l15 padding-b5 tree networkTree">
+                <label class="col-xs-12 icon-subtitle"><%=locale.network%></label>
+                <ul class="targetOrgTree"></ul>
+            </div>	
+            <% } %>
+            <% } %>
+            <!-- tree end -->
+        </div>
+    </div>
+    &nbsp;&nbsp;<div class="overflow-ellipsis" id="path" style="position: absolute; margin-top: -23px; margin-left: 35px; width: 85%;"><%= locale.all %></div>
+    <!-- tree dropdown end -->
+</div>

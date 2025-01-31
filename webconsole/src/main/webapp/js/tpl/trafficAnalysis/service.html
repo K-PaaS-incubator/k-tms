@@ -1,0 +1,125 @@
+<!-- 검색 조건 begin -->
+<div class="content-gray">
+    <form role="form" class="form-inline serviceForm">
+        <div class="row">
+            <!-- search option set -->
+            <div class="sch_area_option border-dotted-right">
+                <!-- search option - default -->
+                <div class="sch_option_set">
+                    <div class="sch_option_set_row">
+                        <!-- 조회대상 -->
+                        <label class="control-label col-xs-1"><%= locale.targetType %></label>
+                        <div class="col-xs-3" id="targetType"></div>
+                        <!-- / 조회대상 -->
+
+                        <!-- 분석기간 -->
+                        <label class="control-label col-xs-1"><%= locale.search.period %></label>
+                        <div class="col-xs-7" id="period"></div>
+                        <!-- / 분석기간  -->
+                    </div>
+
+                    <div class="sch_option_set_row margin-t10">
+
+                        <!-- 정렬기준 begin -->
+                        <label class="control-label col-xs-1"><%= locale.sort %></label>
+                        <div class="col-xs-3">
+                            <select class="form-control col-xs-9" id="sortSelect" name="sortSelect">
+                                <option value="bps" selected>bps</option>
+                                <option value="pps">pps</option>
+                            </select>
+                        </div>
+                        <!-- 정렬기준 end -->	
+
+                        <!-- 프로토콜 선택 begin -->
+                        <label class="control-label col-xs-1"><%= locale.protocol %></label>
+                        <div class="col-xs-3">
+                            <select class="form-control col-xs-9 protocolSelect" id="protocolSelect" name="protocolSelect">
+                                <option value="0" selected ><%= locale.dashboard.total %></option>
+                                <option value="6">TCP</option>
+                                <option value="17">UDP</option>
+                            </select>
+                        </div>
+                        <!-- 프로토콜 선택 end -->
+
+                        <!-- 주소체계 begin -->
+                        <!-- 
+                <label class="control-label col-xs-1"><%= locale.ipType %></label>
+                        -->
+                        <div class="col-xs-3">
+                            <div class="row_radio">
+                                <input type="radio" class="radio" name="ipType" id="ipType1" value="4" checked>&nbsp;<label for="ipType1" class="label-for-button">IPv4</label>&nbsp;&nbsp;
+                                <input type="radio" class="radio" name="ipType" id="ipType2" value="6">&nbsp;<label for="ipType2" class="label-for-button">IPv6</label>&nbsp;
+                            </div>
+                        </div>
+                        <!-- 주소체계 end -->
+                    </div>
+                </div>
+                <!-- / search option - default -->
+
+                <!-- search option - detail -->
+                <div class="sch_option_set detail-search" id="detail-search">
+                    <div class="sch_option_set_row">
+                        <!-- 탐지방향 선택 begin -->
+                        <label class="control-label col-xs-1"><%= locale.search.inbound %></label>
+                        <div class="col-xs-3">
+                            <select class="form-control col-xs-9" name="winBoundSelect" id="winBoundSelect">
+                                <option value="0"><%= locale.search.sum %></option>
+                                <option value="3">Inbound</option>
+                                <option value="2">Outbound</option>
+                                <option value="1"><%= locale.search.inOutbound %></option>
+                            </select>
+                        </div>
+                        <!-- 탐지방향 선택 end -->
+
+                        <!-- 임계치 begin -->
+                        <label class="control-label col-xs-1"><%= locale.threshold %></label>
+                        <div class="col-xs-3">
+                            <select class="form-control" name="thresholdSelect" id="thresholdSelect">
+                                <option value="" selected><%= locale.noSelect %></option>
+                                <option value="bps">bps</option>
+                                <option value="pps">pps</option>
+                            </select>
+                            <input id="thresholdNumInput" name="thresholdNumInput"  type="text" class="form-control maxwidth-40 tms-responsive" READONLY/><span id="thresholdNumInputText"></span>
+                        </div>
+                        <!-- 임계치 end -->
+
+                        <!-- 피해포트 begin -->
+                        <label class="control-label col-xs-1"><%= locale.port %></label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control col-xs-8" name="destPortInput" id="destPortInput" maxlength="5"/>
+                        </div>
+                        <!-- 피해포트 end -->
+                    </div>
+                </div>
+                <!-- / search option - detail -->
+            </div>
+            <!-- / search option set -->
+
+            <!-- search button -->
+            <div class="sch_area_btn text-right">
+                <button type="button" class="btn btn_sch_detail margin-r10 cancelBtn"><%= locale.reset %></button>
+                <button type="button" class="btn btn_sch_detail margin-r10 detailBtn" id="detail-search-toggle"><%= locale.search.detailSearch %>&nbsp;<i class="fa fa-caret-down"></i></button>
+                <button type="button" class="btn btn-primary" id="searchBtn"><i class="fa fa-search"></i><%= locale.search.search %></button>
+            </div>
+            <!-- / search button -->
+        </div>
+    </form>
+</div>
+<!-- 검색 조건 end -->
+
+<!-- 검색결과 begin -->
+<div class="content-white border-solid-top">
+    <!-- tab begin -->
+    <!-- tab header begin -->
+    <div id="scroll-tab">
+        <ul class="nav nav-tabs" role="tablist">
+        </ul>
+    </div>
+    <!-- tab header end -->
+    <!-- tab content begin -->
+    <div class="tab-content">
+    </div>
+    <!-- tab content end -->
+    <!-- tab end -->
+</div>
+<!-- 검색결과 end -->

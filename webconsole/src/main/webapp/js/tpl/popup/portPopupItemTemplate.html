@@ -1,0 +1,13 @@
+<td class="align-center"><%= data.rNum %></td>
+<td>[<%= data.nProtocol %>] <%= data.nDestPort %> </td>
+<% if (condition.attackNameInput == null || condition.attackNameInput == "") { %>
+<td class="align-right"><a id="lcode"><%= data.sLcodeCount %></a></td>
+<% } %>
+<% if (condition.srcIp == null || condition.srcIp == "") { %>
+<td class="align-right"><a id="srcIp"><%= data.srcIpCount %></a></td>
+<% } %>
+<% if (condition.destIp == null || condition.destIp == "") { %>
+<td class="align-right"><a id="destIp"><%= data.destIpCount %></a></td>
+<% } %>
+<td class="align-right"><a id="sum"><%= data.nSum %>(<%= data.totalRate %>)</a></td>
+<td class="align-right"><%= data.bps %></td>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.detectionAnalysis.ApplicationMapper">
+	
+	<resultMap type="ApplicationVO" 				id="applicationMap">
+		<result property="lIndex" 					column="LINDEX" />
+		<result property="tmLogTime" 				column="TMLOGTIME" />
+		<result property="nProtocol"				column="NPROTOCOL" />
+		<result property="dwSourceIp"				column="DWSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="strSourceIp" 				column="STRSOURCEIP"/>
+		<result property="nSourcePort"				column="NSOURCEPORT" />
+		<result property="deDestinationIp" 			column="DWDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="strDestinationIp" 		column="STRDESTINATIONIP"/>
+		<result property="nDestinationPort"			column="NDESTINATIONPORT" />
+		<result property="bType" 					column="BTYPE" />
+		<result property="bIpType" 					column="BIPTYPE" />
+		<result property="wDataSize" 				column="WDATASIZE" />
+		<result property="lSrcNetIndex" 			column="LSRCNETINDEX" />
+		<result property="lDstNetIndex" 			column="LDSTNETINDEX" />
+		<result property="lvsensorIndex" 			column="LVSENSORINDEX" />
+		<result property="lsensorIndex" 			column="LSENSORINDEX" />
+		<result property="sData" 					column="SDATA" />
+		<result property="totalRowSize" 			column="TOTAL" />
+		<result property="rNum" 					column="R_NUM" />
+		<result property="vsensorName" 				column="VSENSORNAME" />
+		<result property="srcNetworkName" 			column="SRCNETNAME" />
+		<result property="dstNetworkName" 			column="DSTNETNAME" />
+		<result property="sensorName" 				column="SENSORNAME" />
+		<result property="tmDbTime" 				column="TMDBTIME" />
+		<result property="totalCount"				column="TOTALCOUNT" />
+		<result property="sumCount"					column="SUMCOUNT" />
+		<result property="destIpCount"				column="DEST_IP" />
+		<result property="sourceIpCount"			column="SOURCE_IP" />
+		<result property="srcIpCount"				column="S_IPCOUNT"/>
+		<result property="dstIpCount"				column="D_IPCOUNT"/>
+		<result property="sPortCount" 				column="S_PORTCOUNT" />
+		<result property="dPortCount" 				column="D_PORTCOUNT" />
+		<result property="strIpCount"				column="STR_IPCOUNT" />
+		<result property="lTotCount" 				column="LTOTCOUNT" />
+		<result property="nType"					column="NTYPE" />
+		<result property="nIpType"					column="NIPTYPE" />
+	</resultMap>
+	
+        <select id="selectApplicationLogList" parameterType="com.kglory.tms.web.model.dto.ApplicationSearchDto" resultMap="applicationMap">
+            SELECT  LINDEX, DATE_FORMAT( TMLOGTIME, '%Y-%m-%d %H:%i:%s') AS TMLOGTIME, DWSOURCEIP, STRSOURCEIP, NSOURCEPORT, DWDESTINATIONIP, STRDESTINATIONIP, NDESTINATIONPORT, NPROTOCOL, 
+                    BTYPE, BIPTYPE, WDATASIZE, SDATA, LSRCNETINDEX, (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LSRCNETINDEX = LNETWORKINDEX) AS SRCNETNAME, LDSTNETINDEX, 
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LDSTNETINDEX = LNETWORKINDEX) AS DSTNETNAME
+            FROM
+            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                SELECT * 
+                FROM ${item.name}
+            </foreach>
+            WHERE TMLOGTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMLOGTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND BIPTYPE = #{ipType}
+            <if test="lnetgroupIndex != null and lnetgroupIndex > 0">
+                AND (LSRCNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex})
+                    OR LDSTNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex}))
+            </if>
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+            </if>
+            <if test="lvsensorIndex != null and lvsensorIndex > 0">
+                AND LVSENSORINDEX = #{lvsensorIndex}
+            </if>
+            <if test="lsensorIndex != null and lsensorIndex > 0">
+                AND LSENSORINDEX = #{lsensorIndex}
+            </if>
+            <if test="bType != null and bType != ''">
+                AND BTYPE = #{bType}
+            </if>
+            <if test="toIp != null and  fromIp != null and ipType == 4">
+                AND ((#{toIp} >= DWSOURCEIP AND DWSOURCEIP >= #{fromIp})
+                     OR (#{toIp} >= DWDESTINATIONIP AND DWDESTINATIONIP >= #{fromIp}))
+            </if>
+            <if test="strSourceIp != null and  strDestinationIp != null and ipType == 6">
+                AND(STRSOURCEIP = #{strSourceIp} OR STRDESTINATIONIP = #{strDestinationIp})
+            </if>
+            <if test="destPortInput != null and destPortInput != ''">
+                AND NDESTINATIONPORT = #{destPortInput} 
+            </if>
+            <if test="attackPortInput != null and attackPortInput !=''">
+                AND NSOURCEPORT = #{attackPortInput}
+            </if>
+                ORDER BY TMLOGTIME DESC
+            <if test="isDownload neq 'Y'.toString()" >
+                LIMIT #{rowSize} OFFSET #{startRowSize}
+            </if>
+        </select>
+        
+        <select id="selectApplicationLogListCount" parameterType="com.kglory.tms.web.model.dto.ApplicationSearchDto" resultType="long">
+            SELECT  IFNULL(COUNT(LINDEX), 0) AS TOTAL
+            FROM
+            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                SELECT * 
+                FROM ${item.name}
+            </foreach>
+            WHERE TMLOGTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMLOGTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND BIPTYPE = #{ipType}
+            <if test="lnetgroupIndex != null and lnetgroupIndex > 0">
+                AND (LSRCNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex})
+                    OR LDSTNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex}))
+            </if>
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND (LSRCNETINDEX = #{lnetworkIndex} OR LDSTNETINDEX = #{lnetworkIndex})
+            </if>
+            <if test="bType != null and bType != ''">
+                AND BTYPE = #{bType}
+            </if>
+            <if test="toIp != null and  fromIp != null and ipType == 4">
+                AND ((#{toIp} >= DWSOURCEIP AND DWSOURCEIP >= #{fromIp})
+                     OR (#{toIp} >= DWDESTINATIONIP AND DWDESTINATIONIP >= #{fromIp}))
+            </if>
+            <if test="strSourceIp != null and  strDestinationIp != null and ipType == 6">
+                AND(STRSOURCEIP = #{strSourceIp} OR STRDESTINATIONIP = #{strDestinationIp})
+            </if>
+            <if test="destPortInput != null and destPortInput != ''">
+                AND NDESTINATIONPORT = #{destPortInput} 
+            </if>
+            <if test="attackPortInput != null and attackPortInput !=''">
+                AND NSOURCEPORT = #{attackPortInput}
+            </if>
+        </select>
+        
+	<resultMap type="ApplicationVO" 			id="applicationHelpPopupMap">
+		<result property="lIndex" 			column="LINDEX" />
+		<result property="tmLogTime" 			column="TMLOGTIME" />
+		<result property="nProtocol"			column="NPROTOCOL" />
+		<result property="dwSourceIp"			column="DWSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="strSourceIp" 			column="STRSOURCEIP"/>
+		<result property="nSourcePort"			column="NSOURCEPORT" />
+		<result property="deDestinationIp" 		column="DWDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="strDestinationIp"             column="STRDESTINATIONIP"/>
+		<result property="nDestinationPort"		column="NDESTINATIONPORT" />
+		<result property="bType" 			column="BTYPE" />
+		<result property="bIpType" 			column="BIPTYPE" />
+		<result property="wDataSize" 			column="WDATASIZE" />
+		<result property="lSrcNetIndex" 		column="LSRCNETINDEX" />
+		<result property="lDstNetIndex" 		column="LDSTNETINDEX" />
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX" />
+		<result property="lsensorIndex" 		column="LSENSORINDEX" />
+		<result property="sData" 			column="SDATA" />
+		<result property="vsensorName" 			column="VSENSORNAME" />
+		<result property="srcNetworkName" 		column="SRCNETNAME" />
+		<result property="dstNetworkName" 		column="DSTNETNAME" />
+		<result property="sensorName" 			column="SENSORNAME" />
+		<result property="tmDbTime" 			column="TMDBTIME" />
+	</resultMap>
+	
+	<select id="selectApplicationHelpPopupList" parameterType="com.kglory.tms.web.model.dto.ApplicationSearchDto" resultMap="applicationHelpPopupMap">
+                SELECT LINDEX, TMLOGTIME, DWSOURCEIP, STRSOURCEIP, DWDESTINATIONIP, STRDESTINATIONIP, NPROTOCOL, BTYPE, BIPTYPE,
+                        WDATASIZE, SDATA, NSOURCEPORT, NDESTINATIONPORT, LSRCNETINDEX, LDSTNETINDEX, TMDBTIME,
+                        (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LSRCNETINDEX = LNETWORKINDEX) AS SRCNETNAME,
+                        (SELECT STRNAME FROM   SYSTEM_NETWORK WHERE LDSTNETINDEX = LNETWORKINDEX) AS DSTNETNAME
+                FROM   
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT * 
+                        FROM ${item.name}
+                </foreach>
+                WHERE TMLOGTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                AND TMLOGTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                WHERE LINDEX= #{lIndex} 
+                LIMIT 1
+	</select>
+</mapper>

@@ -1,0 +1,63 @@
+<div class="content-gray">
+<form role="form" class="form-inline auditLogForm">
+	<div class="row">
+			<!-- search option set -->
+			<div class="sch_area_option border-dotted-right">
+				<!-- search option - default -->
+					<div class="sch_option_set">
+						<div class="sch_option_set_row">
+							
+							<!-- 분석기간 -->
+							<label class="control-label col-xs-1"><%= locale.search.period %></label>
+							<div class="col-xs-7" id="period"></div>
+							<!-- / 분석기간  -->
+							
+							<!-- 유형구분 선택 begin -->
+							<div class="col-xs-4 padding-clear">
+								<label class="control-label col-xs-4"><%= locale.typeClass%></label>
+								<div class="col-xs-8">
+									<select id="auditType" name="auditType" class="form-control col-xs-5">
+										<option value="0"><%= locale.all%></option>
+										<option value="1"><%= locale.dashboard.auditAction%></option>
+										<option value="2"><%= locale.dashboard.auditError%></option>
+										<option value="3"><%= locale.dashboard.auditWarning%></option>
+									</select>
+								</div>
+							</div>
+							<!-- 유형구분 선택 end -->
+						</div>
+						
+						<div class="sch_option_set_row margin-t10">
+							<!-- 감사내용 begin -->
+					    	<label class="control-label col-xs-1"><%= locale.auditContent%></label>
+					    	<div class="col-xs-7">
+								<input id="strContent" name="strContent" type="text" class="form-control col-xs-10" maxlength="256"/>
+							</div>
+							<!-- 감사내용 end -->
+							
+							<!-- 사용자/시스템 begin -->
+							<div class="col-xs-4 padding-clear">							
+						    	<label class="control-label col-xs-4"><%= locale.user%>/<%= locale.system%></label>
+						    	<div class="col-xs-8">
+									<input id="strOperator" name="strOperator" type="text" class="form-control" maxlength="256"/>
+								</div>
+							</div>
+							<!-- 사용자/시스템 end -->
+						</div>
+					</div>
+				<!-- / search option - default -->
+			</div>
+			<!-- / search option set -->
+			
+			<!-- search button -->
+			<div class="sch_area_btn text-right">
+				<button type="button" class="btn btn_sch_detail margin-r10 cancelBtn"><%=locale.reset%></button>
+				<button type="button" class="btn btn-primary searchBtn"><i class="fa fa-search"></i><%=locale.search.search%></button>
+			</div>
+			<!-- / search button -->
+		</div>
+	</form>
+</div>
+<!-- 검색 조건 end -->
+
+<div id="table" class="content-white border-solid-top"></div>

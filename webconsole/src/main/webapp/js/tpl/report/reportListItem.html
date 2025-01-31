@@ -1,0 +1,22 @@
+<td class="align-center"><input type="checkbox" id="deleteReportCheck" name="deleteReportCheck" value="<%= model.lIndex %>"/></td>
+<td class="align-center"><%= model.rNum %></td>
+<td class="overflow-ellipsis">
+	<% if( model.lStatus == 0 ){ %>
+		<a href="<%= model.strHtmlPathName %>" target="_blink" ><%= model.strName %></a>
+	<% }else{ %>
+		<span><%= model.strName %></span>
+	<% } %>
+</td>
+<td class="align-center overflow-ellipsis">
+	<%= model.strReportType %>
+</td>
+<td class="align-center"><%= model.tmFrom %> ~ <%= model.tmTo %></td>
+<td class="align-center">
+	<% if( model.lStatus == 1 ){ %>
+	<a class="icon-fileformat <%= model.reportFileType %>" href="/" onclick="return false;" style="text-decoration:none; cursor: default;" title="<%= model.reportFileType %>"></a>
+	<% }else{ %>
+	<a class="icon-fileformat <%= model.reportFileType %>" href="api/common/fileDownload.do?type=report&code=<%= model.lIndex %>" style="text-decoration:none;" title="<%= model.reportFileType %>"></a>
+	<% } %>
+</td>
+<td class="align-center"><%= model.strStatus %></td>
+<td><%= model.tmEnd %></td>

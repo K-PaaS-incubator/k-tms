@@ -1,0 +1,90 @@
+<!-- 첫번째 줄 상세시간 begin -->
+<div class="col-xs-12">
+    <div class="form-group col-xs-12 padding-clear">
+        <form class="form-inline overflow-hidden"><Br>
+            <table class="table table-vertical-line table-striped">
+                <thead>
+                    <tr>
+                        <th width="15%"><%= locale.reservationList %></th>
+                        <th><%= locale.dailyBackupSettings %></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><%= locale.whetherItBackup %></td>
+                        <td><input type="checkbox" id="nDayConfigFlag" name="nDayConfigFlag"></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= locale.itemSetting %></strong></td>
+                        <td>
+                            <!-- 항목설정 테이블 begin -->
+                            <table class="table table-vertical-line margin-clear">
+                                <thead>
+                                    <tr>
+                                        <th class="align-center"><%= locale.item %></th>
+                                        <th width="25%" class="align-center"><%= locale.usage %></th>							
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><%= locale.intrusionDetection %></td>
+                                        <td class="align-center"><input type="checkbox" name="nDayTableCheckPop" /></td>							
+                                    </tr>
+                                    <tr>
+                                        <td><%= locale.traffic %></td>
+                                        <td class="align-center"><input type="checkbox" name="nDayTableCheckPop" /></td>							
+                                    </tr>
+                                    <tr>
+                                        <!--<td><%= locale.securityAudit %></td>-->
+                                        <td><%= locale.auditLog %></td>
+                                        <td class="align-center"><input type="checkbox" name="nDayTableCheckPop" /></td>							
+                                    </tr>
+                                    <tr>
+                                        <td><%= locale.session %></td>
+                                        <td class="align-center"><input type="checkbox" name="nDayTableCheckPop"/></td>							
+                                    </tr>
+                                    <tr>
+                                        <td><%= locale.securePolicy %></td>
+                                        <td class="align-center"><input type="checkbox" name="nDayTableCheckPop"/></td>							
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- 항목설정 테이블 end -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><%= locale.backupPeriodRanges %> *</td>
+                        <td id="dayPeriod">
+                            <input type="text" id="tmFromDayInput" name="tmFromDayInput" class="form-control" readOnly>
+                            <span id="tt">&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+                            <input type="text" id="tmToDayInput" name="tmToDayInput" class="form-control" readOnly>
+                        </td>
+                    <tr>
+                        <td><strong><%= locale.backupFileCreationScheme %> *</strong></td>
+                        <td>
+                            <label class="margin-t10">
+                                <input type="radio" name="nDayFileFlagRadio" id="nDayFileFlagRadio" value=0 checked> <%= locale.classifiedByTableBackup %>
+                            </label>
+<!--                            <br/>
+                            <label>
+                                <input type="radio" name="nDayFileFlagRadio" id="nDayFileFlagRadio" value=1> <%= locale.classifiedByDayIntegratedBackup %>
+                            </label>-->
+                            <br/>
+                            <span class="description margin-r5"><%= locale.fileName %></span>
+                            <input type="text" id="strDayFileNameInputPopup" name="strDayFileNameInputPopup" class="form-control" value="<%=model.strDayFileName%>" maxlength="256"/>yy_MM_dd_HHmmss.zip
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><%= locale.backupTableDrop %></td>
+                        <td><input type="checkbox" id="nDayTableDeleteFlagChecked"/> <%= locale.remove %></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer col-xs-12 margin-t20" style="margin-left:-15px;">
+                <button type="button" class="btn btn-info" id="excuteBtn"><%= locale.apply %></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true"></span><span class="sr-only"></span><%= locale.close %></button>
+                <!-- <button type="button" class="btn btn-default">닫기</button> -->
+            </div>
+        </form>
+    </div>
+</div>

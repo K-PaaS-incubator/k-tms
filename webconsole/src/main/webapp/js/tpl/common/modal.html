@@ -1,0 +1,17 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+			</button>
+			<h4 class="modal-title"><span class="modal-icon-<%= type %>"></span><%=title%></h4>
+			<!-- modal 성격에 따라.. 차트모달 클래스명 : modal-icon-chart, 조회모달 클래스명 : modal-icon-search, 정보모달 클래스명 : modal-icon-info -->
+		</div>
+		<div class="modal-body">
+			<%=body%>
+		</div>
+		<% if(isFooter){%>
+		<div class="modal-footer">
+		<% }%>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<!-- 목록 정보 begin -->
+<div class="padding-t5 margin-l5 margin-r5">
+    <!-- 목록 개수 : <strong>6</strong> -->
+    <!-- <button type="button" class="btn btn-default btn-sm margin-b5 pull-right">내보내기</button> -->
+    <div class="btnContent pull-left margin-r5">
+        <button type="button" class="btn btn-default pull-left btn-sm rowDeleteBtn"><%= locale.remove %></button>
+    </div>
+    <div class="btnContent pull-right margin-b15 margin-l5">
+        <button type="button" class="btn btn-default pull-left btn-sm margin-b5 addBtn"><%= locale.add %></button>
+        <button type="button" class="btn btn-default pull-left btn-sm margin-b5 margin-l5 margin-r15 modifyBtn"><%= locale.modifyCompleted %></button>
+
+    </div>
+</div>
+<!-- 목록 정보 end -->
+
+<!-- 탐지예외 목록 table begin -->
+<table class="table table-vertical-line table-striped table-fixed">
+    <thead>
+        <tr>
+            <th class="width-check"></th>
+            <th><%= locale.attackName%></th>
+            <th width="54%" class="overflow-ellipsis"><span class="color-green"><%= locale.sourceIp%></span> <span class="font-size-10">(<span class="rect icon_from">F</span> From / <span class="rect icon_to">T</span> To)</span><span class="color-green-light"> / <%= locale.port %> / <%= locale.network%></span><br><span class="color-blue"><%= locale.destinationIp%></span> <span class="font-size-10">(<span class="rect icon_from">F</span> From / <span class="rect icon_to">T</span> To)</span><span class="color-blue-light"> / <%= locale.port %> / <%= locale.network%></span></th>
+            <th width="10%" class="overflow-ellipsis" title="<%= locale.protocol%>"><%= locale.protocol%></th>
+            <th class="width-check overflow-ellipsis" title="<%= locale.usage%>"><%= locale.usage%></th>
+        </tr>
+    </thead>
+    <tbody id="detectionExceptionTbodyEdit"></tbody>
+</table>
+<!-- 탐지예외 목록 table end -->
+<!-- 탐지예외 end -->

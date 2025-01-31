@@ -1,0 +1,52 @@
+<!--
+<label class="control-label col-lg-1"><%= locale.search.period %></label>
+-->
+<div class="col-xs-12 padding-clear pull-left">
+	<select name="simpleTimeSelect" class="form-control simpleTimeSelect">
+		<% if (category != null && category == 'minute') { %>
+		<!-- <option value="detail"><%= locale.search.selectPeriod %></option> -->
+		<option value="5m" selected="selected"><%= locale.search.recent5Minute %></option>
+		<option value="10m"><%= locale.search.recent10Minute %></option>
+		<option value="30m"><%= locale.search.recent30Minute %></option>
+		<option value="1h"><%= locale.search.recent1Hour %></option>
+		<option value="3h"><%= locale.search.recent3Hour %></option>
+		<option value="6h"><%= locale.search.recent6Hour %></option>
+		<option value="12h"><%= locale.search.recent12Hour %></option>
+		<option value="1d"><%= locale.search.recent1Day %></option>
+		<option value="7d"><%= locale.search.recent7Day %></option>
+		<option value="30d"><%= locale.search.recent30Day %></option>
+		<% } %>
+		<% if (category == null || category == "hour") { %>
+		<!-- <option value="detail" selected="selected"><%= locale.search.selectPeriod %></option> -->
+		<!-- <option value="5m"><%= locale.search.recent5Minute %></option>
+		<option value="10m"><%= locale.search.recent10Minute %></option> -->	<!-- category가 hour인 탐지분석, 트래픽 분석의 차트에서는 사용불가 -->	
+		<option value="30m"><%= locale.search.recent30Minute %></option>
+		<option value="1h"><%= locale.search.recent1Hour %></option>
+		<option value="3h"><%= locale.search.recent3Hour %></option>
+		<option value="6h"><%= locale.search.recent6Hour %></option>
+		<option value="12h" selected="selected"><%= locale.search.recent12Hour %></option>
+		<option value="1d"><%= locale.search.recent1Day %></option>
+		<option value="7d"><%= locale.search.recent7Day %></option>
+		<option value="30d"><%= locale.search.recent30Day %></option>
+		<% } %>
+		<% if (category == "12hours") { %>
+		<option value="5m"><%= locale.search.recent5Minute %></option>
+		<option value="10m"><%= locale.search.recent10Minute %></option>	
+		<option value="30m"><%= locale.search.recent30Minute %></option>
+		<option value="1h"><%= locale.search.recent1Hour %></option>
+		<option value="3h"><%= locale.search.recent3Hour %></option>
+		<option value="6h"><%= locale.search.recent6Hour %></option>
+		<option value="12h" selected="selected"><%= locale.search.recent12Hour %></option>
+		<option value="1d"><%= locale.search.recent1Day %></option>
+		<option value="7d"><%= locale.search.recent7Day %></option>
+		<option value="30d"><%= locale.search.recent30Day %></option>
+		<% } %>
+	</select>
+	<input type="text" name="startDateInput" class="form-control startDateInput" readonly>
+	~
+	<input type="text" name="endDateInput" class="form-control endDateInput" readonly>
+	<button type="button" class="btn btn-default btn-root-tree refreshBtn" data-toggle="dropdown">
+		<span class="glyphicon glyphicon-refresh" title="<%= locale.refresh %>"></span>
+	</button>
+	<input type="hidden" class="listViewInput" name="listViewInput" value="defaultList">
+</div>

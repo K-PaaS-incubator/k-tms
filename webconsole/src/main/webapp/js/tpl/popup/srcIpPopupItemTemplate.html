@@ -1,0 +1,13 @@
+<td class="align-center" width="5%"><%= data.rNum %></td>
+<td width="35%"><a class="ipRetrievePopupLink"><%= data.dwSourceIp %></a></td>
+<% if (condition.attackNameInput == null || condition.attackNameInput == "") { %>
+<td class="align-right" width="10%"><a id="lcode"><%= data.sLcodeCount %></a></td>
+<% } %>
+<% if (condition.destPortInput == null || condition.destPortInput == "") { %>
+<td class="align-right" width="10%"><a id="destPort"><%= data.sPortCount %></a></td>
+<% } %>
+<% if (condition.destIp == null || condition.destIp == "") { %>
+<td class="align-right" width="10%"><a id="destIp"><%= data.destIpCount %></a></td>
+<% } %>
+<td class="align-right" width="15%"><a id="sum"><%= data.nSum %>(<%= data.totalRate %>)</a></td>
+<td class="align-right" width="15%"><%= data.bps %></td>

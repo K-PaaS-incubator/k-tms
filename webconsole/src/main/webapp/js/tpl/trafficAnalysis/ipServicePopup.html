@@ -1,0 +1,37 @@
+<!-- <div class="modal-body modal-body-white-padding"> -->
+<!-- 	<div class="icon-subtitle">IP : <%= ip %> 의 최근 5분간 TOP5 서비스 </div> -->
+<!-- 	<div class="col-xs-5"> 그래프 </div> -->
+<!-- </div> -->
+<div class="modal-body modal-body-white-padding">
+	<div class="pull-right">
+		<div><%= startDate %> ~ <%= endDate %></div>
+		<div class="align-right"> <span style="color: blue;">S : Source IP </span> /<span style="color: pink;"> D : Destination IP</span></div>
+	</div>
+	<!-- 목록 table begin -->
+	<!-- 내용의 길이에 따라 ...로표시되기 위해서는 table에 class table-fixed 추가,th에 각 width지정, 해당 td에 class overflow-ellipsis 추가가 필요 -->
+	<div class="servicePopupProgressbar">
+		<table class="table table-striped table-hover table-vertical-line margin-t10 table-fixed">
+			<thead>
+				<tr>
+					<th width="8%"><%= locale.rank %></th>
+					<th width="15%"><%= locale.service %></th>
+					<th class=""  width="25%">bps</th>
+					<th><%= locale.share %> </th>
+					<th width="25%">pps</th>
+					<th width=""><%= locale.share %></th>
+				</tr>
+				<tr>
+					<th width="8%" class="summary">Total</th>
+					<th width="15%" class="summary"></th>
+					<th class="summary align-right"  width="25%"><%= transformativeBps %></th>
+					<th class="summary"> </th>
+					<th class="summary align-right" width="25%"><%= transformativePps %></th>
+					<th class="summary" width=""></th>
+				</tr>
+			</thead>
+			<tbody id="servicePopupTbody">
+			</tbody>
+		</table>
+	</div>
+	<!-- 목록 table end -->
+</div>

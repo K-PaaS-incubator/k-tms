@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.dashboard.AttackInfoPopupMapper">
+
+
+	<resultMap type="AttackHelpVO" 					id="attackInfoPopupListResultMap">
+		<result property="lCode" 					column="LCODE"/>
+		<result property="strDescription" 			column="STRDESCRIPTION"/>
+		<result property="strAttackType" 			column="STRATKTYPE"/>
+		<result property="signatureRule" 			column="STRSIGRULE"/>
+		<result property="sigHelpDescription"		column="SIGHELPDESCRIPTION"/>
+		<result property="bSeverity" 				column="BSEVERITY"/>
+		<result property="strCveId" 				column="STRCVEID"/>
+		<result property="strSummary" 				column="STRSUMMARY"/>
+		<result property="totalRowSize"				column="TOTALROWSIZE"/>
+		<result property="rNum" 					column="RNUM"/>
+		<result property="cntInfo" 					column="CNT_INFO"/>
+		<result property="cntLow" 					column="CNT_LOW"/>
+		<result property="cntMed" 					column="CNT_MED"/>
+		<result property="cntHigh" 					column="CNT_HIGH"/>
+		<result property="bType" 					column="BTYPE"/>
+	</resultMap>
+	
+	<select id="selectAttackInfoPopupList" parameterType="com.kglory.tms.web.model.dto.AttackInfoPopupDto" resultMap="attackInfoPopupListResultMap">
+            SELECT A.LCODE AS LCODE, 
+                A.STRDESCRIPTION AS STRDESCRIPTION, 
+                C.STRNAME AS STRATKTYPE, 
+                A.BSEVERITY AS BSEVERITY, 
+                A.STRSIGRULE AS STRSIGRULE,
+                B.STRCVEID AS STRCVEID,
+                B.STRSUMMARY AS STRSUMMARY,
+                B.STRDESCRIPTION AS SIGHELPDESCRIPTION
+            FROM  ( SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS STRATKTYPE, SSEVERITY AS BSEVERITY, SALIVE, STRSIGRULE 
+                    FROM POLICY_SIGNATURE 
+                    UNION 
+                    SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS STRATKTYPE, SSEVERITY AS BSEVERITY, SALIVE, STRSIGRULE 
+                    FROM POLICY_USERSIG 
+                ) A
+            LEFT JOIN SYSTEM_SIGHELP B
+            ON A.LCODE = B.LCODE
+            LEFT JOIN SYSTEM_SIGCLASSTYPE C
+            ON A.STRATKTYPE = C.NCLASSTYPE
+            WHERE 1 = 1
+            <if test="severities.size() > 0">
+                    AND A.BSEVERITY IN
+                    <foreach item="item" index="index" collection="severities"  open="(" separator="," close=")">
+                          #{item}
+                    </foreach>
+            </if>
+            <if test="attackTypeSelect != 0">
+                    AND A.STRATKTYPE = #{attackTypeSelect}
+            </if>
+            <if test="searchSelect != 0 ">
+                <if test="searchSelect == 1 and searchInput != null">
+                    AND UPPER(A.STRDESCRIPTION) LIKE  CONCAT('%',UPPER(#{searchInput}),'%')
+                </if>
+                <if test="searchSelect == 2 and searchInput != null">
+                    AND UPPER(B.STRSUMMARY) LIKE CONCAT('%',UPPER(#{searchInput}),'%')
+                </if>
+                <if test="searchSelect == 3 and searchInput != null">
+                    AND UPPER(B.SIGHELPDESCRIPTION) LIKE CONCAT('%',UPPER(#{searchInput}),'%')
+                </if>
+                <if test="searchSelect == 4 and searchInput != null">
+                    AND UPPER(B.STRCVEID) LIKE CONCAT('%',UPPER(#{searchInput}),'%')
+                </if>
+            </if>
+            <if test="searchSelect == 0 and  searchInput != ''">
+                AND (UPPER(A.STRDESCRIPTION) LIKE CONCAT('%',UPPER(#{searchInput}),'%')
+
+                OR UPPER(B.STRSUMMARY) LIKE CONCAT('%',UPPER(#{searchInput}),'%')
+
+                OR UPPER(B.STRDESCRIPTION) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+
+                OR UPPER(B.STRCVEID) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%') )
+            </if>
+            ORDER BY A.LCODE DESC
+            LIMIT #{rowSize} OFFSET #{startRowSize}
+	</select>
+        
+	<select id="selectAttackInfoPopupListSeverityCount" parameterType="com.kglory.tms.web.model.dto.AttackInfoPopupDto" resultMap="attackInfoPopupListResultMap">
+            SELECT A.LCODE AS LCODE, 
+                A.STRDESCRIPTION AS STRDESCRIPTION, 
+                A.STRATKTYPE AS STRATKTYPE, 
+                A.BSEVERITY AS BSEVERITY, 
+                A.STRSIGRULE AS STRSIGRULE,
+                B.STRCVEID AS STRCVEID,
+                B.STRSUMMARY AS STRSUMMARY,
+                B.STRDESCRIPTION AS SIGHELPDESCRIPTION,
+                COUNT(CASE WHEN A.BSEVERITY = 0 THEN 1 END) AS CNT_INFO,
+                COUNT(CASE WHEN A.BSEVERITY = 1 THEN 1 END) AS CNT_LOW,
+                COUNT(CASE WHEN A.BSEVERITY = 3 THEN 1 END) AS CNT_MED,
+                COUNT(CASE WHEN A.BSEVERITY = 5 THEN 1 END) AS CNT_HIGH,
+                COUNT(A.LCODE) AS TOTALROWSIZE
+            FROM  ( SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS STRATKTYPE, SSEVERITY AS BSEVERITY, SALIVE, STRSIGRULE 
+                    FROM POLICY_SIGNATURE 
+                    UNION 
+                    SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS STRATKTYPE, SSEVERITY AS BSEVERITY, SALIVE, STRSIGRULE 
+                    FROM POLICY_USERSIG 
+                ) A
+            LEFT JOIN SYSTEM_SIGHELP B
+            ON A.LCODE = B.LCODE
+            WHERE 1 = 1
+            <if test="severities.size() > 0">
+                    AND A.BSEVERITY IN
+                    <foreach item="item" index="index" collection="severities"  open="(" separator="," close=")">
+                          #{item}
+                    </foreach>
+            </if>
+            <if test="attackTypeSelect != 0">
+                    AND A.STRATKTYPE = #{attackTypeSelect}
+            </if>
+            <if test="searchSelect != 0 ">
+                <if test="searchSelect == 1 and searchInput != null">
+                    AND UPPER(A.STRDESCRIPTION) LIKE  CONCAT('%', UPPER(#{searchInput}) ,'%')
+                </if>
+                <if test="searchSelect == 2 and searchInput != null">
+                    AND UPPER(B.STRSUMMARY) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+                </if>
+                <if test="searchSelect == 3 and searchInput != null">
+                    AND UPPER(B.SIGHELPDESCRIPTION) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+                </if>
+                <if test="searchSelect == 4 and searchInput != null">
+                    AND UPPER(B.STRCVEID) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+                </if>
+            </if>
+            <if test="searchSelect == 0 and  searchInput != ''">
+                AND (UPPER(A.STRDESCRIPTION) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+
+                OR UPPER(B.STRSUMMARY) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+
+                OR UPPER(B.STRDESCRIPTION) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%')
+
+                OR UPPER(B.STRCVEID) LIKE CONCAT('%', UPPER(#{searchInput}) ,'%'))
+            </if>
+	</select>
+	
+	<resultMap type="AttackHelpVO" 				id="typeOfVulnerabilityResultMap">
+		<result property="nClassType" 			column="NCLASSTYPE"/>
+		<result property="strName" 				column="STRNAME"/>
+	</resultMap>
+	
+	<select id="selectTypeOfVulnerabilityList" 	resultMap="typeOfVulnerabilityResultMap">
+		SELECT NCLASSTYPE, STRNAME 
+		FROM SYSTEM_SIGCLASSTYPE
+		ORDER BY NCLASSTYPE ASC
+	</select>
+
+</mapper>

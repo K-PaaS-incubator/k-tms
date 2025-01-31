@@ -1,0 +1,90 @@
+<!-- scroll tab header begin -->
+<div id="scroll-tab">
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active"><span><a href="#whois-tab" role="tab" data-toggle="tab">Whois</a></span></li>
+		<li><span><a href="#ping-tab" role="tab" data-toggle="tab">Ping</a></span></li>
+		<li><span><a href="#trace-route-tab" role="tab" data-toggle="tab">TraceRoute</a></span></li>
+	</ul>
+</div>
+<!-- scroll tab header end -->
+<!-- scroll tab content begin -->
+<div class="tab-content padding-bottom-clear">
+	<div class="tab-pane padding-t5 padding-r15 padding-l15 active" id="whois-tab">
+		<!-- whois begin -->
+		<form role="form" class="form-inline">
+			<div class="col-xs-10">
+				<div class="col-xs-5">
+					<label class="control-label col-xs-3">IP</label>
+					<input id="ip" name="ip" type="text" class="form-control col-xs-6 whoisip" />
+				</div>
+				<div class="col-xs-7">
+					<label class="control-label col-xs-4">Whois Server</label>
+					<select class="form-control col-xs-6">
+						<option value="202.12.28.136">whois.apnic.net</option>
+                        <option value="199.5.26.46">whois.arin.net</option>
+                        <option value="200.3.14.150">whois.lacnic.net</option>
+                        <option value="49.8.14.101">whois.krnic.net</option>
+                    </select>
+				</div>
+			</div>
+			<div class="col-xs-2">
+				<button type="button" class="btn btn-default col-xs-12"><%= locale.retrieve %></button>
+			</div>
+		</form>
+		<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+		<p class="search-msg">
+		</p>
+		<!-- whois end -->
+	</div>
+	<div class="tab-pane padding-t5 padding-r15 padding-l15" id="trace-route-tab">
+		<!-- trace route begin -->
+		<form role="form" class="form-inline">
+			<div class="col-xs-10 padding-clear">
+				<div class="col-xs-12 padding-clear">
+					<div class="form-group col-xs-6"> 
+						<label class="control-label col-xs-6">IP</label>
+						<input id="ip" name="ip" type="text" class="form-control col-xs-6 traceip" />
+					</div>
+<!--					<div class="form-group col-xs-6"> 
+						<label class="control-label col-xs-6"><%= locale.hostMapping %></label>
+						<input id="hostmap" type="checkbox" class="form-control" />
+					</div>-->
+				</div>
+				<div class="col-xs-12 margin-t10 padding-clear">
+					<div class="form-group col-xs-6"> 					
+						<label class="control-label col-xs-6"><%= locale.maxHops %></label>
+                                                <input id="hops" type="text" class="form-control col-xs-6" value="30" maxlength="3"/>
+					</div>
+					<div class="form-group col-xs-6"> 					
+						<label class="control-label col-xs-6"><%= locale.timeout %></label>
+                                                <input id="timeout" type="text" class="form-control col-xs-3" value="4000" maxlength="5"/>
+						<label class="control-label margin-l5">ms</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-2 padding-clear">
+				<button type="button" class="btn btn-default row2-height col-xs-12"><%= locale.retrieve %></button>
+			</div>
+		</form>
+		<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+		<p class="search-msg">
+		</p>
+		<!-- trace route end -->
+	</div>
+	<div class="tab-pane padding-t5 padding-r15 padding-l15" id="ping-tab">
+		<!-- ping begin -->
+		<form role="form" class="form-inline">
+			<div class="col-xs-10">
+				<label class="control-label col-xs-2">IP</label>
+				<input id="ip" name="ip" type="text" class="form-control col-xs-3 pingip" />
+			</div>
+			<div class="col-xs-2">
+				<button type="button" class="btn btn-default col-xs-12"><%= locale.retrieve %></button>
+			</div>
+		</form>
+		<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+		<p class="search-msg">
+		</p>
+		<!-- ping end -->
+	</div>
+</div>

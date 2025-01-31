@@ -1,0 +1,81 @@
+<div class="pull-right" style="padding-right: 5px;"><button type="button" class="btn btn-default btn-sm" id="backupFilePopup"><%= locale.backupFile %></button></div>
+<table class="table table-vertical-line table-striped">
+    <thead>
+        <tr>
+            <th width="30%"><%= locale.reservationList %></th>
+            <th width="70%"><%= locale.dailyBackupSettings %></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong><%= locale.automaticBackupHistory %></strong></td>
+            <td><%= model.nDayConfigFlagStr %></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.whetherItBackup %></strong></td>
+            <td><input type="checkbox" disabled <%= model.nDayConfigFlagChecked %>></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.itemSetting %></strong></td>
+            <td>
+                <!-- 항목설정 테이블 begin -->
+                <table class="table table-vertical-line margin-clear">
+                    <thead>
+                        <tr>			  				
+                            <th class="align-center"><%= locale.item %></th>
+                            <th class="align-center maxwidth-50"><%= locale.usage %></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><%= locale.intrusionDetection %></td>
+                            <td class="align-center"><input type="checkbox" disabled <%= model.nDayTableCheckValueChecked[4] %>/></td>							
+                        </tr>
+                        <tr>
+                            <td><%= locale.traffic %></td>
+                            <td class="align-center"><input type="checkbox" disabled <%= model.nDayTableCheckValueChecked[3] %>/></td>							
+                        </tr>
+                        <tr>
+                            <!--<td><%= locale.securityAudit %></td>-->
+                            <td><%= locale.auditLog %></td>
+                            <td class="align-center"><input type="checkbox" disabled <%= model.nDayTableCheckValueChecked[2] %>/></td>					  									
+                        </tr>
+                        <tr>
+                            <td><%= locale.session %></td>
+                            <td class="align-center"><input type="checkbox" disabled <%= model.nDayTableCheckValueChecked[1] %>/></td>							
+                        </tr>
+                        <tr>
+                            <td><%= locale.securePolicy %></td>
+                            <td class="align-center"><input type="checkbox" disabled <%= model.nDayTableCheckValueChecked[0] %>/></td>							
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- 항목설정 테이블 end -->
+            </td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.reservationTime %></strong></td>
+            <td><%= model.nDayBookTimeStr %></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.backupPeriodRanges %></strong></td>
+            <td><%= model.nDayBookDayBeforeStr %></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.backupFolderLocation %></strong></td>
+            <td><%= model.strBackupPathName %></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.backupFileCreationScheme %></strong></td>
+            <td><%= model.nDayFileFlagStr %></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.backupTableDrop %></strong></td>
+            <td><%= model.nDayTableDeleteFlagStr %></td>
+        </tr>
+        <tr>
+            <td><strong><%= locale.immediateBackup %></strong></td>
+            <td><button type="button" class="btn btn-default btn-sm " id="backupBtn" disabled><%= locale.immediateBackup %></button></td>
+        </tr>
+    </tbody>
+</table>

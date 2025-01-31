@@ -1,0 +1,59 @@
+<!-- 검색결과 begin -->
+<!-- 건수 및 버튼 영역  begin -->
+<div class="row margin-t10">
+    <!-- 건수 표시 begin -->
+    <div class="col-xs-6">
+        <div class="col-xs-12">
+            <div class="pull-left minwidth-60 text-primary"><%= locale.searchSection %></div>
+            <div class="pull-left" id="listDate"></div>
+        </div>
+        <div class="col-xs-12">
+            <div class="pull-left minwidth-60 margin-t10 text-primary"><%= locale.totalCount %>&nbsp;</div>
+            <div class="pull-left margin-t10">
+                <strong class="chart-text-10" id="totalRowSize"></strong>
+            </div>
+        </div>
+    </div>
+    <!-- 건수 표시 end -->
+
+    <!-- 버튼 영역 begin -->
+    <div class="col-xs-6">
+        <form class="form-inline" role="form">
+            <div class="pull-right">
+                <div class="pull-left margin-l20 margin-r10">
+                    <div>					
+                    </div>
+                    <div class="margin-t5">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 버튼 영역 end -->
+</div>
+
+<div class="progressbar margin-t10">
+    <table class="table table-striped-vertical table-hover table-fixed" id="content_table">
+        <thead>
+            <tr>
+                <th id="sessionLog_service" width="8%"><%= locale.type %></th>
+                <th id="sessionLog_serverIp" width="16%"><%= locale.dwSourceIp %></th>
+                <th id="sessionLog_serverIp" width="16%"><%= locale.destinationIp %></th>
+                <th id="sessionLog_allNetwork" width="12%" ><%= locale.protocol %></th>
+                <th id="sessionLog_serverByte" width="8%" ><%= locale.nSourcePort %></th>
+                <th id="sessionLog_cliendByte" width="8%" ><%= locale.destinationPort %></th>
+                <th id="sessionLog_startTime" width="14%"><%= locale.detectionTime %></th>
+<!--                <th id="sessionLog_endTime" width="19%"><%= locale.blockReason %></th>-->
+            </tr>
+        </thead>
+        <tbody id="tableList">
+        </tbody>
+    </table>
+</div>
+<!-- 더보기 begin -->
+<!-- 더보기 옵션 begin -->
+<div id="pageLayout"></div>
+<!-- 더보기 end -->
+<!-- 검색결과 end -->
+
+<!-- session log end -->

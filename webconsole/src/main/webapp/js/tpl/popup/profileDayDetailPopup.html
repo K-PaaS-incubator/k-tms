@@ -1,0 +1,74 @@
+<div class="modal-body modal-body-white-padding">
+    <form class="col-xs-12 padding-clear margin-b10 detailSetBatchForm scroll-height-500" role="form" >
+<!--        <div class="form-group form-inline">
+            <div class="icon-subtitle pull-left"><span class="dayName"></span> 상세 설정</div>
+        </div>-->
+        <!-- 상세 그래프  -->
+        <!-- 	<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="200px" /> -->
+
+
+        <!-- 상한값, 하한값 설정 시작 -->
+        <div class="daySetBatchForm">
+            <div class="form-group form-inline">
+                <label class="control-label"><%=locale.upperLimitValue%></label>
+                <label class="control-label margin-r5"><%=locale.howToSetUp%></label>
+                <select class="form-control dayUpperSettingSelect">
+                    <option value="1"><%=locale.assignmentFixedValue%>(=)</option>
+                    <option value="2"><%=locale.batchIncreas%>(+/-)</option>
+                    <option value="3"><%=locale.batchRate%>(%)</option>
+                </select>
+                <label class="control-label margin-l20 margin-r5"><%=locale.settingValue%></label>
+                <select class="form-control dayUpperTrafficSelect">
+                    <option value="avgTraffic"><%=locale.avgTraffic%></option>
+                    <option value="maxTraffic"><%=locale.maxTraffic%></option>
+                    <option value="minTraffic"><%=locale.minTraffic%></option>
+                    <option value="profileUpper"><%=locale.profileMax%></option>
+                    <option value="profileLower"><%=locale.profileMin%></option>
+                </select>
+                <label class="control-label dayUpperPlusLabel">+</label>
+                <label class="control-label dayUpperMultiplyLabel">x</label>
+                <input class="form-control align-right dayUpperInput" type="text" placeholder="0">
+                <select class="form-control dayUpperUnit">
+                </select>
+                <label class="control-label dayUpperPercentLabel">%</label>
+            </div>
+            <div class="form-group form-inline">
+                <label class="control-label"><%=locale.minValue%> </label>
+                <label class="control-label margin-r5"><%=locale.settingValue%></label>
+                <select class="form-control dayLowerSettingSelect">
+                    <option value="1"><%=locale.assignmentFixedValue%>(=)</option>
+                    <option value="2"><%=locale.batchIncreas%>(+/-)</option>
+                    <option value="3"><%=locale.batchRate%>(%)</option>	
+                </select>
+                <label class="control-label margin-l20 margin-r5"><%=locale.settingValue%></label>
+                <select class="form-control dayLowerTrafficSelect">
+                    <option><%=locale.avgTraffic%></option>
+                    <option><%=locale.maxTraffic%></option>
+                    <option><%=locale.minTraffic%></option>
+                    <option><%=locale.profileMax%></option>
+                    <option><%=locale.profileMin%></option>
+                </select>
+                <label class="control-label dayLowerPlusLabel">+</label>
+                <label class="control-label dayLowerMultiplyLabel">x</label>
+                <input class="form-control align-right dayLowerInput" type="text" placeholder="0">
+                <select class="form-control dayLowerUnit">
+                </select>
+                <label class="control-label dayLowerPercentLabel">%</label>
+            </div>
+            <button class="btn btn-default daySetBatchBtn margin-b10 pull-right" type="button"><%=locale.apply%></button>
+        </div>
+        <!-- 상한값, 하한값 설정 끝 -->
+        <!-- 상세설정 table begin -->
+        <table class="table table-striped table-hover table-vertical-line margin-t10">
+            <thead>
+                <tr>
+                    <th><%=locale.term%></th>
+                    <th><%=locale.upperTraffic%></th>
+                    <th><%=locale.lowTraffic%></th>
+                </tr>
+            </thead>
+            <tbody id="detailSettingTbody" class="detailSettingTbody">
+            </tbody>
+        </table>
+    </form>
+</div>

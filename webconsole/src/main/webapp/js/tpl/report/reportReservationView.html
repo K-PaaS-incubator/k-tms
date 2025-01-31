@@ -1,0 +1,75 @@
+<div>
+	<form class="form-inline" role="form">
+		<!-- 보고서 종류/예약 설정 begin -->
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.create %> <%= locale.method %></th>
+					<td>
+						<%= locale.reservation %> <%= locale.create %>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"><%= locale.report %> <%= locale.kind %></th>
+					<td>
+						<%= model.strCategory %> >
+						<%= model.strReportType %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.report %> <%= locale.name %></th>
+					<td>
+						<%= model.strScheduleName %>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"><%= locale.fileformat %></th>
+					<td>
+						<%= model.strReportFileType %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- 보고서 종류/예약 설정 end -->
+			
+		<!-- 구간 및 기간 설정 begin -->
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.targetType %></th>
+					<td>
+						<%= model.strObject %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.term %> <%= locale.setting %></th>
+					<td>
+					 	<%= model.lTimeTypeStr %> <%= model.tmFrom %> ~ <%= model.tmTo %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.reservation %> <%= locale.setting %></th>
+					<td>
+						<%= model.strSchedule %>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>

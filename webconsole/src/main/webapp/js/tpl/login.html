@@ -1,0 +1,98 @@
+<div class="login-cert">
+    <div class="login-img" style="width:500px">
+        <h1 style="width:500px">
+            Welcome to <strong>TESS TAS CLOUD V1.0</strong>
+        </h1>
+    </div>
+
+    <div class="row login-contents">
+
+        <div style="display:inline-block;">
+
+            <div class="login-type" id="login-normal">
+            <!-- 
+                <input type="hidden" name="_csrf" id="_csrf" value=""/>		
+             -->
+                <h2><%= locale.sign_in_id%></h2>					
+
+                <div class="pull-left" style="width:190px;">				
+                    <!-- id field begin -->
+                    <div class="form-group">
+                        <input type="text" id="userid" class="user-id" placeholder="<%= locale.id %>" required	autofocus maxlength="32"/>
+                    </div>
+                    <!-- id field end -->
+
+                    <!-- pw field begin -->
+                    <div class="form-group">
+                        <input type="password" id="password" class="user-pw" placeholder="<%= locale.password %>" required maxlength="64"/>
+                    </div>
+                    <!-- pw field end -->
+                </div>
+                <button type="button" id="loginBtn" class="login"><%= locale.sign_in %></button>
+            </div>
+        </div>
+        <div class="loginOptimizeMsg">
+            ※ <%= locale.loginOptimizedMessage %>
+        </div>
+    </div>
+</div>
+
+<!-- alert msg begin -->
+<div class="header-alert">
+    <!-- header-alert 클래스 기본은 경고의 붉은 컬러입니다. 경고의 오랜지 컬러는 warning를 추가해주세요 -->
+    <span class="alert-wrap"></span>
+    <button type="button" data-dismiss="alert" class="close alert-close">X</button>
+</div>
+<!-- alert msg end -->
+
+
+<div class="loginModal" id="loginModal">
+    <div class="padding-clear loginModal-content">
+    	<div class="modal-header">
+    		<button class="close hidden" type="button" data-dismiss="modal">
+    			<span aria-hidden="true">x</span>
+    			<span class="sr-only">Close</span>
+    		</button>
+    		<h4 class="modal-title">
+    			<span class="modal-icon-info"></span>
+    			기본 계정 정보 변경
+    		</h4>
+    	</div>
+    	
+        <div class="modal-body">
+            <div class="form-group padding-clear">
+                <div class="icon-subtitle"><%= locale.basicInformationChange %><span class="pull-right"></span></div> 
+                <div class="border-dotted-all overflow-hidden padding-t5">
+                    <table class="view-table">
+                        <tr class="border-clear">
+                            <th width="30%"><%= locale.user %> ID</th>
+                            <td><input type="text" id="popupUserId" name="popupUserId" class="form-control col-xs-10 adminId" maxlength="15"/>
+                                <div class="btnContent">
+                                    <!-- 완료 버튼 누를때 중복 검사하도록 변경 -->
+                                    <!-- <button type="button" id="adminIdCheckBtn" class="btn btn-default margin-l10 col-xs-3">중복 검사</button> -->
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="border-clear">
+                            <th><%= locale.encryption %></th>
+                            <td><input type="password" id="popupPassword" name="popupPassword" class="form-control col-xs-10">&nbsp;&nbsp;<span id="passwordScript"  maxlength="20"></span></td>
+                        </tr>
+                        <tr class="border-clear">
+                            <th><%= locale.encryption %><%= locale.ok %></th>
+                            <td><input type="password" id="popupComparePassword" name="popupComparePassword" class="form-control col-xs-10"  maxlength="20">&nbsp;&nbsp;<span id="comparePasswordScript" ></span></td>
+                        </tr>
+                        <tr class="border-clear">
+                            <th></th>
+                            <!-- <td><label><input type="checkbox" name="loginCheck"> 최초 로그인 시 암호 변경</label></td> -->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-center padding-t10">
+            <button type="button" class="btn btn-info" id="adminSave"><%= locale.save %></button>
+            <!-- <button type="button" class="btn btn-default" id="closeBtn"><%= locale.close %></button> -->
+            <button type="button" class="btn btn-default" data-dismiss="modal" id="adminClose"><span aria-hidden="true"></span><span class="sr-only"></span><%= locale.close %></button>
+        </div>
+    </div>
+</div>

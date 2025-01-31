@@ -1,0 +1,24 @@
+<!-- 시간 동기화 옵션 begin -->
+	<div class="icon-subtitle"><%= locale.timeSyncOption%></div>
+	<div class="border-dotted-all overflow-hidden padding-t5">
+		<span class="col-xs-12 description"><input type="checkbox" class="timeSyncCheckbox" name="timeSyncCheckbox" value="" disabled/> <%= locale.standardTimeSyncUsed%></span>
+		<table class="view-table col-xs-12">
+			<tr class="border-clear">
+				<th width="20%"><%= locale.inspectionPeriod%></th>
+				<td class=""><span class="period"></span><%= locale.timeMin%></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 시간 동기화 옵션 end -->
+	
+	<!-- 표준시간 서버 begin -->
+	<div class="icon-subtitle"><%= locale.standardTimeServer%></div>
+	<div class="border-dotted-all overflow-hidden padding-t5 padding-b5">
+		<table class="view-table col-xs-12">
+			<tr class="border-clear">
+				<th width="20%"><%= locale.server%></th>
+				<td><select class="form-control col-xs-12 serverSelect" size="5" multiple="" disabled></select></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 표준시간 서버 end -->

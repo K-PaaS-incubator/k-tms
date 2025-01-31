@@ -1,0 +1,170 @@
+<div>
+	<form class="form-inline reportCreationForm" role="form">
+		<!-- 보고서 종류/예약 설정 begin -->
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.create %> <%= locale.method %></th>
+					<td>
+						<table width="80%" class="border-clear">
+							<tr class="border-clear">
+								<td width="48%">
+									<input type="radio" name="createTypeRadio" id="createTypeRadio" value=3 class="margin-r5" disabled/><%= locale.reservation %><%= locale.create %>
+								</td>
+								<td>
+									<input type="radio" name="createTypeRadio" id="createTypeRadio" value=2 class="margin-r5 margin-l10" disabled/><%= locale.immediate %><%= locale.create %>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"><%= locale.report %> <%= locale.kind %></th>
+					<td>
+						<select class="form-control margin-r5  margin-l10 col-xs-6" id="strReportTypeSelect1" name="strReportTypeSelect1">
+							<option value="3"><%= locale.dailyTrendReport %></option>
+							<option value="2"><%= locale.weeklyTrendReport %></option>
+							<option value="1"><%= locale.monthlyTrendReport %></option>
+							<option value="13"><%= locale.dailyTrendReportipv6 %></option>
+							<option value="14"><%= locale.weeklyTrendReportipv6 %></option>
+							<option value="15"><%= locale.monthlyTrendReportipv6 %></option>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.report %> <%= locale.name %></th>
+					<td>
+						<table class="view-table"  width="80%">
+							<tr class="border-clear">
+								<td>
+									<input type="text" class="form-control col-xs-8" id="strScheduleName" name="strScheduleName" maxlength="32"/>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"><%= locale.fileformat %></th>
+					<td>
+						<table class="view-table" width="34%">
+							<tr class="border-clear">
+								<td>
+									<select class="form-control margin-r5 minwidth-150" id="destFileSelect" name="destFileSelect">
+										<option value=10>pdf</option>
+										<option value=100>word</option>
+										<option value=1000>excel</option>
+										<option value=10000>html</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+			<!-- 보고서 종류/예약 설정 end -->
+			
+		<!-- 구간 및 기간 설정 begin -->
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all margin-t5 padding-t5 padding-b3">
+			<table class="view-table ">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.targetType %></th>
+					<td>
+						<div class="form-group col-xs-8 padding-clear"  id="targetType"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table" id="periodType1">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.term %> <%= locale.setting %></th>
+					<td>
+						<table class="view-table"  width="80%">
+							<tr class="border-clear" id="ltimeTypeTr2">
+								<td>
+								 	<input type="radio" name="ltimetypeRadio" id="ltimetypeRadio" value="2" checked>
+								    <%= locale.creationTime %> <%= locale.criteria %> <%= locale.thedaybefore %>
+								</td>
+							</tr>
+							<tr class="border-clear" id="ltimeTypeTr5">
+								<td>
+								 	<input type="radio" name="ltimetypeRadio" id="ltimetypeRadio" value="5" checked>
+								    <%= locale.creationTime %> <%= locale.criteria %> <%= locale.lastWeek %>
+								</td>
+							</tr>
+							<tr class="border-clear" id="ltimeTypeTr7">
+								<td>
+								 	<input type="radio" name="ltimetypeRadio" id="ltimetypeRadio" value="7" checked>
+								    <%= locale.creationTime %> <%= locale.criteria %> <%= locale.lastMonth %>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"></th>
+					<td>
+						<table class="view-table" width="34%">
+							<tr class="border-clear">
+								<td>
+									<input type="radio" name="ltimetypeRadio" id="ltimetypeRadio" value="0">
+									<%= locale.user %> <%= locale.definition %>&nbsp;
+									<input type="text" id="tmFromDayInput" name="tmFromDayInput" class="form-control" readonly>
+									<input type="text" id="tmFromWeekInput" name="tmFromWeekInput" class="form-control" readonly>
+									<input type="text" id="tmFromMonthInput" name="tmFromMonthInput" class="form-control" readonly>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.reservation %> <%= locale.setting %></th>
+					<td>
+						<table class="view-table" width="34%">
+							<tr class="border-clear">
+								<td>
+									<select class="form-control margin-r5 minwidth-100" id="schedulePeriodSelect" name="schedulePeriodSelect">
+										<option value="2"><%= locale.everyDay %></option>
+										<option value="1"><%= locale.everyWeek %></option>
+										<option value="0"><%= locale.everyMonth %></option>
+										<option value="3"><%= locale.once %></option>
+									</select>
+									<select class="form-control margin-r5 minwidth-50" id="lMonthSelect" name="lMonthSelect">
+									</select>
+									<select class="form-control margin-r5 minwidth-50" id="lWeekSelect" name="lWeekSelect">
+										<option value=1><%= locale.sunday %></option>
+										<option value=2><%= locale.monday %></option>
+										<option value=3><%= locale.tuesday %></option>
+										<option value=4><%= locale.wednesday %></option>
+										<option value=5><%= locale.thursday %></option>
+										<option value=6><%= locale.friday %></option>
+										<option value=7><%= locale.saturday %></option>
+									</select>
+									<select class="form-control margin-r5 minwidth-50" id="lHourSelect" name="lHourSelect">
+									</select>
+									<%= locale.timeHour %>
+									<select class="form-control margin-r5 minwidth-50" id="lMinuteSelect" name="lMinuteSelect">
+									</select>
+									<%= locale.timeMin %>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>

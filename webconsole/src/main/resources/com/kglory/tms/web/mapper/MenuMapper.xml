@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.MenuMapper">
+	
+	<resultMap type="MenuVO" id="menuMap">
+		<result property="menuNo" column="MENU_NO" />
+		<result property="menuKey" column="MENU_KEY" />
+		<result property="menuName" column="MENU_NAME" />
+		<result property="menuNameEng" column="MENU_NAME_ENG" />
+		<result property="displayOrder" column="DISPLAY_ORDER" />
+		<result property="enabled" column="ENABLED" />
+		<result property="upperMenuKey" column="UPPER_MENU_KEY" />
+		<result property="roleNo" column="ROLE_NO" />
+		<result property="url" column="URL" />
+	</resultMap>
+	
+	<select id="selectMenu" parameterType="java.util.List" resultMap="menuMap">
+		SELECT MENU_NO, 
+		       MENU_KEY, 
+		       MENU_NAME, 
+		       MENU_NAME_ENG, 
+		       DISPLAY_ORDER, 
+		       ENABLED, 
+		       UPPER_MENU_KEY, 
+		       ROLE_NO, 
+		       URL 
+		FROM   TB_MENU 
+		WHERE  ENABLED = 'Y' 
+		   AND ROLE_NO IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		       #{item}
+		</foreach>
+		ORDER  BY UPPER_MENU_KEY DESC, 
+		          DISPLAY_ORDER ASC 
+	</select>
+
+</mapper>

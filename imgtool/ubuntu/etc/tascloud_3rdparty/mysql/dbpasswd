@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+#
+RAND_STR=`head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c8`
+NEW_PW=`echo $RAND_STR | openssl enc -aes-256-cbc -a -salt -k $RAND_STR`
+ORIG_PW=
+############################
+# Create db properties
+############################
+echo driver=org.mariadb.jdbc.Driver > /usr/local/mysql/data/db.properties
+echo url=jdbc:mariadb://127.0.0.1:3306/TESS >> /usr/local/mysql/data/db.properties
+echo username=mysql >> /usr/local/mysql/data/db.properties
+echo password=$RAND_STR$GET_MAC >> /usr/local/mysql/data/db.properties
+echo maxActive=50 >> /usr/local/mysql/data/db.properties
+#################################
+# DB password update
+#################################
+mysql -u root -h 127.0.0.1 -e "create user 'mysql'@'%' identified by '$RAND_STR$GET_MAC';FLUSH PRIVILEGES;"
+mysql -u root -h 127.0.0.1 -e "grant all privileges on *.* to 'mysql'@'%';"

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.securityPolicy.AuditLogPolicyMapper">
+
+	<select id="selectAuditLogPolicy" parameterType="AuditLogPolicyVO" resultType="AuditLogPolicyVO">
+		SELECT LAUDITSETINDEX, 
+		       LTYPE1, 
+		       LTYPE2, 
+		       STRCONTENT, 
+		       LWARNINGINDEX, 
+		       STRSMSCONTENT, 
+		       NAPPLY 
+		FROM   POLICY_AUDITSET 
+		WHERE  LTYPE1 = #{lType1} 
+		   AND LTYPE2 = #{lType2} 
+	</select>
+        
+	<select id="selectAuditLogDetail" parameterType="AuditLogPolicyVO" resultType="AuditLogPolicyVO">
+		SELECT A.LAUDITSETINDEX, 
+                    A.LTYPE1, 
+                    A.LTYPE2, 
+                    A.STRCONTENT, 
+                    A.LWARNINGINDEX, 
+                    A.STRSMSCONTENT, 
+                    A.NAPPLY,
+                    B.STRALARMTYPE, 
+                    B.NCOUNT, 
+                    B.NSECOND, 
+                    B.LMAILGROUP, 
+                    B.LSMSGROUP, 
+                    B.NTYPE, 
+                    B.NALARMTYPE
+                FROM   POLICY_AUDITSET A
+                LEFT OUTER JOIN POLICY_WARNINGSET B
+                ON A.LWARNINGINDEX = B.LWARNINGSETINDEX
+		WHERE  A.LTYPE1 = #{lType1} 
+		   AND A.LTYPE2 = #{lType2} 
+	</select>
+	
+	<resultMap type="com.kglory.tms.web.model.dto.AuditLogPolicyDto" id="AuditLogPolicyWaringSet">
+		<result property="lAuditSetIndex"	column="LAUDITSETINDEX" />
+		<result property="lType1"			column="LTYPE1" />
+		<result property="lType2"			column="LTYPE2" />
+		<result property="strContent"		column="STRCONTENT" />
+		<result property="lWarningIndex" 	column="LWARNINGINDEX" />
+		<result property="strSmsContent" 	column="STRSMSCONTENT" />
+		<result property="nApply"			column="NAPPLY" />
+		<result property="lWarningSetIndex" column="LWARNINGSETINDEX"/>
+		<result property="strAlarmType" 	column="STRALARMTYPE"/>
+		<result property="nCount" 			column="NCOUNT"/>
+		<result property="nSecond" 			column="NSECOND"/>
+		<result property="lMailGroup" 		column="LMAILGROUP"/>
+		<result property="lSmsGroup" 		column="LSMSGROUP"/>
+		<result property="nType" 			column="NTYPE"/>
+		<result property="nAlarmType" 		column="NALARMTYPE"/>
+	</resultMap>
+	
+	<select id="selectAuditLogPolicyActionList" parameterType="com.kglory.tms.web.model.dto.AuditLogPolicyDto" resultMap="AuditLogPolicyWaringSet">
+		SELECT A.LAUDITSETINDEX		AS LAUDITSETINDEX, 
+		       A.LTYPE1				AS LTYPE1, 
+		       A.LTYPE2				AS LTYPE2, 
+		       A.STRCONTENT			AS STRCONTENT, 
+		       A.LWARNINGINDEX		AS LWARNINGINDEX, 
+		       A.STRSMSCONTENT		AS STRSMSCONTENT, 
+		       A.NAPPLY				AS NAPPLY, 
+		       B.LWARNINGSETINDEX	AS LWARNINGSETINDEX, 
+		       B.STRALARMTYPE 		AS STRALARMTYPE, 
+		       B.NCOUNT				AS NCOUNT, 
+		       B.NSECOND			AS NSECOND, 
+		       B.LMAILGROUP			AS LMAILGROUP, 
+		       B.LSMSGROUP			AS LSMSGROUP, 
+		       B.NTYPE				AS NTYPE, 
+		       B.NALARMTYPE			AS NALARMTYPE
+                FROM   POLICY_AUDITSET A
+                LEFT JOIN POLICY_WARNINGSET B
+                ON A.LWARNINGINDEX = B.LWARNINGSETINDEX
+                WHERE  A.LTYPE1 = 1
+                <if test="lType2 == 1">AND 10000 > A.LTYPE2 </if>
+                <if test="lType2 == 10000">AND 20000 > A.LTYPE2 AND A.LTYPE2 >= 10000 </if>
+                <if test="lType2 == 20000">AND 30000 > A.LTYPE2 AND A.LTYPE2 >= 20000 </if>
+		ORDER  BY A.LAUDITSETINDEX 
+	</select>
+	
+	<!-- 감사로그 정책> 오류 > 리스트 조회(구분에 따라 센서, 매니저, 콘솔)  -->
+	<select id="selectAuditLogPolicyErrorList" parameterType="com.kglory.tms.web.model.dto.AuditLogPolicyDto" resultMap="AuditLogPolicyWaringSet">
+		SELECT A.LAUDITSETINDEX		AS LAUDITSETINDEX, 
+		       A.LTYPE1				AS LTYPE1, 
+		       A.LTYPE2				AS LTYPE2, 
+		       A.STRCONTENT			AS STRCONTENT, 
+		       A.LWARNINGINDEX		AS LWARNINGINDEX, 
+		       A.STRSMSCONTENT		AS STRSMSCONTENT, 
+		       A.NAPPLY				AS NAPPLY, 
+		       B.LWARNINGSETINDEX	AS LWARNINGSETINDEX, 
+		       B.STRALARMTYPE 		AS STRALARMTYPE, 
+		       B.NCOUNT				AS NCOUNT, 
+		       B.NSECOND			AS NSECOND, 
+		       B.LMAILGROUP			AS LMAILGROUP, 
+		       B.LSMSGROUP			AS LSMSGROUP, 
+		       B.NTYPE				AS NTYPE, 
+		       B.NALARMTYPE			AS NALARMTYPE
+                FROM   POLICY_AUDITSET A
+                LEFT JOIN POLICY_WARNINGSET B
+                ON A.LWARNINGINDEX = B.LWARNINGSETINDEX
+                WHERE  A.LTYPE1 = 2
+                <if test="lType2 == 1">AND 10000 > A.LTYPE2 </if>
+                <if test="lType2 == 10000">AND 20000 > A.LTYPE2 AND A.LTYPE2 >= 10000 </if>
+                <if test="lType2 == 20000">AND 30000 > A.LTYPE2 AND A.LTYPE2 >= 20000 </if>
+		ORDER  BY A.LAUDITSETINDEX 
+	</select>
+	
+	<select id="selectAuditLogPolicyWarningList" parameterType="com.kglory.tms.web.model.dto.AuditLogPolicyDto" resultMap="AuditLogPolicyWaringSet">
+		SELECT A.LAUDITSETINDEX		AS LAUDITSETINDEX, 
+		       A.LTYPE1				AS LTYPE1, 
+		       A.LTYPE2				AS LTYPE2, 
+		       A.STRCONTENT			AS STRCONTENT, 
+		       A.LWARNINGINDEX		AS LWARNINGINDEX, 
+		       A.STRSMSCONTENT		AS STRSMSCONTENT, 
+		       A.NAPPLY				AS NAPPLY, 
+		       B.LWARNINGSETINDEX	AS LWARNINGSETINDEX, 
+		       B.STRALARMTYPE 		AS STRALARMTYPE, 
+		       B.NCOUNT				AS NCOUNT, 
+		       B.NSECOND			AS NSECOND, 
+		       B.LMAILGROUP			AS LMAILGROUP, 
+		       B.LSMSGROUP			AS LSMSGROUP, 
+		       B.NTYPE				AS NTYPE, 
+		       B.NALARMTYPE			AS NALARMTYPE
+                FROM   POLICY_AUDITSET A
+                LEFT JOIN POLICY_WARNINGSET B
+                ON A.LWARNINGINDEX = B.LWARNINGSETINDEX
+                WHERE  A.LTYPE1 = 3
+                <if test="lType2 == 1">AND 10000 > A.LTYPE2 </if>
+                <if test="lType2 == 10000">AND 20000 > A.LTYPE2 AND A.LTYPE2 >= 10000 </if>
+                <if test="lType2 == 20000">AND 30000 > A.LTYPE2 AND A.LTYPE2 >= 20000 </if>
+		ORDER  BY A.LAUDITSETINDEX 
+	</select>
+	
+	<update id="updateAuditLogPolicyList" parameterType="com.kglory.tms.web.model.dto.AuditLogPolicyDto">
+                UPDATE POLICY_AUDITSET
+                SET LWARNINGINDEX = #{lWarningIndex}, 
+                        NAPPLY = #{nApply}
+                WHERE LAUDITSETINDEX = #{lAuditSetIndex}
+	</update>
+	
+	<select id="selectWarningsetIndex" parameterType="com.kglory.tms.web.model.dto.AuditLogPolicyDto" resultType="BigInteger">
+                SELECT LWARNINGSETINDEX
+                FROM POLICY_WARNINGSET
+                WHERE NALARMTYPE = #{nAlarmType}
+                AND LMAILGROUP = #{lMailGroup}
+                AND LSMSGROUP = #{lSmsGroup}
+	</select>
+	
+	
+</mapper>

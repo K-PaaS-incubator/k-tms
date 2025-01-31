@@ -1,0 +1,16 @@
+<!--<td class="align-center" width="7%"><%=data.bSeverity %></td> -->
+<!-- <td class="level-narrow severity-bg-lv<%=data.bSeverity %>"></td> -->
+<!--<td class="align-center"></td>-->
+<td id="helpTd" class="overflow-ellipsis align-left" title="<%=data.strTitle %>"><span class="cell-color-dot-bg severity-bg-lv<%= data.bSeverity %>"></span><a class="attackName"><%= data.strTitle %></a></td>
+<td class="overflow-ellipsis align-center">
+<% if (data.rawdata != null && data.rawdata != '') { %>
+	<button type="button" class="btn-intable-list packetRawTd" style="height:17px;"></button>
+<% } %>	
+</td>
+<td class="overflow-ellipsis" title="<%= data.dwSourceIp %>"><a class="ipRetrieveAttackPopupLink"><%= data.dwSourceIp %></a></td>
+<td><%= data.nSourcePort %></td>
+<td class="overflow-ellipsis" title="<%= data.deDestinationIp %>"><a class="ipRetrieveVictimPopupLink"><%= data.deDestinationIp %></a></td>
+<td><%= data.nDestinationPort %></td>
+<td class="align-right"><%= data.dweventnum %></td>
+<td class="align-right"><%= data.dwpktsize %></td>
+<td><%= data.endDate %></td>

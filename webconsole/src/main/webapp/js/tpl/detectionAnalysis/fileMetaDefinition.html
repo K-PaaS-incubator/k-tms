@@ -1,0 +1,75 @@
+<!-- FileMeta 탐지 정보 -->
+<div class="modal-body modal-body-white-padding">
+    <!-- <div class="security-view-title" id="bTypeName">
+            <span id="attackType"></span>
+    </div> -->
+    <!-- 상세 정보 view table begin -->
+    <div class="scroll-height-400">
+        <div class="icon-subtitle margin-t5" id="detectionInfoTitle"><%= locale.search.generalInfo %></div>
+        <!-- 일반정보 begin -->
+        <div class="border-dotted-all padding-all-5 progressbar" id="detectionInfoContent">
+            <!-- info 2column table begin -->
+            <table class="view-table">
+                <colgroup>
+                    <col width="15%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="35%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th><%= locale.type %></th>
+                        <td style="word-break:break-all;"><span id="fileType"></span></td>
+                        <th><%= locale.detectionTime %></th>
+                        <td><span id="tmLogTime"></span></td>
+                    </tr>
+                    <tr>
+                        <th><%= locale.dwSourceIp %></th>
+                        <td class="align-left"><span id="sip"></span><button class="btn btn-default btn-sm margin-t5 pull-right sipRetrievePopupBtn"><%= locale.search.ipSearch %></button></td>
+                        <th><%= locale.destinationIp %></th>
+                        <td class="align-left"><span id="dip"></span><button class="btn btn-default btn-sm margin-t5 pull-right dipRetrievePopupBtn"><%= locale.search.ipSearch %></button></td>
+                    </tr>
+                    <tr>
+                        <th><%= locale.nSourcePort %></th>
+                        <td><span id="sPort"></span></td>
+                        <th><%= locale.destinationPort %></th>
+                        <td><span id="dPort"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- info 2column table end -->
+        </div>
+        <!-- 일반정보 end -->
+
+        <div class="icon-subtitle"><%= locale.fileInfo %></div>
+        <!-- 파일정보 begin -->
+        <div class="border-dotted-all padding-all-5">
+            <table class="view-table">
+                <colgroup>
+                    <col width="15%">
+                    <col width="35%">
+                    <col width="15%">
+                    <col width="35%">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th><%= locale.fileInfo %></th>
+                        <td style="word-break:break-all;"><span id="fileName"></span>
+                       		<button class="btn btn-default btn-sm margin-t5 pull-right fileDownload"
+                       		<%if(role != 7){%>style="display:none;"<%}%> ><%=locale.download%></button>
+                       </td>                        
+                       <th><%= locale.fileSize %></th>
+                        <td><span id="fileSize"></span></td>
+                    </tr>	
+                    <tr>
+                        <th><%= locale.httpHost %>: </th>
+                        <td><span id="host"></span></td>
+                        <th><%= locale.fileHash %>: </th>
+                        <td style="word-break:break-all;"><span id="hash"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- 상세 정보 view table end -->
+</div> 

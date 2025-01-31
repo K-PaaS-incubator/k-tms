@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemSettings.VsensorMapper">
+	<resultMap type="SessionServiceDataVO" 	id="sessionMonitoringMap">
+		<result property="lIndex" 			column="LINDEX"></result>
+		<result property="nPort" 			column="NPORT"></result>
+		<result property="strName" 			column="STRNAME"></result>
+		<result property="nRenewOption" 	column="NRENEWOPTION"></result>
+		<result property="lvsensorIndex" 	column="LVSENSORINDEX"></result>
+		<result property="nCheck" 			column="NCHECK"></result>
+	</resultMap>
+	
+	<select id="selectSessionMonitoringService" parameterType="com.kglory.tms.web.model.dto.VsensorDto" resultMap="sessionMonitoringMap">
+		SELECT	A.LINDEX, A.NPORT,  A.STRNAME, NVL2(B.NPORT, 1, 0) AS NCHECK, B.NRENEWOPTION, B.LVSENSORINDEX		       	
+		FROM (
+			SELECT LINDEX, STRNAME, NPORT
+			FROM SESSION_SERVICE_DATA 
+		) A,
+		(
+			SELECT LINDEX, NPORT, NRENEWOPTION, LVSENSORINDEX 
+			FROM SESSION_MONITOR 
+			WHERE LVSENSORINDEX = #{lvsensorIndex}
+		) B	
+		WHERE A.LINDEX = B.NPORT(+)
+		ORDER BY LINDEX ASC   
+	</select>
+	
+	<resultMap type="VsensorVO" 			id="vsensorLindexResultMap">
+		<result property="lIndex"			column="LINDEX" />
+		<result property="lvsensorIndex"	column="LVSENSORINDEX" />
+		<result property="lsensorName"		column="STRNAME" />
+	</resultMap>
+	
+	<delete id="deleteSessionMonitoringService" parameterType="com.kglory.tms.web.model.dto.VsensorDto">
+		DELETE 	FROM SESSION_MONITOR
+				WHERE LVSENSORINDEX = #{lvsensorIndex}
+	</delete>
+	
+	<insert id="insertSessionMonitoringService" parameterType="com.kglory.tms.web.model.dto.VsensorDto">
+		INSERT ALL 
+		<foreach collection="fileList" item="item">
+		INTO SESSION_MONITOR ( LINDEX, NPORT, NRENEWOPTION, LVSENSORINDEX ) 
+		VALUES (#{item.lIndex}, #{item.nPort}, #{item.nRenewOption}, #{item.lvsensorIndex})
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	
+	<select id="selectVsensorPerSessionMonitoring" parameterType="com.kglory.tms.web.model.dto.VsensorDto" resultMap="sessionMonitoringMap">
+		SELECT LINDEX, NPORT, NRENEWOPTION, LVSENSORINDEX
+		FROM SESSION_MONITOR
+		WHERE LVSENSORINDEX = #{lvsensorIndex}
+	</select>
+	
+	<select id="selectSessionMonitoringServiceData" resultMap="sessionMonitoringMap">
+		SELECT LINDEX, NVL2(NPORT, 1, 0) AS NCHECK, NPORT, STRNAME
+		FROM SESSION_SERVICE_DATA
+		ORDER BY LINDEX ASC		
+	</select>
+	
+	<resultMap type="DetectionPolicyVO" 	id="detectionExceptionResultMap">
+		<result property="lCode"			column="LCODE" />
+		<result property="strDescription"	column="STRDESCRIPTION" />
+	</resultMap>
+	
+	<select id="selectDetectionPolicyGroup" resultMap="detectionExceptionResultMap">
+		SELECT LCODE, SCLASSTYPE, STRDESCRIPTION, SSEVERITY, LUSED, LTHRESHOLDNUM, LTHRESHOLDTIME
+		FROM (
+		  SELECT LCODE, SCLASSTYPE, STRDESCRIPTION, SSEVERITY, LUSED, LTHRESHOLDNUM, LTHRESHOLDTIME  
+		  FROM POLICY_SIGNATURE 
+		  UNION 
+		  SELECT LCODE, SCLASSTYPE, STRDESCRIPTION, SSEVERITY, LUSED, LTHRESHOLDNUM, LTHRESHOLDTIME
+		  FROM POLICY_USERSIG
+		) A
+		WHERE LCODE > -1
+		<if test="attackNameInput != null and  attackNameInput != ''">
+                    AND STRDESCRIPTION LIKE CONCAT('%' , #{attackNameInput} , '%')
+                </if>
+		ORDER BY LCODE DESC
+	</select>
+        
+	<resultMap type="DetectionExceptionVO" 		id="detectionExceptionPolicyMap">
+		<result property="lIndex" 				column="LINDEX"></result>
+		<result property="lCode" 				column="LCODE"></result>
+		<result property="strDescriptionValue" 	column="STRDESCRIPTION"></result>
+		<result property="sSeverity" 			column="SSEVERITY"></result>
+		<result property="sClassType" 			column="SCLASSTYPE"></result>
+		<result property="lVioCode" 			column="LVIOCODE"></result>
+		<result property="nClassType" 			column="NCLASSTYPE"></result>
+		<result property="lsrcNetworkIndex" 	column="LSRCNETWORKINDEX"></result>
+		<result property="ldstNetworkIndex" 	column="LDSTNETWORKINDEX"></result>
+		<result property="lsrcNetworkIndexName" column="LSRCNETWORKINDEXNAME"></result>
+		<result property="ldstNetworkIndexName" column="LDSTNETWORKINDEXNAME"></result>
+		<result property="strSrcIpFrom" 		column="STRSRCIPFROM"></result>
+		<result property="strSrcIpTo" 			column="STRSRCIPTO"></result>
+		<result property="strDstIpFrom" 		column="STRDSTIPFROM"></result>
+		<result property="strDstIpTo" 			column="STRDSTIPTO"></result>
+		<result property="nSport" 				column="NSPORT"></result>
+		<result property="nDport" 				column="NDPORT"></result>
+		<result property="nProtocol" 			column="NPROTOCOL"></result>
+		<result property="nDetect" 				column="NDETECT"></result>
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX"></result>	
+		<result property="chkVioCode" 		column="NCHKVIOCODE"></result>
+		<result property="chkSrcNetwork" 		column="NCHKSRCNETWORK"></result>
+		<result property="chkDstNetwork" 		column="NCHKDSTNETWORK"></result>
+		<result property="chkSrcIP" 		column="NCHKSRCIP"></result>
+		<result property="chkDstIP" 		column="NCHKDSTIP"></result>
+		<result property="chkProtocol" 		column="NCHKPROTOCOL"></result>
+		<result property="chkSPort" 		column="NCHKSPORT"></result>
+		<result property="chkDPort" 		column="NCHKDPORT"></result>
+	</resultMap>
+	
+        <select id="selectDetectionException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto" resultMap="detectionExceptionPolicyMap">
+		SELECT A.LINDEX AS LINDEX, A.LVIOCODE AS LVIOCODE, A.NCLASSTYPE AS NCLASSTYPE, A.LSRCNETWORKINDEX AS LSRCNETWORKINDEX, 
+                        A.LDSTNETWORKINDEX AS LDSTNETWORKINDEX, A.STRSRCIPFROM AS STRSRCIPFROM, A.STRSRCIPTO AS STRSRCIPTO, 
+                        A.STRDSTIPFROM AS STRDSTIPFROM, A.STRDSTIPTO AS STRDSTIPTO, A.NPROTOCOL AS NPROTOCOL, A.NSPORT AS NSPORT, 
+                        A.NDPORT AS NDPORT, A.NDETECT AS NDETECT, A.NCHKVIOCODE AS NCHKVIOCODE, A.NCHKSRCNETWORK AS NCHKSRCNETWORK, A.NCHKDSTNETWORK AS NCHKDSTNETWORK, 
+                        A.NCHKSRCIP AS NCHKSRCIP, A.NCHKDSTIP AS NCHKDSTIP, A.NCHKPROTOCOL AS NCHKPROTOCOL, A.NCHKSPORT AS NCHKSPORT, A.NCHKDPORT AS NCHKDPORT,
+                        IFNULL(B.STRDESCRIPTION, IFNULL(C.STRDESCRIPTION, (SELECT STRNAME FROM SYSTEM_SIGCLASSTYPE WHERE NCLASSTYPE = A.NCLASSTYPE))) AS STRDESCRIPTION, 
+                        IFNULL(B.SSEVERITY, C.SSEVERITY) AS SSEVERITY, D.STRNAME AS LSRCNETWORKINDEXNAME, E.STRNAME AS LDSTNETWORKINDEXNAME
+                FROM POLICY_EXCEPTION A
+                LEFT JOIN POLICY_SIGNATURE B ON A.LVIOCODE = B.LCODE
+                LEFT JOIN POLICY_USERSIG C ON A.LVIOCODE = C.LCODE
+                LEFT JOIN SYSTEM_NETWORK D ON D.LNETWORKINDEX = A.LSRCNETWORKINDEX
+                LEFT JOIN SYSTEM_NETWORK E ON E.LNETWORKINDEX = A.LDSTNETWORKINDEX
+	</select>
+        
+        <select id="selectDetectionExceptionDetail" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto" resultMap="detectionExceptionPolicyMap">
+		SELECT A.LINDEX AS LINDEX, A.LVIOCODE AS LVIOCODE, A.NCLASSTYPE AS NCLASSTYPE, A.LSRCNETWORKINDEX AS LSRCNETWORKINDEX, 
+                        A.LDSTNETWORKINDEX AS LDSTNETWORKINDEX, A.STRSRCIPFROM AS STRSRCIPFROM, A.STRSRCIPTO AS STRSRCIPTO, 
+                        A.STRDSTIPFROM AS STRDSTIPFROM, A.STRDSTIPTO AS STRDSTIPTO, A.NPROTOCOL AS NPROTOCOL, A.NSPORT AS NSPORT, 
+                        A.NDPORT AS NDPORT, A.NDETECT AS NDETECT, A.NCHKVIOCODE AS NCHKVIOCODE, A.NCHKSRCNETWORK AS NCHKSRCNETWORK, A.NCHKDSTNETWORK AS NCHKDSTNETWORK, 
+                        A.NCHKSRCIP AS NCHKSRCIP, A.NCHKDSTIP AS NCHKDSTIP, A.NCHKPROTOCOL AS NCHKPROTOCOL, A.NCHKSPORT AS NCHKSPORT, A.NCHKDPORT AS NCHKDPORT,
+                        IFNULL(B.STRDESCRIPTION, IFNULL(C.STRDESCRIPTION, (SELECT STRNAME FROM SYSTEM_SIGCLASSTYPE WHERE NCLASSTYPE = A.NCLASSTYPE))) AS STRDESCRIPTION, 
+                        IFNULL(B.SSEVERITY, C.SSEVERITY) AS SSEVERITY, D.STRNAME AS LSRCNETWORKINDEXNAME, E.STRNAME AS LDSTNETWORKINDEXNAME
+                FROM POLICY_EXCEPTION A
+                LEFT JOIN POLICY_SIGNATURE B ON A.LVIOCODE = B.LCODE
+                LEFT JOIN POLICY_USERSIG C ON A.LVIOCODE = C.LCODE
+                LEFT JOIN SYSTEM_NETWORK D ON D.LNETWORKINDEX = A.LSRCNETWORKINDEX
+                LEFT JOIN SYSTEM_NETWORK E ON E.LNETWORKINDEX = A.LDSTNETWORKINDEX
+                WHERE LINDEX = #{lIndex}
+	</select>
+        
+	<insert id="insertDetectionException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		INSERT INTO POLICY_EXCEPTION (
+				LVIOCODE, 
+				NCLASSTYPE, 
+				LSRCNETWORKINDEX, 
+				LDSTNETWORKINDEX, 
+				STRSRCIPFROM, 
+				STRSRCIPTO, 
+				STRDSTIPFROM, 
+				STRDSTIPTO, 
+				NPROTOCOL, 
+				NSPORT, 
+				NDPORT, 
+				NDETECT, 
+				NCHKVIOCODE, 
+				NCHKSRCNETWORK, 
+				NCHKDSTNETWORK, 
+				NCHKSRCIP, 
+				NCHKDSTIP, 
+				NCHKPROTOCOL, 
+				NCHKSPORT, 
+				NCHKDPORT
+				)
+		VALUES ( 
+				#{lVioCode}, 
+				#{nClassType}, 
+				#{lsrcNetworkIndex}, 
+				#{ldstNetworkIndex}, 
+				#{strSrcIpFrom}, 
+				#{strSrcIpTo}, 
+				#{strDstIpFrom}, 
+				#{strDstIpTo}, 
+				#{nProtocol}, 
+				#{nSport}, 
+				#{nDport}, 
+				#{nDetectValue}, 
+				#{nchkVioCode},
+				#{nchkSrcNetwork},
+				#{nchkDstNetwork},
+				#{nchkSrcIp},
+				#{nchkDstIp},
+				#{nchkProtocol},
+				#{nchkSport},
+				#{nchkDport}
+				)
+                <selectKey order="AFTER" keyProperty="lIndex" resultType="int">
+                        SELECT MAX(LINDEX) FROM POLICY_EXCEPTION
+                </selectKey>
+	</insert>
+
+	<update id="updateDetectionException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		UPDATE POLICY_EXCEPTION
+		SET NDETECT = #{nDetectValue} 
+		WHERE LINDEX = #{lIndex}
+	</update>
+	
+	<update id="updatePolicyTotalException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		UPDATE POLICY_EXCEPTION
+		SET NDETECT = #{nDetectValue}, 
+			LSRCNETWORKINDEX = #{lsrcNetworkIndex}, 
+			LDSTNETWORKINDEX = #{ldstNetworkIndex}, 
+			STRSRCIPFROM = #{strSrcIpFrom},  
+			STRSRCIPTO = #{strSrcIpTo}, 
+			STRDSTIPFROM = #{strDstIpFrom}, 
+			STRDSTIPTO = #{strDstIpTo}, 
+			NPROTOCOL = #{nProtocol}, 
+			NSPORT = #{nSport}, 
+			NDPORT = #{nDport} 
+		WHERE LVIOCODE = #{lVioCode}
+	</update>
+	
+	<update id="updatePolicyException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		UPDATE POLICY_EXCEPTION
+		SET NDETECT = #{nDetectValue}
+		WHERE LVIOCODE = #{lVioCode}
+	</update>
+        
+	<update id="updatePolicyExceptionByIndex" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		UPDATE POLICY_EXCEPTION
+		SET NDETECT = #{nDetectValue}
+		WHERE LINDEX = #{lIndex}
+	</update>
+	
+	<delete id="deleteDetectionExceptionList" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		DELETE FROM POLICY_EXCEPTION
+		WHERE LINDEX = #{deletelIndex}
+	</delete>
+	
+	<insert id="insertDetectionExceptionList" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto">
+		INSERT INTO POLICY_EXCEPTION (LINDEX, LVIOCODE, NCLASSTYPE, LSRCNETWORKINDEX, LDSTNETWORKINDEX, STRSRCIPFROM, STRSRCIPTO, STRDSTIPFROM, STRDSTIPTO, NPROTOCOL, NSPORT, NDPORT, NDETECT, NCHKVIOCODE, NCHKSRCNETWORK, NCHKDSTNETWORK, NCHKSRCIP, NCHKDSTIP, NCHKPROTOCOL, NCHKSPORT, NCHKDPORT)
+		VALUES ( SEQ_POLICY_EXCEPTION.nextval, #{lVioCode}, #{nClassType}, #{lsrcNetworkIndex}, #{ldstNetworkIndex}, #{strSrcIpFrom}, '1.1.1.1', #{strDstIpFrom}, '2.2.2.2', #{nProtocol}, #{nSport}, #{nDport}, #{nDetectValue}, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+	</insert>
+	
+	<insert id="insertMonitorIntrusionDetectionException" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		INSERT INTO POLICY_EXCEPTION (LINDEX, LVIOCODE, NCLASSTYPE, LSRCNETWORKINDEX, LDSTNETWORKINDEX, STRSRCIPFROM, STRSRCIPTO, STRDSTIPFROM, STRDSTIPTO, NPROTOCOL, NSPORT, NDPORT, NDETECT, NCHKVIOCODE, NCHKSRCNETWORK, NCHKDSTNETWORK, NCHKSRCIP, NCHKDSTIP, NCHKPROTOCOL, NCHKSPORT, NCHKDPORT)
+		VALUES ( SEQ_POLICY_EXCEPTION.nextval, #{lVioCode}, #{nClassType}, #{lsrcNetworkIndex}, #{ldstNetworkIndex}, #{strSrcIpFrom}, #{strSrcIpFrom}, #{strDstIpFrom}, #{strDstIpFrom}, #{nProtocol}, #{nSport}, #{nDport}, #{nDetectValue}, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+	</insert>
+	
+	<resultMap type="YaraRuleVo" 			id="yaraRulePolicyVOMap">
+		<result property="lIndex"			column="LINDEX"/>
+		<result property="strName"			column="STRNAME"/>
+		<result property="sSeverity"		column="SSEVERITY"/>
+		<result property="lvsensorIndex" 	column="LVSENSORINDEX"/>
+		<result property="lgroupIndex" 		column="LGROUPINDEX"/>
+		<result property="lUsed" 			column="LUSED"/>
+		<result property="totalRowSize" 	column="TOTAL_ROWS" />
+	</resultMap>
+	
+	<select id="isDuplicateDetectionException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto" resultMap="detectionExceptionPolicyMap">
+		SELECT
+                    LINDEX,
+                    LVIOCODE,
+                    STRSRCIPFROM,
+                    STRSRCIPTO,
+                    STRDSTIPFROM,
+                    STRDSTIPTO,
+                    NDETECT
+		FROM POLICY_EXCEPTION
+		WHERE LVIOCODE = #{lVioCode}
+                AND NCLASSTYPE = #{nClassType}
+            <if test="strSrcIpFrom == null">
+		AND STRSRCIPFROM IS NULL
+            </if>
+            <if test="strSrcIpFrom != null">
+		AND STRSRCIPFROM = #{strSrcIpFrom}
+            </if>
+            <if test="strSrcIpTo == null">
+		AND STRSRCIPTO IS NULL
+            </if>
+            <if test="strSrcIpTo != null">
+		AND STRSRCIPTO = #{strSrcIpTo}
+            </if>
+            <if test="strDstIpFrom == null">
+		AND STRDSTIPFROM IS NULL
+            </if>
+            <if test="strDstIpFrom != null">
+		AND STRDSTIPFROM = #{strDstIpFrom}
+            </if>
+            <if test="strDstIpTo == null">
+		AND STRDSTIPTO IS NULL
+            </if>
+            <if test="strDstIpTo != null">
+		AND STRDSTIPTO = #{strDstIpTo}
+            </if>
+                AND LSRCNETWORKINDEX = #{lsrcNetworkIndex}
+                AND LDSTNETWORKINDEX = #{ldstNetworkIndex}
+                AND NPROTOCOL = #{nProtocol}
+                AND NSPORT = #{nSport}
+                AND NDPORT = #{nDport}
+	</select>
+	
+	<select id="isTotalDuplicateDetectionException" parameterType="com.kglory.tms.web.model.dto.DetectionExceptionDto" resultMap="detectionExceptionPolicyMap">
+		SELECT
+		LVIOCODE,
+		STRSRCIPFROM,
+		STRSRCIPTO,
+		STRDSTIPFROM,
+		STRDSTIPTO
+		FROM POLICY_EXCEPTION
+		WHERE LVIOCODE = #{lVioCode}
+                AND NCLASSTYPE = #{nClassType}
+		AND STRSRCIPFROM = #{strSrcIpFrom}
+		AND STRSRCIPTO = #{strSrcIpTo}
+		AND STRDSTIPFROM = #{strDstIpFrom}
+		AND STRDSTIPTO = #{strDstIpTo}
+	</select>
+        
+        <resultMap  id="networkResultMap" 		type="NetworkVO">
+		<result property="lnetworkIndex" 	column="LNETWORKINDEX"/>
+		<result property="strName" 			column="STRNAME"/>
+	</resultMap>
+	
+	<select id="selectVsensorTargetNetworkList" parameterType="com.kglory.tms.web.model.dto.NetworkDto" resultMap="networkResultMap">
+		SELECT 	LNETWORKINDEX, 
+				STRNAME
+		FROM SYSTEM_NETWORK
+	</select>
+	
+</mapper>

@@ -1,0 +1,39 @@
+<div class="col-xs-20p padding-l10 padding-r10">
+	<div class="db-status-panel <%=model.status%>">
+		<div class="panel-title"><%=model.strName%></div>
+		<div class="panel-body">
+			<div class="col-xs-12 text-center">
+				<svg width="140px" height="140px" id="pieChart_<%=model.strName%>" class="minwidth-140">
+				</svg>
+				<div class="chart-value">
+					<span class="status"><%=model.statusStr%></span>
+				</div>				
+			</div>
+			<!--
+			<div class="chart-value pull-right align-right">
+				<span class="status"><%=model.statusStr%></span>
+				<span class="used"><%=locale.dbUsing%> <span class="font-bold font-size-17"><%=dataExpression.getFormatPercentData(model.dblUsed,model.dblTotal)%></span></span>
+				<span class="remainder margin-t5"><%=locale.dbSpace%> <span class="font-bold font-size-14"><%=dataExpression.getFormatPercentData(model.dblSpace,model.dblTotal)%></span></span>
+			</div>
+			-->
+			
+			<table class="panel-table">
+				<tr>
+					<th class="align-left overflow-ellipsis" style="width:50px;"><%=locale.all%></th>
+					<td class="align-right overflow-ellipsis"><%=dataExpression.getFormatTrafficData(model.dblTotal)%>byte</td>
+					<td class="" style="width:60px;"></td>
+				</tr>
+				<tr>
+					<th class="align-left overflow-ellipsis"><%=locale.dbUsing%></th>
+					<td class="align-right overflow-ellipsis"><strong><%=dataExpression.getFormatTrafficData(model.dblUsed)%></strong>byte</td>
+					<td><span class="db-status-box used align-right pull-right"><%=dataExpression.getFormatPercentData(model.dblUsed,model.dblTotal)%></span></td>
+				</tr>
+				<tr>
+					<th class="align-left overflow-ellipsis"><%=locale.dbSpace%></th>
+					<td class="align-right"><%=dataExpression.getFormatTrafficData(model.dblSpace)%>byte</td>
+					<td><span class="db-status-box remain align-right pull-right"><%=dataExpression.getFormatPercentData(model.dblSpace,model.dblTotal)%></span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,90 @@
+<!-- tab content begin -->
+<div class="tab-content">
+<form class="form-inline sessionCreationForm" role="form">
+<!-- 등록정보 begin -->
+	<div class="tab-pane active" id="tab1">
+	<div class="title"><%=locale.sessionFilterviewSetting%></div>
+		<div class="icon-subtitle"><%= locale.outline %></div>
+		<table class="table table-vertical-line table-striped">
+			<tbody>
+				<tr>
+					<td width="20%"><%= locale.filterviewName %> *</td>
+					<td><input type="text" class="form-control col-xs-4 strFilterViewName" name="strFilterViewName" id="strFilterViewName" value="<%= model.strFilterViewName %>" maxlength="50" ></td>
+				</tr>
+				<tr>
+					<td><%= locale.comment %></td>
+					<td><textarea class="form-control col-xs-10 strDescription" rows="7" name="strDescription" id="strDescription"><%= model.strDescription %></textarea></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="icon-subtitle"><%= locale.detailSetting %></div>
+
+		<table class="table table-vertical-line table-striped">
+			<thead>
+				<tr>
+					<th style="width:10%;"></th>
+					<th style="width:15%;"><%= locale.type %></th>
+					<th style="width:40%;"><%= locale.searchCondition %></th>
+					<th style="width:35%;"><%= locale.selectColor %></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="orgSensor-toggle" name="orgSensor-toggle" <%= model.strNTargetEnabledEdit %>></td>
+					<td><%= locale.targetType %></td>
+					<td><span id="targetType"></span></td>
+					<td class="align-center">											
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground0" value="0"><label for="orgSensorBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground1" value="1"><label for="orgSensorBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground2" value="2"><label for="orgSensorBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground3" value="3"><label for="orgSensorBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground4" value="4"><label for="orgSensorBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="session-toggle" name="session-toggle" <%= model.strNsessionEnabledEdit %>></td>
+					<td><%= locale.dashboard.serviceType %></td>
+					<td>
+						<select class="form-control pull-left" id="sessionSelect" style="width:160px;" name="sessionSelect">
+							<option value=""><%= locale.noSelect %></option>
+                        </select>&nbsp;<input type="text" class="form-control" id="sessionInput" style="width:50px;" value="<%=model.nSession%>" readOnly disabled="disabled">
+					</td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="sessionBackground" id="sessionBackground0" value="0"><label for="sessionBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="sessionBackground" id="sessionBackground1" value="1"><label for="sessionBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="sessionBackground" id="sessionBackground2" value="2"><label for="sessionBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="sessionBackground" id="sessionBackground3" value="3"><label for="sessionBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="sessionBackground" id="sessionBackground4" value="4"><label for="sessionBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="serverIp-toggle" name="serverIp-toggle" <%= model.strServerIpEnabledEdit %>></td>
+					<td>Server IP</td>
+					<td><input type="text" class="form-control" id="serverIp" name="serverIp" value="<%= model.strServerIp %>"></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="serverIpBackground" id="serverIpBackground0" value="0"><label for="serverIpBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="serverIpBackground" id="serverIpBackground1" value="1"><label for="serverIpBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="serverIpBackground" id="serverIpBackground2" value="2"><label for="serverIpBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="serverIpBackground" id="serverIpBackground3" value="3"><label for="serverIpBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="serverIpBackground" id="serverIpBackground4" value="4"><label for="serverIpBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center"><input type="checkbox" id="clientIp-toggle" <%= model.strClientIpEnabledEdit %>></td>
+					<td>Client IP</td>
+					<td><input type="text" class="form-control" id="clientIp" name="clientIp" value="<%= model.strClientIp %>"></td>
+					<td class="align-center">
+						<input type="radio" class="hidden" name="clientIpBackground" id="clientIpBackground0" value="0"><label for="clientIpBackground0" class="threat-bg-gray"></label>
+						<input type="radio" class="hidden" name="clientIpBackground" id="clientIpBackground1" value="1"><label for="clientIpBackground1" class="threat-bg-red"></label>
+						<input type="radio" class="hidden" name="clientIpBackground" id="clientIpBackground2" value="2"><label for="clientIpBackground2" class="threat-bg-orange"></label>
+						<input type="radio" class="hidden" name="clientIpBackground" id="clientIpBackground3" value="3"><label for="clientIpBackground3" class="threat-bg-green"></label>
+						<input type="radio" class="hidden" name="clientIpBackground" id="clientIpBackground4" value="4"><label for="clientIpBackground4" class="threat-bg-blue"></label>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+<!-- 등록정보 end -->
+</div>	

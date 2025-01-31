@@ -1,0 +1,4 @@
+
+rm -rf /etc/profile
+rm -rf /etc/magic.mgc
+rm -rf /etc/tascloud_3rdparty

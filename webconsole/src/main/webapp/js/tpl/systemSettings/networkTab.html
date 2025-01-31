@@ -1,0 +1,162 @@
+<button type="button" class="btn btn-default margin-b10 col-xs-12">변경</button>
+<!-- tab begin -->
+<!-- tab header begin -->
+<ul class="nav nav-tabs nav-tabs-icon float-clear" role="tablist">
+    <li class="active"><a href="#tab1" role="tab" data-toggle="tab"><span class="info"></span>등록정보</a></li>
+    <li><a href="#tab2" role="tab" data-toggle="tab"><span class="change"></span>변경이력</a></li>
+</ul>
+<!-- tab header end -->
+
+<!-- tab content begin -->
+<div class="tab-content">
+    <!-- 등록정보 begin -->
+    <div class="tab-pane active" id="tab1">
+        <table class="view-table col-xs-12 margin-t5">
+            <tr>
+                <th width="15%">이름</th>
+                <td>네트워크 2</td>
+            </tr>
+            <tr>
+                <th>인덱스</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>설명</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>대역폭</th>
+                <td>SSL 인증 0,000 Mbps</td>
+            </tr>
+            <tr>
+                <th>타입</th>
+                <td>IP 블럭</td>
+            </tr>
+            <tr>
+                <th>IP 블럭 목록</th>
+                <td>
+                    <!-- header 고정 begin -->
+                    <div style="height:150px" class="border-solid-bottom">
+                        <table class="fancyTable table-darkheader table-hover table table-striped table-vertical-line" id="header-fix">
+                            <thead>
+                                <tr>
+                                    <th class="align-center">Form IP</th>
+                                    <th class="align-center">To IP</th>
+                                    <th class="align-center">Mask</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="align-center">125.38.16.84</td>
+                                    <td class="align-center">100.202.0.1</td>
+                                    <td class="align-center">255.255.255.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">125.38.16.84</td>
+                                    <td class="align-center">100.202.0.1</td>
+                                    <td class="align-center">255.255.255.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">125.38.16.84</td>
+                                    <td class="align-center">100.202.0.1</td>
+                                    <td class="align-center">255.255.255.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">125.38.16.84</td>
+                                    <td class="align-center">100.202.0.1</td>
+                                    <td class="align-center">255.255.255.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">125.38.16.84</td>
+                                    <td class="align-center">100.202.0.1</td>
+                                    <td class="align-center">255.255.255.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">125.38.16.84</td>
+                                    <td class="align-center">100.202.0.1</td>
+                                    <td class="align-center">255.255.255.0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- header 고정 end -->
+                </td>
+            </tr>
+            <tr>
+                <th>가상센서</th>
+                <td>10.170.1.60</td>
+            </tr>
+        </table>
+    </div>
+    <!-- 등록정보 end -->
+
+    <!-- 변경이력 begin -->
+    <div class="tab-pane" id="tab2">
+        <!-- 검색 부분 begin -->
+        <form class="form-inline margin-t5 margin-b5 overflow-hidden" role="form">
+            <div class="col-xs-4 padding-clear padding-t5">목록 개수 : 6</div>
+            <div class="col-xs-8 align-right padding-right-clear">
+                <label class="control-label">구분</label>
+                <select class="form-control">
+                    <option>등록정보</option>
+                </select>
+
+                <label class="control-label margin-l10">기간</label>
+                <select class="form-control">
+                    <option>최근 1 주일</option>
+                    <option>최근 2 주일</option>
+                </select>
+
+                <button type="button" class="btn btn-default">검색</button>
+            </div>
+        </form>
+        <!-- 검색 부분 end -->
+
+        <!-- 검색 결과 테이블 begin -->
+        <table class="table table-vertical-line table-striped  inside-iconbtn margin-t5">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th>구분</th>
+                    <th>변경일시</th>
+                    <th>설명</th>
+                    <th>변경인</th>
+                    <th>상태</th>
+                    <th width="10%">상세보기</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="align-center">1</td>
+                    <td>등록정보</td>
+                    <td>2014.05.27 21:53:11</td>
+                    <td>변경 테스트</td>
+                    <td>admin001</td>
+                    <td class="align-center threat-text-lv1">성공</td>
+                    <td class="align-center"><button type="button" class="btn-intable-chart" data-toggle="modal" data-target="#modal-detail-history"></button></td>
+                </tr>
+                <tr>
+                    <td class="align-center">1</td>
+                    <td>등록정보</td>
+                    <td>2014.05.27 21:53:11</td>
+                    <td>변경 테스트</td>
+                    <td>admin001</td>
+                    <td class="align-center threat-text-lv1">성공</td>
+                    <td class="align-center"><button type="button" class="btn-intable-chart" data-toggle="modal" data-target="#modal-detail-history"></button></td>
+                </tr>
+                <tr>
+                    <td class="align-center">1</td>
+                    <td>등록정보</td>
+                    <td>2014.05.27 21:53:11</td>
+                    <td>변경 테스트</td>
+                    <td>admin001</td>
+                    <td class="align-center threat-text-lv5">실패</td>
+                    <td class="align-center"><button type="button" class="btn-intable-chart" data-toggle="modal" data-target="#modal-detail-history"></button></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- 검색 결과 테이블 end -->
+    </div>
+    <!-- 변경이력 end -->
+</div>	

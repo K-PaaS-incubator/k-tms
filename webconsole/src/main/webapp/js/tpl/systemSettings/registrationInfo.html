@@ -1,0 +1,64 @@
+<table class="view-table col-xs-12 margin-t5">
+	<tr>
+		<th width="20%"><%= locale.name %></th>
+		<!-- <td><%= model.strName %></td> -->
+		<td><span id="strName"></span></td>
+	</tr>
+	<tr>
+		<th><%= locale.comment %></th>
+		<!-- <td><%= model.strDescription %></td> -->
+		<td><span id="strDescription"></span></td>
+	</tr>
+	<tr>
+		<th><%= locale.privateIp %></th>
+		<!-- <td><%= model.lPrivateIp %></td> -->
+		<td><span id="lPrivateIp"></span></td>
+	</tr>
+	<tr>
+		<th><%= locale.publicIp %></th>
+		<!-- <td><%= model.lPublicIp %></td> -->
+		<td><span id="lPublicIp"></span></td>
+	</tr>
+	<tr>
+		<th><%= locale.communicationMethod %></th>
+		<td><%= locale.SSLCertificates %></td>
+	</tr>
+        <% if (SYSTEM_TYPE != 3) {%>
+<!-- 임시제거 2019.09.19	<tr>
+		<th><%= locale.ipMonitor %> <%= locale.list %></th>
+		<td>
+			 header 시작 begin 
+			<div>
+	 			<table class="fancyTable table-hover table table-striped table-vertical-line" id="header-fix">
+	                <colgroup>
+	                    <col width="10%" />
+	                    <col width="45%" />
+	                    <col width="45%" />
+	                </colgroup>
+					<thead>
+						<tr>
+							<th class="align-center"></th>
+							<th class="align-center">From IP</th>
+							<th class="align-center">To IP</th>
+						</tr>
+					</thead>
+					<tbody id="ipMonitorTbody">
+					</tbody>
+				</table>
+			</div>
+			 header 끝 end 
+		</td>
+	</tr>
+	<tr>
+		<th class="align-center"></th>
+		<td><input type="checkbox" id="sUseBlackList" name="sUseBlackList" value="" disabled/>
+		<span>모니터링 IP를 블랙리스트로 사용</span></td>
+	</tr>-->
+        <%}%>
+    <% if (SYSTEM_TYPE != 2) { %>    
+	<tr>
+		<th><%= locale.preProcessCount %></th>
+		<td><span id="preProcessCount"></span></td>
+	</tr>
+	<% } %>
+</table>

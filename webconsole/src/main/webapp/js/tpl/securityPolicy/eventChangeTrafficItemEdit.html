@@ -1,0 +1,36 @@
+<td class="align-right">
+	<%= model.ucSeverityName %>
+</td>
+<td class="align-right">
+	<input class="form-control col-xs-8 editThreshold dblThreshold align-right" type="text" value="<%= model.dblThreshold %>" maxlength="12">
+	<% if(model.ucSubType1 == 1){ %>
+		<%= locale.dashboard.count %>
+	<% } else if(model.ucSubType1 == 2 ) { %>
+		%
+	<% } else { %>
+		<%= locale.anomaliRank %>
+	<% } %>
+</td>
+<td class="align-right">
+	<input class="form-control col-xs-8 editCondition dblCondition align-right" type="text" value="<%= model.dblCondition %>" maxlength="12"> <%= locale.dashboard.count %>
+</td>
+<td class="align-center" style="display: none;">
+	<input type="checkbox" class="editEmergencyAlarm" value="4" <%= model.secondType2 %> >
+</td>
+<td class="align-center" style="display: none;">
+	<input type="checkbox" class="editAudibilityAlarm"  value="8" <%= model.secondType1 %> >
+</td>
+<td class="align-center">
+	<select class="form-control editMail">
+		<option value=0 <%= model.mailType0 %>><%= locale.beNotInUse %></option>
+		<option value=1 <%= model.mailType1 %>><%= locale.admin %></option>
+		<option value=2 <%= model.mailType2 %>><%= locale.user %></option>
+	</select>
+</td>
+<td class="align-center">
+	<select class="form-control editSms">
+		<option value=0 <%= model.smsType0 %>><%= locale.beNotInUse %></option>
+		<option value=1 <%= model.smsType1 %>><%= locale.admin %></option>
+		<option value=2 <%= model.smsType2 %>><%= locale.user %></option>
+	</select>
+</td>

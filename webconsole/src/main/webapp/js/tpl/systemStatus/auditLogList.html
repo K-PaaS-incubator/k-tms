@@ -1,0 +1,71 @@
+<!-- 검색결과 begin -->
+
+<!-- 버튼 영역  begin -->
+<div class="row margin-t10">
+
+	<!-- 건수 표시 begin -->
+	<div class="col-xs-6">
+		<div class="col-xs-12">
+			<div class="pull-left minwidth-60 text-primary"><%= locale.searchSection %>&nbsp;</div>
+			<div class="pull-left" id="listDate"></div>
+		</div>
+		<div class="col-xs-12">
+			<div class="pull-left minwidth-60 margin-t10 text-primary"><%= locale.totalCount %>&nbsp;</div>
+			
+			<div class="pull-left margin-t10">
+				<strong class="chart-text-10" id="totalRowSize"></strong>
+				<!--
+			    <span class="threat-bg-lv5 rect margin-r5 margin-l15"></span>High <strong><span id="severityHCount"></span></strong>
+				<span class="threat-bg-lv4 rect margin-r5 margin-l10"></span>Medium <strong><span id="severityMCount"></span></strong>
+				<span class="threat-bg-lv3 rect margin-r5 margin-l10"></span>Low <strong><span id="severityLCount"></span></strong>
+				<span class="threat-bg-lv2 rect margin-r5 margin-l10"></span>Info <strong><span id="severityICount"></span></strong>
+				-->
+			</div>
+		</div>
+	</div>
+	<!-- 건수 표시 end -->
+
+	
+	<!-- 다운로드 버튼 begin -->
+	<div class="col-xs-6">
+		<form class="form-inline" role="form">
+			<div class="pull-right">
+				<div class="pull-left margin-l20 margin-r10">
+					<div>					
+						<input type="radio" class="radio" name="exportRange" id="exportRange2" value="currentPage" checked>&nbsp;<label for="exportRange2" class="label-for-button"><%=locale.currentPageNoSpace%></label>&nbsp;&nbsp;
+<!--						<input type="radio" class="radio" name="exportRange" id="exportRange1" value="all">&nbsp;<label for="exportRange1" class="label-for-button">전체</label>&nbsp;-->
+						<%= locale.download %>
+					</div>
+					<div class="margin-t5">
+						<button type="button" class="btn btn-labeled btn-success-fill btnExport" data-format="excel"><span class="btn-label"><i class="fa fa-file-excel-o"></i></span>excel</button>
+						<button type="button" class="btn btn-labeled btn-primary-fill btnExport" data-format="word"><span class="btn-label"><i class="fa fa-file-word-o"></i></span>word</button>
+						<button type="button" class="btn btn-labeled btn-info-fill btnExport" data-format="html"><span class="btn-label"><i class="fa fa-file-code-o"></i></span>html</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 다운로드 버튼 end -->
+</div>
+<!-- 버튼 영역  end -->
+
+<!-- table begin -->
+<div class="progressbar margin-t10">
+<table class="table table-striped table-hover table-vertical-line table-fixed">
+	<thead>
+		<tr>
+    		<th width="7%"><%= locale.type%></th>
+    		<th width="15%"><%= locale.user%>, <%= locale.system%></th>
+                <th><%= locale.auditContents%></th>
+                <th width="15%"><%= locale.logTime%></th>
+    	</tr>
+    </thead>
+    <tbody id="list"></tbody>
+</table>
+</div>
+<!-- 더보기 begin -->
+<div id="pageLayout">
+</div>
+<!-- 더보기 end -->
+<!-- table end -->
+<!-- 검색결과 end -->

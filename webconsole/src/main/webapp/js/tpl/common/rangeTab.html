@@ -1,0 +1,40 @@
+<!-- 구간별 조회 begin -->
+	<!-- 전체구간정보 및 브라우저 새탭 옵션 begin -->
+	<div class="row">
+		<div class="col-xs-6"><%=locale.allRange%> : <span><%=startDate%></span> ~ <span><%=endDate%></span></div>
+		<div class="col-xs-6 align-right">
+		  <!-- <label>
+		    <input type="checkbox" value="">
+		    브라우저 새탭에서 보기
+		  </label> --> 
+		</div>
+	</div>
+	<!-- 전체구간정보 및 브라우저 새탭 옵션 end -->
+	
+	<!-- 간편 구간조회 버튼들 begin -->
+	<div class="title margin-t10"><%=locale.easyRangeSearch%></div>
+	<div class="time-section-buttons float-clear overflow-hidden">
+		<% _.each(data, function(section) { %> 
+			<div class="col-xs-2">
+			<button type="button" class="btn-block btn btn-default align-center <%=section.cls%>" data-range="<%=section.rangeDate%>">
+			<span class="time-title"><span class="glyphicon glyphicon-time"></span><%=section.title%></span>
+			<%=locale.rangeSearch2%>
+			<span class="detail-time"><%=section.rangeDate%></span>
+			</button>
+			</div>
+		<% }); %>
+	</div>
+	<!-- 간편 구간조회 버튼들 end -->
+	
+	<!-- 상세 구간조회 begin -->
+	<div class="title margin-t20"><%=locale.detailRangeSearch%><span><%=locale.rangeComment%></span></div>
+		<!-- 구간 시작 begin -->
+		<div class="form-inline">
+	    <label class="control-label margin-r5"><%=locale.range%></label>
+	   		<input type="text" id="startDateInput" class="form-control startDateInput" value="<%= startDate %>"/> ~
+			<input type="text" id="endDateInput" class="form-control endDateInput" value="<%= endDate %>" />
+			<button type="button" class="btn btn-default rangeBtn"><%=locale.search.search %></button>
+		</div>
+		<!-- 구간 끝 end -->
+	<!-- 상세 구간조회 end -->
+<!-- 구간별 조회 end -->

@@ -1,0 +1,86 @@
+<!-- info table begin -->
+<table class="view-table">
+	<tr>
+		<th width="8%" class="padding-rl-clear"><%= locale.targetType %></th>
+		<td width="42%"><%= pathName %></td>
+		<th width="8%" class="padding-rl-clear"><%= locale.search.period %></th>
+		<td width="42%"><%= condition.startDateInput %> ~ <%= condition.endDateInput %></td>
+	</tr>
+	<tr>
+		<th class="padding-rl-clear"><%= locale.attackName %></th>
+		<td><%= condition.attackNameInput %></td>
+		<th class="padding-rl-clear"><%= locale.attackerIp %></th>
+		<td><%= condition.srcIp %></td>		
+	</tr>
+	<tr>
+		<th class="padding-rl-clear"><%= locale.victimIp %></th>
+		<td><%= condition.destIp %></td>
+		<th class="padding-rl-clear"><%= locale.victimPort %></th>
+		<!-- <td><%= condition.destPortInput %></td> -->
+		<td>
+			<% if (condition.nProtocolView != null && condition.nProtocolView != '') { %>
+			[<%= condition.nProtocolView %>]<%= condition.destPortInput %>
+			<% } %>
+			<% if (condition.nProtocolView == null && condition.nProtocolView == '') { %>
+			<%= condition.destPortInput %>
+			<% } %>
+		</td>
+<!-- 
+	결과내 검색 기능은 추후 수정예정. 주석 처리 
+			<input id="victimPort" type="text"	class="form-control col-xs-8 margin-r5"/>
+			<button type="button" class="btn btn-default"><%= locale.search.search %></button>		
+ --></tr>
+</table>
+<!-- info table end -->
+<!-- 조회 form begin
+<div class="row margin-t15">
+	<form role="form" class="form-inline">
+		<label class="control-label margin-l10"><%= locale.victimPort %></label> <input id="victimPort" type="text"
+			class="form-control margin-l5"
+		/>
+		<button type="button" class="btn btn-default"><%= locale.search.search %></button>
+	</form>
+</div>
+<!-- 조회 form end
+
+<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>-->
+
+<!-- table begin -->
+<div class="row">
+	<!-- info line begin -->
+	<div class="col-xs-12 margin-t10 margin-b5">
+		<%= locale.all %> : <strong id="totalCount"></strong> <%= locale.dashboard.count %>
+	</div>
+	<!-- info line end -->
+
+	<!-- table begin -->
+	<div class="col-xs-12 margin-t5 margin-b5 progressbar">
+		<table class="table table-vertical-line">
+			<thead>
+				<tr>
+					<th width="5%"><%= locale.rank %></th>
+					<th><%= locale.victimPort %></th>
+					<% if (condition.attackNameInput == null || condition.attackNameInput == '') { %>
+					<th><%= locale.attackName %></th>
+					<% } %>
+					<% if (condition.srcIp == null || condition.srcIp == '') { %>
+					<th><%= locale.attackerIp %></th>
+					<% } %>
+					<% if (condition.destIp == null || condition.destIp == '') { %>
+					<th><%= locale.victimIp %></th>
+					 <% } %>
+					<th><%= locale.attackCount %></th>
+					<th><%=locale.search.sum%>(byte)</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<!-- 더보기/pagination 옵션 begin -->
+		<div class="more-option align-center">
+		</div>
+		<!-- 더보기/pagination 옵션 end -->
+	</div>
+	<!-- table end -->
+</div>
+<!-- table end -->

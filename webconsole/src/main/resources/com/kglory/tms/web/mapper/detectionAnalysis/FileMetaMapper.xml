@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.detectionAnalysis.FileMetaMapper">
+	
+	<resultMap type="FileMetaVO" 				id="fileMetaMap">
+            <result property="lIndex" 				column="LINDEX" />
+            <result property="tmLogTime" 			column="TMLOGTIME" />
+            <result property="nProtocol"			column="NPROTOCOL" />
+            <result property="dwSourceIp"			column="DWSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+            <result property="strSourceIp"          column="STRSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+            <result property="nSourcePort"			column="NSOURCEPORT" />
+            <result property="deDestinationIp" 		column="DWDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+            <result property="strDestinationIp"     column="STRDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+            <result property="nDestinationPort"		column="NDESTINATIONPORT" />
+            <result property="strMagic" 			column="STRMAGIC" />
+            <result property="strFileName" 			column="STRFILENAME" />
+            <result property="strFileHash" 			column="STRFILEHASH" />
+            <result property="strHost" 				column="STRHOST" />
+            <result property="dwFileSize" 			column="DWFILESIZE" />
+            <result property="lSrcNetIndex" 		column="LSRCNETINDEX" />
+            <result property="lDstNetIndex" 		column="LDSTNETINDEX" />
+            <result property="lvsensorIndex" 		column="LVSENSORINDEX" />
+            <result property="lsensorIndex" 		column="LSENSORINDEX" />
+            <result property="totalRowSize" 		column="TOTAL" />
+            <result property="rNum" 				column="R_NUM" />
+            <result property="vsensorName" 			column="VSENSORNAME" />
+            <result property="sensorName" 			column="SENSORNAME" />
+            <result property="strStoreFileName"     column="STRSTOREFILENAME" />
+            <result property="lCode"                column="LCODE" />
+            <result property="nGrpIndex"            column="NGRPINDEX" />
+            <result property="bSeverity"            column="BSEVERITY" />
+            <result property="strRuleName"          column="STRRULENAME" />
+            <result property="strGrpName"           column="STRGRPNAME" />
+            <result property="bIpType" 				column="BIPTYPE" />
+	</resultMap>
+        
+	<select id="selectFileMetaList" parameterType="com.kglory.tms.web.model.dto.FileMetaSearchDto" resultMap="fileMetaMap">
+            SELECT  LINDEX, DATE_FORMAT( TMLOGTIME, '%Y-%m-%d %H:%i:%s') AS TMLOGTIME, DWSOURCEIP, STRSOURCEIP, NSOURCEPORT, DWDESTINATIONIP, STRDESTINATIONIP, BIPTYPE,
+                    NDESTINATIONPORT, NPROTOCOL, STRMAGIC, STRFILENAME, DWFILESIZE, LSRCNETINDEX, LDSTNETINDEX, 
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LSRCNETINDEX = LNETWORKINDEX) AS SRCNETNAME, 
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LDSTNETINDEX = LNETWORKINDEX) AS DSTNETNAME, 
+                    LCODE, NGRPINDEX, BSEVERITY, STRRULENAME, STRGRPNAME
+            FROM
+            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                SELECT * 
+                FROM ${item.name}
+            </foreach>
+            WHERE TMLOGTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMLOGTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND BIPTYPE = #{ipType}
+            <if test="lnetgroupIndex != null and lnetgroupIndex > 0">
+                AND (LSRCNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex})
+                        OR
+                    LDSTNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex})
+                )
+            </if>
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND (
+                    LSRCNETINDEX = #{lnetworkIndex}
+                    OR
+                    LDSTNETINDEX = #{lnetworkIndex}
+                )
+            </if>
+            <if test="fileNameInput != null and fileNameInput != ''">
+                AND UPPER(STRFILENAME) LIKE CONCAT('%', UPPER(#{fileNameInput}) ,'%')
+            </if>
+            <if test="toIp != null and  fromIp != null and ipType == 4">
+                AND (
+                    (#{toIp} <![CDATA[ >= ]]> DWSOURCEIP AND DWSOURCEIP >= #{fromIp})
+                    OR
+                    (#{toIp} <![CDATA[ >= ]]> DWDESTINATIONIP AND DWDESTINATIONIP >= #{fromIp})
+                )
+            </if>
+            <if test="strSourceIp != null and  strDestinationIp != null and ipType == 6">
+                AND (
+                    STRSOURCEIP = #{strSourceIp} OR STRDESTINATIONIP = #{strDestinationIp}
+                )
+            </if>
+            <if test="destPortInput != null and destPortInput != ''">
+                AND NDESTINATIONPORT = #{destPortInput} 
+            </if>
+            <if test="attackPortInput != null and attackPortInput !=''">
+                AND NSOURCEPORT = #{attackPortInput}
+            </if>
+            <if test="strFileHash != null and strFileHash != ''">
+                AND UPPER(STRFILEHASH) LIKE CONCAT('%', UPPER(#{strFileHash}) ,'%')
+            </if>
+            <if test="strRuleName != null and strRuleName != ''">
+                AND UPPER(STRRULENAME) LIKE CONCAT('%', UPPER(#{strRuleName}) ,'%')
+            </if>
+            <if test="fileType != null and fileType != ''">
+                AND UPPER(STRMAGIC) LIKE CONCAT('%', UPPER(#{fileType}) ,'%')
+            </if>
+            ORDER BY TMLOGTIME DESC
+            <if test="isDownload neq 'Y'.toString()" >
+                LIMIT #{rowSize} OFFSET #{startRowSize}
+            </if>
+        </select>
+        
+	<select id="selectFileMetaListCount" parameterType="com.kglory.tms.web.model.dto.FileMetaSearchDto" resultType="long">
+            SELECT  IFNULL(COUNT(LINDEX), 0) TOTAL
+            FROM
+            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                SELECT * 
+                FROM ${item.name}
+            </foreach>
+            WHERE TMLOGTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMLOGTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND BIPTYPE = #{ipType}
+            <if test="lnetgroupIndex != null and lnetgroupIndex > 0">
+                AND (LSRCNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex})
+                        OR
+                    LDSTNETINDEX IN (SELECT LNETWORKINDEX FROM SYSTEM_NETWORKGROUPLINK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex})
+                )
+            </if>
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND (
+                    LSRCNETINDEX = #{lnetworkIndex}
+                    OR
+                    LDSTNETINDEX = #{lnetworkIndex}
+                )
+            </if>
+            <if test="fileNameInput != null and fileNameInput != ''">
+                AND UPPER(STRFILENAME) LIKE CONCAT('%', UPPER(#{fileNameInput}) ,'%')
+            </if>
+            <if test="toIp != null and  fromIp != null and ipType == 4">
+                AND (
+                    (#{toIp} <![CDATA[ >= ]]> DWSOURCEIP AND DWSOURCEIP >= #{fromIp})
+                    OR
+                    (#{toIp} <![CDATA[ >= ]]> DWDESTINATIONIP AND DWDESTINATIONIP >= #{fromIp})
+                )
+            </if>
+            <if test="strSourceIp != null and  strDestinationIp != null and ipType == 6">
+                AND (
+                    STRSOURCEIP = #{strSourceIp} OR STRDESTINATIONIP = #{strDestinationIp}
+                )
+            </if>
+            <if test="destPortInput != null and destPortInput != ''">
+                AND NDESTINATIONPORT = #{destPortInput} 
+            </if>
+            <if test="attackPortInput != null and attackPortInput !=''">
+                AND NSOURCEPORT = #{attackPortInput}
+            </if>
+            <if test="strFileHash != null and strFileHash != ''">
+                AND UPPER(STRFILEHASH) LIKE CONCAT('%', UPPER(#{strFileHash}) ,'%')
+            </if>
+            <if test="strRuleName != null and strRuleName != ''">
+                AND UPPER(STRRULENAME) LIKE CONCAT('%', UPPER(#{strRuleName}) ,'%')
+            </if>
+            <if test="fileType != null and fileType != ''">
+                AND UPPER(STRMAGIC) LIKE CONCAT('%', UPPER(#{fileType}) ,'%')
+            </if>
+        </select>
+        
+	<select id="selectFileMetaHelpPopupList" parameterType="com.kglory.tms.web.model.dto.FileMetaSearchDto" resultMap="fileMetaMap">
+            SELECT LINDEX, DATE_FORMAT( TMLOGTIME, '%Y-%m-%d %H:%i:%s') AS TMLOGTIME, STRMAGIC, STRFILENAME, STRHOST, STRFILEHASH, DWFILESIZE, DWSOURCEIP, STRSOURCEIP, DWDESTINATIONIP,
+                    STRDESTINATIONIP, BIPTYPE, NPROTOCOL, NSOURCEPORT, NDESTINATIONPORT, LSRCNETINDEX, LDSTNETINDEX,
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LSRCNETINDEX = LNETWORKINDEX) AS SRCNETNAME, 
+                    (SELECT STRNAME FROM SYSTEM_NETWORK WHERE LDSTNETINDEX = LNETWORKINDEX) AS DSTNETNAME,
+                    TMDBTIME, STRSTOREFILENAME
+            FROM 
+            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                SELECT * 
+                FROM ${item.name}
+            </foreach>
+            WHERE TMLOGTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMLOGTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND LINDEX = #{lIndex} 
+	</select>
+
+</mapper>

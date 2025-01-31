@@ -1,0 +1,6 @@
+<td class="align-center"><input type="checkbox" class="toggle lIndex" name="lIndex"  <%= model.completed ? 'checked' : '' %> value="<%= model.lIndex%>"/></td>	
+<td class="overflow-ellipsis" title="<%= model.strDescriptionValue %>"><%= model.strDescriptionValue %></td>
+<td><span class="rect icon_from">F</span> <span class="color-green"><%= model.strSrcIpFromVal %></span><br><span class="rect icon_to">T</span> <%= model.strSrcIpToVal %></span><span class="color-green-light margin-l10"><%= model.nSportVal %></span><span class="color-green-light margin-l10"><%= model.lsrcNetworkIndexVal %></span><br>
+<span class="rect icon_from">F</span> <span class="color-blue"><%= model.strDstIpFromVal %></span><br><span class="rect icon_to">T</span> <%= model.strDstIpToVal %><span class="color-blue-light margin-l10"><%= model.nDportVal %></span><span class="color-blue-light margin-l10"><%= model.ldstNetworkIndexVal %></span></td>
+<td class="align-center"><%= model.nProtocolVal %></td>
+<td class="align-center"><input type="checkbox" class="nDetectCheck" value="<%= model.nDetect %>" <%= model.strValue %> /></td>

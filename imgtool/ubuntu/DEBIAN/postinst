@@ -1,0 +1,42 @@
+mkdir -p /logs/TESS/log/log
+mkdir -p /logs/TESS/log/core
+mkdir -p /logs/TESS/log/backup
+mkdir -p /logs/TESS/log/traffic
+mkdir -p /logs/TESS/log/session
+mkdir -p /logs/TESS/log/log/files
+mkdir -p /logs/TESS/log/log/filesbackup
+
+ln -s /opt/TESS/1.0.0 /opt/TESS/current
+ln -s /conf/TESS/1.0.0 /conf/TESS/current
+ln -s /opt/TESS/current/sensor /home/sensor
+ln -s /conf/TESS/current/sensor/cfg /home/sensor/cfg
+ln -s /conf/TESS/current/sensor/rule /home/sensor/rule
+ln -s /conf/TESS/current/sensor/CertKeys /home/sensor/CertKeys
+ln -s /logs/TESS/log /home/sensor/log
+
+if [ ! -e /lib/x86_64-linux-gnu/libc.so ]; then
+	ln -s /lib/x86_64-linux-gnu/libc.so.6 /lib/x86_64-linux-gnu/libc.so
+fi
+
+cp /tastmp/etc/profile /etc/profile
+cp /tastmp/etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/20auto-upgrades
+cp /tastmp/etc/apt/apt.conf.d/10periodic /etc/apt/apt.conf.d/10periodic
+
+chown -R root:root /opt/TESS
+chown -R root:root /conf/TESS
+chown -R root:root /logs/TESS
+
+chmod -R 755 /opt/TESS
+chmod -R 755 /logs/TESS/log
+chmod -R 777 /logs/TESS/log/log/files
+chmod -R 777 /logs/TESS/log/log/filesbackup
+
+ulimit -c 102400
+cp -f /tastmp/etc/sysctl.conf /etc/
+cp -f /tastmp/etc/files.conf /etc/
+cp -f /tastmp/etc/security/limits.conf /etc/security/
+sysctl -p
+echo "ulimit -c 102400" >> ~/.bashrc
+
+cp -r /tastmp/etc/tascloud_3rdparty /etc/
+chmod -R 755 /etc/tascloud_3rdparty/*

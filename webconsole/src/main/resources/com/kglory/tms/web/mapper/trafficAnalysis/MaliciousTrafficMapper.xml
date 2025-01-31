@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.kglory.tms.web.mapper.trafficAnalysis.MaliciousTrafficMapper">
+	
+	<resultMap type="MaliciousTrafficVO" 	id="maliciousTrafficResultMap">
+		<result property="rNum" 			column="RNUM"/>
+		<result property="strName" 			column="STRNAME"/>
+		<result property="ucType" 			column="UCTYPE"/>
+		<result property="nProtocol" 		column="NPROTOCOL"/>
+		<result property="bps" 				column="BPS"/>
+		<result property="pps" 				column="PPS"/>
+		<result property="cps" 				column="CPS"/>
+		<result property="totalRowSize" 	column="TOTAL_ROWS"/>
+		<result property="ingressBps" 		column="INGRESS_BPS"/>
+		<result property="egressBps" 		column="EGRESS_BPS"/>
+		<result property="ingressPps" 		column="INGRESS_PPS"/>
+		<result property="egressPps" 		column="EGRESS_PPS"/>
+		<result property="ingressCps" 		column="INGRESS_CPS"/>
+		<result property="egressCps" 		column="EGRESS_CPS"/>
+		<result property="malBps" 			column="MALBPS"/>
+		<result property="malPps" 			column="MALPPS"/>
+		<result property="malCps" 			column="MALCPS"/>
+		<result property="malIngressBps" 	column="MALINGRESS_BPS"/>
+		<result property="malEgressBps" 	column="MALEGRESS_BPS"/>
+		<result property="malIngressPps" 	column="MALINGRESS_PPS"/>
+		<result property="malEgressPps" 	column="MALEGRESS_PPS"/>
+		<result property="malIngressCps" 	column="MALINGRESS_CPS"/>
+		<result property="malEgressCps" 	column="MALEGRESS_CPS"/>
+	</resultMap>
+	
+	<select id="selectMaliciousTrafficList" parameterType="com.kglory.tms.web.model.dto.MaliciousTrafficDto" resultMap="maliciousTrafficResultMap">
+		SELECT 	A.STRNAME AS STRNAME, 
+                        A.UCTYPE AS UCTYPE, 
+                        A.NPROTOCOL AS NPROTOCOL,
+                        IFNULL(A.BPS/#{avgTime}, 0) 				AS BPS, 
+                        IFNULL(A.PPS/#{avgTime}, 0) 				AS PPS, 	
+                        IFNULL(A.CPS/#{avgTime}, 0) 				AS CPS, 
+                        IFNULL(A.INGRESS_BPS/#{avgTime}, 0) 		AS INGRESS_BPS,  
+                        IFNULL(A.EGRESS_BPS/#{avgTime}, 0) 		AS EGRESS_BPS, 
+                        IFNULL(A.INGRESS_PPS/#{avgTime}, 0) 		AS INGRESS_PPS,  
+                        IFNULL(A.EGRESS_PPS/#{avgTime}, 0) 		AS EGRESS_PPS, 
+                        IFNULL(A.INGRESS_CPS/#{avgTime}, 0) 		AS INGRESS_CPS,  
+                        IFNULL(A.EGRESS_CPS/#{avgTime}, 0) 		AS EGRESS_CPS, 
+                        IFNULL(B.MALBPS/#{avgTime}, 0) 			AS MALBPS,  
+                        IFNULL(B.MALPPS/#{avgTime}, 0) 			AS MALPPS, 
+                        IFNULL(B.MALCPS/#{avgTime}, 0) 			AS MALCPS, 
+		     	IFNULL(B.MALINGRESS_BPS/#{avgTime}, 0) 	AS MALINGRESS_BPS,  
+		     	IFNULL(B.MALEGRESS_BPS/#{avgTime}, 0) 		AS MALEGRESS_BPS, 
+                        IFNULL(B.MALINGRESS_PPS/#{avgTime}, 0) 	AS MALINGRESS_PPS,  
+                        IFNULL(B.MALEGRESS_PPS/#{avgTime}, 0) 		AS MALEGRESS_PPS, 
+                        IFNULL(B.MALINGRESS_CPS/#{avgTime}, 0) 	AS MALINGRESS_CPS,  
+                        IFNULL(B.MALEGRESS_CPS/#{avgTime}, 0) 		AS MALEGRESS_CPS
+			FROM (
+			SELECT 	STRNAME, 
+                                UCTYPE, 
+                                NPROTOCOL,
+                                SUM(DBLBPS)				AS BPS,
+                                SUM(DBLPPS)				AS PPS,
+                                SUM(DBLMADECPS)			AS CPS,
+                                SUM(INGRESS_BPS) 		AS INGRESS_BPS, 
+                                SUM(EGRESS_BPS) 		AS EGRESS_BPS,
+                                SUM(INGRESS_PPS)		AS INGRESS_PPS, 
+                                SUM(EGRESS_PPS) 		AS EGRESS_PPS,
+                                SUM(INGRESS_CPS) 		AS INGRESS_CPS, 
+                                SUM(EGRESS_CPS) 		AS EGRESS_CPS
+			FROM (
+				SELECT 	TMSTART, 
+                                        UCTYPE, 
+                                        NPROTOCOL, 
+                                        STRNAME, 
+                                        DBLPPS, 
+                                        DBLBPS, 
+                                        DBLMADECPS,
+                                        (DBLBPSININ+DBLBPSOUTIN) 				AS INGRESS_BPS, 
+                                        (DBLBPSINOUT+DBLBPSOUTOUT) 				AS EGRESS_BPS,
+                                        (DBLPPSININ+DBLPPSOUTIN) 				AS INGRESS_PPS, 
+                                        (DBLPPSINOUT+DBLPPSOUTOUT) 				AS EGRESS_PPS,
+                                        (DBLMADECPSININ+DBLMADECPSOUTIN) 		AS INGRESS_CPS, 
+                                        (DBLMADECPSINOUT+DBLMADECPSOUTOUT) 		AS EGRESS_CPS 
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") C">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                AND UCTYPE = 10 AND NPROTOCOL = 0
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) D
+			GROUP BY STRNAME, UCTYPE, NPROTOCOL
+		) A
+                LEFT OUTER JOIN
+		(
+			SELECT 	STRNAME, 
+                                UCTYPE, 
+                                NPROTOCOL,
+                                SUM(DBLBPS)				AS MALBPS,
+                                SUM(DBLPPS)				AS MALPPS,
+                                SUM(DBLMADECPS)			AS MALCPS,
+                                SUM(INGRESS_BPS) 		AS MALINGRESS_BPS, 
+                                SUM(EGRESS_BPS) 		AS MALEGRESS_BPS,
+                                SUM(INGRESS_PPS)		AS MALINGRESS_PPS, 
+                                SUM(EGRESS_PPS) 		AS MALEGRESS_PPS,
+                                SUM(INGRESS_CPS) 		AS MALINGRESS_CPS, 
+                                SUM(EGRESS_CPS) 		AS MALEGRESS_CPS
+                        FROM (
+                                SELECT TMSTART, 
+                                        UCTYPE, 
+                                        NPROTOCOL, 
+                                        STRNAME, 
+                                        DBLPPS, 
+                                        DBLBPS, 
+                                        DBLMADECPS,
+                                        (DBLBPSININ+DBLBPSOUTIN) 			AS INGRESS_BPS, 
+                                        (DBLBPSINOUT+DBLBPSOUTOUT) 			AS EGRESS_BPS,
+                                        (DBLPPSININ+DBLPPSOUTIN) 			AS INGRESS_PPS, 
+                                        (DBLPPSINOUT+DBLPPSOUTOUT) 			AS EGRESS_PPS,
+                                        (DBLMADECPSININ+DBLMADECPSOUTIN) 	AS INGRESS_CPS, 
+                                        (DBLMADECPSINOUT+DBLMADECPSOUTOUT) 	AS EGRESS_CPS 
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") E">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+                                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                AND UCTYPE = 60
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+		 	) F
+			GROUP BY STRNAME, UCTYPE, NPROTOCOL
+		) B
+                ON 1 = 1
+		<if test="sortSelect == 'bps'">
+		ORDER BY BPS DESC
+		</if>
+		<if test="sortSelect == 'pps'">
+		ORDER BY PPS DESC
+		</if>
+	</select>
+        
+	<resultMap type="MaliciousTrafficChartVO" 	id="maliciousTrafficChartMap">
+		<result property="time" 				column="TMSTART" />
+		<result property="data" 				column="DATA" />
+	</resultMap>
+	
+	<select id="selectMaliciousTrafficChart" parameterType="com.kglory.tms.web.model.dto.MaliciousTrafficDto" resultMap="maliciousTrafficChartMap" >
+            SELECT TMSTART, IFNULL(DATA,0) AS DATA,
+            <if test="graphItem == -1">
+                    #{allTrafficName} AS STRNAME
+            </if>
+            <if test="graphItem != -1">
+                    #{maliciousTrafficName} AS STRNAME
+            </if>
+            FROM (	
+		SELECT TMSTART,	SUM(DATA) AS DATA
+		FROM (
+			SELECT 
+                            DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                            UCTYPE, 
+                            NPROTOCOL, 
+                            (DBLBPS) AS DATA, 
+                            LNETWORKINDEX 
+			FROM 	
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                            SELECT * 
+                            FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+			<if test="graphItem != -1">
+				AND NPROTOCOL = 0 AND UCTYPE = 60
+			</if>
+			<if test="graphItem == -1">
+				AND NPROTOCOL = 0 AND UCTYPE = 10
+			</if> 
+			<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+                        <if test="lnetworkIndex == 0">
+                            AND LNETWORKINDEX = 0
+                        </if>
+                ) B
+                GROUP BY TMSTART
+            ) C
+            ORDER BY TMSTART ASC
+	</select>
+        
+</mapper>

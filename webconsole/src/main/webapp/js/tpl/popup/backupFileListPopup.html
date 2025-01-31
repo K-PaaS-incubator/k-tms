@@ -1,0 +1,42 @@
+<!-- <div class="modal-body modal-body-gray-padding"> -->
+<!-- 조회 form begin -->
+<form role="form" class="form-inline" onsubmit="return false;">
+    <div class="col-xs-11 padding-clear ">
+        <!-- 첫번째 줄 상세시간 begin -->
+        <div class="margin-t10 margin-b10 col-xs-12">
+            <!-- 검색어 begin -->
+            <label class="control-label minwidth-50"><%= locale.backupFile %></label>
+            <input type="text" class="form-control margin-l5 minwidth-300" id="searchInput" maxlength="256"/>
+            <!-- 검색어 begin -->
+        </div>
+        <!-- 첫번째 줄 상세시간 end -->
+    </div>
+    <div class="col-xs-1 padding-clear margin-t10">
+        <button type="button" class="btn btn-default col-xs-12" id="searchBtn"><%= locale.searching %></button>
+    </div>
+</form>
+<!-- 조회 form end -->
+<!-- </div> -->
+<div class="border-solid-top padding-t10 backupFileList" style="height: 550px;">
+    <div class="col-xs-2 padding-b5 padding-clear"><%= locale.totalCount %> <strong id="totalCount"></strong></div>
+    <!-- 목록 table begin -->
+    <!-- 내용의 길이에 따라 ...로표시되기 위해서는 table에 class table-fixed 추가,th에 각 width지정, 해당 td에 class overflow-ellipsis 추가가 필요 -->
+    <table class="table table-striped table-hover table-vertical-line table-fixed">
+        <thead>
+            <tr>
+                <th class="width-number"><%= locale.number %></th>
+                <th width="15%"><%= locale.backupRange %> </th>
+                <th width="20%"><%= locale.backupTable %> </th>
+                <th width="9%"><%= locale.backupTableDel %> </th>
+                <th><%= locale.backupFile %> </th>
+                <th width="11%"><%= locale.backupDate %></th>
+                <th width="8%"><%= locale.download %></th>
+            </tr>
+        </thead>
+        <tbody id="list" class="list"></tbody>
+    </table>
+    <!-- 더보기/pagination 옵션 begin -->
+    <div class="more-option align-center"></div>
+    <!-- 더보기/pagination 옵션 end -->
+    <!-- 목록 table end -->
+</div>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemSettings.SystemConfMapper">
+	<resultMap type="SystemConfVO" id="systemConfMap">
+		<result property="idx"      column="IDX" />
+		<result property="key"      column="NAME" />
+		<result property="value"    column="VALUE" />
+		<result property="descp"    column="DESCP" />
+	</resultMap>
+
+	<select id="getSystemConfList" resultMap="systemConfMap">
+		SELECT IDX, NAME, VALUE, DESCP FROM SYSTEM_CONFIG
+	</select>
+	
+	<update id="updateSystemConf" parameterType="com.kglory.tms.web.model.dto.SystemConfDto">
+		UPDATE SYSTEM_CONFIG
+		SET VALUE = #{value}
+		WHERE IDX = #{idx}
+                AND NAME = #{key}
+	</update>
+</mapper>

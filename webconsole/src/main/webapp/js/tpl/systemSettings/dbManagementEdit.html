@@ -1,0 +1,48 @@
+<!-- 테이블 유지 기간 설정 begin -->
+<div class="icon-subtitle"><%= locale.setTheTableMaintenancePeriod %></div>
+<table class="table table-vertical-line table-striped">
+    <thead>
+        <tr>		
+            <th><%= locale.table %></th>
+            <th width="70%"><%= locale.maintenancePeriod %></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>	  		
+            <td><%= locale.daysLog%></td>
+            <td class="line-height-18">
+                <input type="text" id="nRawPeriodicInput" name="nRawPeriodicInput" value="<%= model.nRawPeriodic %>" class="form-control col-xs-3 input-sm margin-r5 align-right" maxlength="3"/>
+                <%= locale.days %>
+            </td>
+        </tr>	
+        <tr>	  		
+            <td><%= locale.auditLog %></td>
+            <td class="line-height-18">
+                <input type="text" id="nAuditPeriodicInput" name="nAuditPeriodicInput" value="<%= model.nAuditPeriodic %>" class="form-control col-xs-3 input-sm margin-r5 align-right" maxlength="3"/>
+                <%= locale.days %>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- 테이블 유지 기간 설정 end -->
+
+<!-- 디스크 사용량 관리 begin -->
+<div class="icon-subtitle"><%= locale.setDiskUsed %></div>
+<table class="table table-vertical-line table-striped">
+    <tbody>
+        <tr>	  		
+            <td width="30%"><%= locale.diskWarn %></td>
+            <td class="line-height-18">
+                <input type="text" value="<%= model.nDiskWarn %>" id="nDiskWarn" name="nDiskWarn" class="form-control col-xs-3 input-sm margin-r5 align-right" maxlength="3"/>% <%= locale.diskWarnMailSend %>
+            </td>
+        </tr>
+        <tr>
+            <td width="30%"><%= locale.diskUsed %></td>
+            <td class="line-height-18">
+                <input type="text" value="<%= model.nDiskUsage %>" id="nDiskUsage" name="nDiskUsage" class="form-control col-xs-3 input-sm margin-r5 align-right" maxlength="3"/>% <%= locale.IfMoreThanThisPercentDropInTheOldOrder %>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- 디스크 사용량 관리 end -->
+<!-- db관리 end -->

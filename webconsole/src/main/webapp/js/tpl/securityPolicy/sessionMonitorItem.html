@@ -1,0 +1,9 @@
+<td class="align-center"><input type="checkbox" class="toggle lIndexCheck" name="lIndexCheck"  <%= model.completed ? 'checked' : '' %> value="<%= model.lIndex %>" disabled="disabled"/></td>
+<td id="sessionTd" class="cursor-pointer" data-lindex="<%= model.lIndex %>" data-strname="<%= model.strName %>" data-nport="<%= model.nPort %>"><%= model.strName %></td>
+<td id="portTd"  class="cursor-pointer" data-lindex="<%= model.lIndex %>" data-strname="<%= model.strName %>"><input type="hidden" id="nPort" value="<%= model.nPort %>"/><%= model.nPort %></td>
+<td id="portTd"  class="cursor-pointer">
+    <select id="sessionTransmission" name="sessionTransmission" class="form-control col-xs-7 sessionTransmission" disabled="disabled">
+        <option value="0" <%if (model.nRenewOption == 0){%> selected <%}%>><%=locale.theEnd%></option>
+    </select>
+</td>
+<td class="align-center"><input type="checkbox" class="toggle serviceUseCheck" name="serviceUseCheck" <% if (model.nCheck == 1) { %> checked <%}%> disabled="disabled"/></td>

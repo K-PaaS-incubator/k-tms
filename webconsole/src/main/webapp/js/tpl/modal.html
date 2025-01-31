@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="apple-mobile-web-app-title" content="TESS TAS" />
+
+		<title>TESS TAS</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/style.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/style-responsive.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/tms-style.css" rel="stylesheet">
+
+		<style>.content{margin-left:0px !important;}</style>
+  </head>
+
+  <body class="desktop-detected">
+
+		<!-- content begin : 이 containter가 실제 화면의 컨텐츠입니다. -->
+		<div id="content" class="content-gray">
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-detail-trend">
+				01 - 종합관제 > 추이 그래프
+				<span class="pull-right description margin-l20">tab + form + chart + table + modal footer</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-detail-search">
+				05 - 보안정책 > 탐지정책 상세 검색
+				<span class="pull-right description margin-l20">form + modal footer</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-detail-info">
+				공격 등록정보 상세
+				<span class="pull-right description margin-l20">view table</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-history-log">
+				05 - 보안정책 > 변경 이력 상세
+				<span class="pull-right description margin-l20">summary + table + pagination</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-detail-history">
+				06 - 시스템설정 > 가상센서 변경이력 상세 팝업
+				<span class="pull-right description margin-l20">view table + tab + view table</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-detail-networkinfo">
+				06 - 시스템설정 > 네트워크 등록정보
+				<span class="pull-right description margin-l20">view table</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-product-info">
+				07 - 환경설정 > 제품정보 팝업
+				<span class="pull-right description margin-l20">tab</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-deepsight">
+				12 - deepsight
+				<span class="pull-right description margin-l20">tab + form + table + pagination</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-attack-info">
+				12 - 공격 정보 검색
+				<span class="pull-right description margin-l20">form + summary + table + pagination</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-ip-search">
+				12 - IP 조회
+				<span class="pull-right description margin-l20">form + tab </span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-detail-info2">
+				추가 - 정보상세
+				<span class="pull-right description margin-l20">tab + view table + form + table</span>
+			</button></br>
+
+			<button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-packet">
+				추가 - packet
+				<span class="pull-right description margin-l20">tree, multiple select</span>
+			</button></br>
+
+      <button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-ip-setting">
+          추가 - 입력방식-ip/마스크 설정
+          <span class="pull-right description margin-l20">tree, multiple select</span>
+      </button></br>
+			
+      <button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-pattern-detail">
+				추가 - 패턴 세부설명
+          <span class="pull-right description margin-l20"></span>
+      </button></br>
+			
+      <button type="button" class="btn btn-default margin-b10" data-toggle="modal" data-target="#modal-exception">
+				추가 - 탐지예외 구조 변경
+          <span class="pull-right description margin-l20"></span>
+      </button></br>
+		</div>
+		<!-- content end -->
+
+		<!-- Modal : 01 종합관제 > 추이 그래프 begin -->
+		<div class="modal fade" id="modal-detail-trend" tabindex="-1" role="dialog" aria-labelledby="modal-detail-trend" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-ml"><!-- modal 사이즈 기본과 라지의 중간 사이즈인 770 : modal-ml -->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-chart"></span>추이그래프</h4>
+		      </div>
+		      <div class="modal-body modal-body-gray">
+				  	<!-- scroll tab header begin -->
+						<div id="scroll-tab">
+							<ul class="nav nav-tabs" role="tablist">
+				  	  	<li class="active"><span><a href="#tab111" role="tab" data-toggle="tab">Top5 트래픽</a></span></li>
+				  	  	<li><span><a href="#tab222" role="tab" data-toggle="tab">전체/유해 트래픽</a></span></li>
+				  	  	<li><span><a href="#tab333" role="tab" data-toggle="tab">LOID DDos Tool command2 발생</a></span></li>
+							</ul>
+						</div>
+						<!-- scroll tab header end -->
+
+						<!-- scroll tab content begin -->
+						<div class="tab-content">
+							<!-- Top5 트래픽 begin -->
+							<div class="tab-pane active padding-t5 padding-r15 padding-l15" id="tab111">
+								<!-- 그래프 생성 form begin -->
+								<form role="form" class="form-inline">
+									<div class="col-xs-10 padding-clear">
+										<!-- 첫번째 줄 상세시간 begin -->
+										<div>
+											<!-- 타겟구분 선택 begin -->
+											<div class="form-group col-xs-12 padding-clear">
+										    <label class="control-label col-xs-2">타겟구분</label>
+												<select class="form-control">
+													<option>기관</option>
+													<option>센서</option>
+												</select>
+												<!-- tree dropdown begin -->
+												<div class="dropdown">
+													<button type="button" class="btn btn-default btn-root-tree" data-toggle="dropdown">
+														<span class="glyphicon glyphicon-search"></span>
+													</button>
+													<div class="dropdown-menu root-tree minwidth-300">
+														<!-- tree begin -->
+														<div class="tree">
+															<ul>
+																<li><a href="#"><span class="icon-plus-sign"></span>가상센서</a>(3)
+																	<!-- 하위에 아이템이 있을때는  <a href="#"><span class="icon-plus-sign"></span>아이템명</a>(갯수)로 표현 하고 하위에 ul로 아이템 표시-->
+																	<ul>
+																		<li><a href="#" class="tree-icon sensorgroup">가상센서</a></li>
+																		<li>
+																			<a href="#"><span class="icon-plus-sign"></span>네트워크 그룹</a> (1)
+																			<ul>
+																				<!-- 하위에 아이템이 없을때는 <a href="#" class="tree-icon network">아이템명</a> 아이템 표시하고 a의 class에 자신의 분류를 넣어주면 아이콘으로 표시-->
+																				<li><a href="#" class="tree-icon network">네트워크 1</a></li>
+																				<li><a href="#" class="tree-icon network">네트워크 2</a></li>
+																			</ul>
+																		</li>
+																		<li><a href="#" class="tree-icon network">네트워크</a></li>
+																	</ul>
+																</li>
+																<li><a href="#"><span class="icon-plus-sign"></span>네트워크 그룹</a>(1)
+																	<ul>
+																		<li><a href="#" class="tree-icon networkgroup">네트워크 그룹</a></li>
+																	</ul>
+																</li>
+															</ul>
+														</div>
+														<!-- tree end -->
+													</div>
+												</div>
+												<!-- tree dropdown end -->
+												<strong class="margin-l5">타겟 경로 > 타켓 이름</strong>
+											</div>
+											<!-- 타겟구부 선택 end -->
+										</div>
+										<!-- 첫번째 줄 상세시간 end -->
+
+										<!-- 두번째 줄 상세시간 begin -->
+										<div class="margin-t10">
+											<!-- 분석기간 선택 begin -->
+											<div class="form-group col-xs-12 margin-t10 padding-clear">
+										    <label class="control-label col-xs-2">분석기간</label>
+												<select class="form-control">
+													<option>분석기간</option>
+													<option>분석기간1</option>
+													<option>분석기간2</option>
+												</select>
+												<input type="text" class="form-control" placeholder="2014-12-31 00:00"/> ~
+												<input type="text" class="form-control" placeholder="end date time"/>
+												<button type="button" class="btn btn-default btn-root-tree" data-toggle="dropdown">
+													<span class="glyphicon glyphicon-refresh"></span>
+												</button>
+											</div>
+											<!-- 분석기간 선택 end -->
+										</div>
+										<!-- 두번째 줄 상세시간 end -->
+									</div>
+									<div class="col-xs-2 padding-clear"><button type="button" class="btn btn-default row2-height col-xs-12">그래프생성</button></div>
+								</form>
+								<!-- 그래프 생성 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- 그래프 & table begin -->
+								<div class="row">
+									<!-- chart begin -->
+									<div class="col-xs-10"><!--class 가 모두 바뀌었습니다.-->
+										<span class="pull-right margin-b5 font-size-11">(단위 : Gbytes)</span>
+										<svg width="100%" height="270px"></svg>
+									</div>
+									<!-- chart end -->
+
+									<!-- table begin -->
+									<div class="col-xs-2 padding-left-clear"><!--class 가 모두 바뀌었습니다.-->
+										<span class="pull-right margin-b5 font-size-11">(단위 : Kbytes)</span>
+										<ul class="chart-subinfo float-clear"><!--이부분이 table 구조에서 ul구조로 변경되었습니다.-->
+											<li>
+												<span class="threat-text-lv5">350.02 M</span>
+												Max
+												<span class="time font-size-10">2015-01-12 10:35</span>
+											</li>
+											<li>
+												<span class="threat-text-lv1">332.56 M</span>
+												Min
+												<span class="time font-size-10">2015-01-12 10:35</span>
+											</li>
+											<li>
+												<span>343.04 M</span>
+												Average
+											</li>
+											<li>
+												<span>341.43 M</span>
+												Last
+											</li>
+										</ul>
+										<!-- <table class="table table-vertical-line">
+											<tr>
+												<td class="align-center">last</td>
+												<td class="align-right">999,999.00</td>
+											</tr>
+											<tr>
+												<td class="align-center">Max.</td>
+												<td class="align-right threat-text-lv5">
+													999,999,999.00
+													<div class="chart-text-6 font-size-11">2014.05.27 22:31</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align-center">Min.</td>
+												<td class="align-right threat-text-lv1">
+													99.00
+													<div class="chart-text-6 font-size-11">2014.05.27 22:31</div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align-center">Avg.</td>
+												<td class="align-right">999.00</td>
+											</tr>
+										</table>	 -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- 그래프 & table end -->
+							</div>
+							<!-- Top5 트래픽 end -->
+
+							<div class="tab-pane" id="tab222">전체/유해트래픽 content</div>
+							<div class="tab-pane" id="tab333">LOID DDos Tool command2 발생 content</div>
+				  	</div>
+						<!-- scroll tab content end -->
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default">이전 12시간</button>
+		        <button type="button" class="btn btn-default">이후 12시간</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : 01 종합관제 > 추이 그래프 end -->
+
+		<!-- Modal : 05 보안정책 > 탐지정책 상세 검색 begin -->
+		<div class="modal fade" id="modal-detail-search" tabindex="-1" role="dialog" aria-labelledby="modal-detail-search" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+					<form class="form-inline" role="form">
+		      	<div class="modal-header">
+		      	  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		      	  <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>탐지정책 목록 상세검색</h4>
+		      	</div>
+		      	<div class="modal-body modal-body-white-padding">
+							<!-- 공격유형 선택 begin -->
+							<div class="form-group col-xs-12 padding-clear">
+						    <label class="control-label col-xs-2">공격유형</label>
+								<select class="form-control col-xs-10">
+									<option>최근 12 시간</option>
+									<option>최근 12 시간1</option>
+									<option>최근 12 시간2</option>
+								</select>
+							</div>
+							<!-- 공격유형 선택 end -->
+
+							<!-- 공격명 선택 begin -->
+							<div class="form-group col-xs-12 margin-t10 padding-clear">
+						    <label class="control-label col-xs-2">공격명</label>
+								<input type="text" class="form-control col-xs-10" placeholder="smtp sendmail"/>
+							</div>
+							<!-- 공격명 선택 end -->
+
+							<!-- 위험도 / 프로토콜 선택 begin -->
+							<div class="form-group col-xs-12 margin-t10 padding-clear">
+						    <label class="control-label col-xs-2">위험도</label>
+								<select class="form-control col-xs-4">
+									<option>위험도</option>
+									<option>위험도1</option>
+									<option>위험도2</option>
+								</select>
+						    <label class="control-label col-xs-2">프로토콜</label>
+								<select class="form-control col-xs-4">
+									<option>프로토콜</option>
+									<option>프로토콜1</option>
+									<option>프로토콜2</option>
+								</select>
+							</div>
+							<!-- 위험도 / 프로토콜 선택 end -->
+
+							<!-- 임계값 / 패킷저장 선택 begin -->
+							<div class="form-group col-xs-12 margin-t10 padding-clear">
+						    <label class="control-label col-xs-2">임계값</label>
+								<div class="col-xs-2 padding-clear">
+								  <input type="text" class="form-control col-xs-12" placeholder="개"/>
+								</div>
+								<div class="col-xs-2">
+									<input type="text" class="form-control col-xs-12" placeholder="초"/>
+								</div>
+						    <label class="control-label col-xs-2">패킷저장</label>
+								<select class="form-control col-xs-4 font-size-12">
+									<option>패킷저장</option>
+									<option>패킷저장1</option>
+									<option>패킷저장2</option>
+								</select>
+							</div>
+							<!-- 임계값 / 패킷저장 선택 end -->
+
+							<!-- 차단여부 / CVE id 선택 begin -->
+							<div class="form-group col-xs-12 margin-t10 padding-clear">
+						    <label class="control-label col-xs-2">차단여부</label>
+								<select class="form-control col-xs-4">
+									<option>차단여부</option>
+									<option>차단여부1</option>
+									<option>차단여부2</option>
+								</select>
+						    <label class="control-label col-xs-2">CVE ID</label>
+								<input type="text" class="form-control col-xs-4" placeholder=""/>
+							</div>
+							<!-- 차단여부 / CVE id 선택 end -->
+							
+							<!-- 검색옵션 begin -->
+							<div class="form-group col-xs-12 margin-t10 align-center border-dotted-top padding-t10">
+								<!-- 결과내 check begin -->
+								<div class="checkbox">
+								  <label>
+								    <input type="checkbox" value="">
+								    결과 내
+								  </label>
+								</div>
+								<!-- 결과내 check end -->
+
+								<!-- 사용중 check begin -->
+								<div class="checkbox margin-l5">
+								  <label>
+								    <input type="checkbox" value="" checked>
+								    사용중
+								  </label>
+								</div>
+								<!-- 사용중 check end -->
+
+								<!-- 미사용 check begin -->
+								<div class="checkbox margin-l5">
+								  <label>
+								    <input type="checkbox" value="" checked>
+								    미사용
+								  </label>
+								</div>
+								<!-- 미사용 check end -->
+							</div>
+							<!-- 검색옵션 begin -->
+							
+						</div>
+		      	<div class="modal-footer">
+		      	  <button type="button" class="btn btn-default">상세검색</button>
+		      	</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal : 05 보안정책 > 탐지정책 상세 검색 end -->
+
+		<!-- Modal : 05 보안정책 > 탐지정책 공격 등록정보 상세 begin -->
+		<div class="modal fade" id="modal-detail-info" tabindex="-1" role="dialog" aria-labelledby="modal-detail-info" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+					<form class="form-inline" role="form">
+		      	<div class="modal-header">
+		      	  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		      	  <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>공격 등록정보</h4>
+		      	</div>
+		      	<div class="modal-body modal-body-white-padding">
+							<div class="security-view-title">
+								<span>Web Access</span>
+								HTTP Moreover Shoping Cart Directory
+							</div>
+
+							<!-- 상세 정보 view table begin -->
+							<div class="scroll-height-400">
+								<div class="icon-subtitle margin-t5">탐지 정보</div>
+								<!-- 탐지정보 begin -->
+								<div class="border-dotted-all padding-all-5">
+									<!-- info 2column table begin -->
+									<table class="view-table">
+										<tr>
+											<th>시작일시</th>
+											<td>2015-01-08 10:45:59</td>
+											<th>종료일시</th>
+											<td>2015-01-08 10:45:59</td>
+										</tr>
+										<tr>
+											<th>SIP</th>
+											<td>119.162.197.241</td>
+											<th>DIP</th>
+											<td>119.205.241.53</td>
+										</tr>
+									</table>
+									<!-- info 2column table end -->
+								</div>
+								<!-- 탐지정보 end -->
+
+								<div class="icon-subtitle">등록 정보</div>
+								<!-- 등록정보 begin -->
+								<div class="border-dotted-all padding-all-5">
+									<table class="view-table">
+										<tr>
+											<th width="15%">위협도</th>
+											<td><span class="threat-bg-lv5 threat-color"></span>높음</td>
+										</tr>
+										<tr>
+											<th>코드</th>
+											<td>1000002</td>
+										</tr>
+										<tr>
+											<th>탐지여부</th>
+											<td>사용</td>
+										</tr>
+										<tr>
+											<th>패킷저장</th>
+											<td class="threat-text-lv1">Raw Data와 함께 로그 저장</td>
+										</tr>
+										<tr>
+											<th>임계값</th>
+											<td>100,000 개 / 100,000초</td>
+										</tr>
+										<tr>
+											<th>패턴정보</th>
+											<td>alert tcp any any - > any 80 <br/>
+									(flow to_server established;uricon:tent:/cached_feed.cgi : content/; nocase; rev:1;)</td>
+										</tr>
+										<tr>
+											<th>요약설명</th>
+											<td>이 위반사건은 허가되지 않은 디렉토리로 접근하여 웹 서버의 파일 및 디렉토리를 조회하려는 시도일 가능성이 있습니다.</td>
+										</tr>
+										<tr>
+											<th>상세설명</th>
+											<td>Moreover.com은 인터넷을 통해 새로운 입력을 컴파일하며, 여러 포맷으로 타 웹사이트에 더하여지는 역할을 합니다. Moreover.com에서 제공되는 cached_feed CGI 스크립트 버젼 1.0은 공격자가 서버의 허가되지 않은 디렉토리로 접근할 수 있는 취약성을 포함하고 있습니다.</td>
+										</tr>
+										<tr>
+											<th>해결방법</th>
+											<td>Upgrade to latest version of cached_feed.pl(2.0 or higher), available at Moreover.Com Web Site.
+											Moreover.com Web Site.<br/>http://w.moreover.com/dev/cache</td>
+										</tr>
+										<tr>
+											<th>참조</th>
+											<td>Snort ID : 1093 ButTraq Mailing List,<br/>
+									http://archives.neohapsis.com/archives/bugtraq/2000-10/0013.html</td>
+										</tr>
+										<tr>
+											<th>Bug Trap ID</th>
+											<td>1762</td>
+										</tr>
+									</table>
+								</div>
+								<!-- 등록정보 end -->
+							</div>
+							<!-- 상세 정보 view table end -->
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal : 05 보안정책 > 탐지정책 공격 등록정보 상세 end -->
+
+		<!-- Modal : 05 보안정책 > 변경 이력 상세 begin -->
+		<div class="modal fade" id="modal-history-log" tabindex="-1" role="dialog" aria-labelledby="modal-history-log" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>정책변경 목록</h4>
+		      </div>
+		      <div class="modal-body modal-body-gray-padding">
+						<div class="col-xs-2">전체 개수 <strong>321</strong></div>
+						<div class="col-xs-5">
+					    <span class="threat-bg-lv5 rect margin-r5 "></span>Hight <strong>198</strong>
+							<span class="threat-bg-lv4 rect margin-r5 margin-l15"></span>Med <strong>453</strong>
+							<span class="threat-bg-lv3 rect margin-r5 margin-l15"></span>Low <strong>420</strong>
+							<span class="threat-bg-lv2 rect margin-r5 margin-l15"></span>Info <strong>102</strong>
+						</div>
+		      </div>
+
+					<div class="modal-body modal-body-white-padding border-solid-top">
+						<!-- 목록 table begin -->
+						<!-- 내용의 길이에 따라 ...로표시되기 위해서는 table에 class table-fixed 추가,th에 각 width지정, 해당 td에 class overflow-ellipsis 추가가 필요 -->
+		  			<table class="table table-striped table-hover table-vertical-line table-fixed">
+		  		    <thead>
+		  		    	<tr>
+		  		    		<th width="5%">NO</th>
+		  		    		<th width="8%">코드</th>
+									<th class="level-narrow"></th>
+		  		    		<th>위험도/공격명</th>
+		  		    		<th width="5%">탐지</th>
+		  		    		<th width="8%">패킷저장</th>
+									<th width="8%">임계값</th>
+									<th width="8%">작업</th>
+		  		    	</tr>
+		  		    </thead>
+		  		    <tbody>
+		  		    	<tr>
+		  		    		<td class="align-center">23</td>
+									<td class="align-center">6620</td>
+		  		    		<td class="level-narrow threat-bg-lv5"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td></td>
+									<td class="align-center">추가</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">24</td>
+									<td class="align-center">6620</td>
+		  		    		<td class="level-narrow threat-bg-lv4"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td></td>
+									<td class="align-center">추가</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">25</td>
+									<td class="align-center">6620</td>
+		  		    		<td class="level-narrow threat-bg-lv3"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td></td>
+									<td class="align-center">추가</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">26</td>
+									<td class="align-center">6620</td>
+		  		    		<td class="level-narrow threat-bg-lv3"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td></td>
+									<td class="align-center">추가</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">27</td>
+									<td class="align-center">6620</td>
+		  		    		<td class="level-narrow threat-bg-lv3"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td class="align-center"><input type="checkbox" value="" checked disabled></td>
+									<td></td>
+									<td class="align-center">추가</td>
+		  		    	</tr>
+							</tbody>
+						</table>
+
+						<!-- 더보기/pagination 옵션 begin -->
+						<div class="more-option align-center">
+							<ul class="pagination">
+							  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+							  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#">4</a></li>
+								<li><a href="#">5</a></li>
+								<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+							</ul>
+						</div>
+						<!-- 더보기/pagination 옵션 end -->
+
+						<!-- 목록 table end -->
+					</div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : 05 보안정책 > 변경 이력 상세 end -->
+
+		<!-- Modal : 06 시스템설정 > 가상센서 변경이력 상세 팝업 begin -->
+		<div class="modal fade" id="modal-detail-history" tabindex="-1" role="dialog" aria-labelledby="modal-detail-history" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>변경이력 상세보기</h4>
+		      </div>
+		      <div class="modal-body-white-padding">
+						<!-- info table begin -->
+						<table class="view-table">
+							<tr>
+								<th>구분</th>
+								<td>등록정보</td>
+								<th>변경일시</th>
+								<td>2014.05.27 21:53:11</td>
+								<th>변경</th>
+								<td>admin001</td>
+								<th>상태</th>
+								<td class="threat-text-lv1">성공</td>
+							</tr>
+							<tr>
+								<th>설명</th>
+								<td colspan="7">변경테스트</td>
+							</tr>
+						</table>
+						<!-- info table end -->
+
+				  	<!-- scroll tab header begin -->
+						<div id="scroll-tab" class="margin-t15">
+							<ul class="nav nav-tabs" role="tablist">
+				  	  	<li class="active"><span><a href="#tab111" role="tab" data-toggle="tab">변경 이전</a></span></li>
+				  	  	<li><span><a href="#tab222" role="tab" data-toggle="tab">변경 이후</a></span></li>
+							</ul>
+						</div>
+						<!-- scroll tab header end -->
+
+						<!-- scroll tab content begin -->
+						<div class="tab-content">
+							<!-- 등록정보인 경우 예 : 등록정보의 구성 이전과 이후로 나누어 보여줍니다. 폭이나 스타일에서 약간의 조정이 필요합니다. begin -->
+							<div class="tab-pane active" id="tab111">
+								<table class="view-table margin-t5">
+									<tr>
+										<th width="15%">이름</th>
+										<td>10.170.1.103</td>
+									</tr>
+									<tr>
+										<th>설명</th>
+										<td></td>
+									</tr>
+									<tr>
+										<th>사설 IP</th>
+										<td>10.170.1.103</td>
+									</tr>
+									<tr>
+										<th>공인 IP</th>
+										<td>10.170.1.103</td>
+									</tr>
+									<tr>
+										<th>통신방식</th>
+										<td>SSL 인증</td>
+									</tr>
+								</table>
+							</div>
+							<!-- 등록정보인 경우 예 end -->
+							<div class="tab-pane" id="tab222">
+								<!-- 등록정보인 경우 예 : 등록정보의 구성 이전과 이후로 나누어 보여줍니다. 폭이나 스타일에서 약간의 조정이 필요합니다. begin -->
+								<div class="tab-pane active" id="tab111">
+									<table class="view-table margin-t5">
+										<tr>
+											<th width="15%">이름</th>
+											<td>10.170.1.103</td>
+										</tr>
+										<tr>
+											<th>설명</th>
+											<td></td>
+										</tr>
+										<tr>
+											<th>사설 IP</th>
+											<td>10.170.1.103</td>
+										</tr>
+										<tr>
+											<th>공인 IP</th>
+											<td>10.170.1.103</td>
+										</tr>
+										<tr>
+											<th>통신방식</th>
+											<td>SSL 인증</td>
+										</tr>
+									</table>
+								</div>
+								<!-- 등록정보인 경우 예 end -->
+							</div>
+				  	</div>
+						<!-- scroll tab content end -->
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : 06 시스템설정 > 가상센서 변경이력 상세 팝업 end -->
+
+		<!-- Modal : 06 - 시스템설정 > 네트워크 등록정보 begin -->
+		<div class="modal fade" id="modal-detail-networkinfo" tabindex="-1" role="dialog" aria-labelledby="modal-detail-networkinfo" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>네트워크 등록정보</h4>
+		      </div>
+		      <div class="modal-body-white-padding">
+						<table class="view-table">
+							<tr>
+								<th width="22%">네트워크명</th>
+								<td>TestNet</td>
+							</tr>
+							<tr>
+								<th>네트워크 그룹명</th>
+								<td>네트워크 그룹 1</td>
+							</tr>
+							<tr>
+								<th>설명</th>
+								<td>내용없음</td>
+							</tr>
+							<tr>
+								<th>대역폭</th>
+								<td class="line-height-22">
+									<select class="form-control col-xs-5 margin-r10">
+									  <option>사용자 정의</option>
+									</select>
+									0 bps
+								</td>
+							</tr>
+						</table>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : 06 - 시스템설정 > 네트워크 등록정보 end -->
+
+		<!-- Modal : 07 환경설정 > 제품정보 팝업 begin -->
+		<div class="modal fade" id="modal-product-info" tabindex="-1" role="dialog" aria-labelledby="modal-product-info" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+					<form class="form-inline" role="form">
+		      	<div class="modal-header">
+		      	  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		      	  <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>TESS TAS 제품정보</h4>
+		      	</div>
+		      	<div class="modal-body modal-body-gray">
+					  	<!-- scroll tab header begin -->
+							<div id="scroll-tab">
+								<ul class="nav nav-tabs" role="tablist">
+					  	  	<li class="active"><span><a href="#tab1" role="tab" data-toggle="tab">제품정보</a></span></li>
+					  	  	<li><span><a href="#tab2" role="tab" data-toggle="tab">오픈소스 라이센스</a></span></li>
+								</ul>
+							</div>
+							<!-- scroll tab header end -->
+
+							<!-- scroll tab content begin -->
+							<div class="tab-content bg-abstract">
+								<div class="tab-pane active padding-r15 padding-l15" id="tab1">
+									<!-- 제품정보 begin -->
+									<div class="product-name">
+										<div class="brand-image"></div>
+									</div>
+									<div class="border-dotted-all margin-t10 overflow-hidden product-info-list">
+										<ul>
+										</ul>
+									</div>
+									<!-- 제품정보 end -->
+								</div>
+								<div class="tab-pane padding-r15 padding-l15" id="tab2">
+									<div class="opensource-license margin-t10">
+										<!-- accordion begin -->
+										<div class="panel-group" id="accordion">
+										  <div class="panel panel-default">
+										    <div class="panel-heading">
+										      <h4 class="panel-title">
+										        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+										          open source name 1
+										        </a>
+										      </h4>
+										    </div>
+										    <div id="collapseOne" class="panel-collapse collapse">
+										      <div class="panel-body">The MIT License (MIT)
+
+Copyright (c) 2011-2015 Twitter, Inc
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</div>
+										    </div>
+										  </div>
+										  <div class="panel panel-default">
+										    <div class="panel-heading">
+										      <h4 class="panel-title">
+										        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+										          open source name 2
+										        </a>
+										      </h4>
+										    </div>
+										    <div id="collapseTwo" class="panel-collapse collapse">
+										      <div class="panel-body">#2</div>
+										    </div>
+										  </div>
+										</div>
+										<!-- accordion end -->
+									</div>
+								</div>
+							</div>
+							<!-- scroll tab content end -->
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal : 07 환경설정 > 제품정보 팝업 end -->
+
+		<!-- Modal : deepsight begin -->
+		<div class="modal fade" id="modal-deepsight" tabindex="-1" role="dialog" aria-labelledby="modal-deepsight" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>deepsight 조회</h4>
+		      </div>
+		      <div class="modal-body modal-body-gray">
+				  	<!-- scroll tab header begin -->
+						<div id="scroll-tab">
+							<ul class="nav nav-tabs" role="tablist">
+				  	  	<li class="active"><span><a href="#tab11" role="tab" data-toggle="tab">취약점</a></span></li>
+				  	  	<li><span><a href="#tab22" role="tab" data-toggle="tab">악성 코드</a></span></li>
+				  	  	<li><span><a href="#tab33" role="tab" data-toggle="tab">경고</a></span></li>
+							</ul>
+						</div>
+						<!-- scroll tab header end -->
+
+						<!-- scroll tab content begin -->
+						<div class="tab-content">
+							<div class="tab-pane active padding-r15 padding-l15" id="tab11">
+							<!-- 취약점 begin -->
+								<!-- 조회 form begin -->
+								<div class="row">
+									<form role="form" class="form-inline">
+										<div class="col-xs-11">
+											<!-- 첫번째 줄 상세시간 begin -->
+											<div>
+												<!-- 위험도 begin -->
+										    <label class="control-label minwidth-50">위험도</label>
+												<select class="form-control margin-l5 minwidth-200">
+												  <option>전체</option>
+												</select>
+												<!-- 위험도 begin -->
+
+												<!-- 취약유형 begin -->
+										    <label class="control-label margin-l30 minwidth-50">취약유형</label>
+												<select class="form-control margin-l5 minwidth-300">
+												  <option>전체</option>
+												</select>
+												<!-- 취약유형 begin -->
+											</div>
+											<!-- 첫번째 줄 상세시간 end -->
+
+											<!-- 두번째 줄 상세시간 begin -->
+											<div class="margin-t10">
+												<!-- 검색어 begin -->
+										    <label class="control-label minwidth-50">검색어</label>
+												<select class="form-control margin-l5 minwidth-200">
+												  <option>검색필드 선택</option>
+												</select>
+												<input type="text" class="form-control margin-l5 minwidth-380"/>
+												<!-- 검색어 begin -->
+											</div>
+											<!-- 두번째 줄 상세시간 end -->
+										</div>
+										<div class="col-xs-1 padding-clear"><button type="button" class="btn btn-default row2-height col-xs-11">조회</button></div>
+									</form>
+								</div>
+								<!-- 조회 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- table begin -->
+								<div class="row">
+									<!-- info line begin -->
+									<div class="col-xs-12 margin-b5">전체 : <strong>4,877</strong> 건</div>
+									<!-- info line end -->
+
+									<!-- table begin -->
+									<div class="col-xs-12 margin-t5 margin-b5">
+										<table class="table table-vertical-line">
+						  		    <thead>
+						  		    	<tr>
+						  		    		<th width="5%">NO</th>
+													<th width="10%">위험도</th>
+													<th width="58%">취약점</th>
+													<th width="27%">취약유형</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td class="align-center">1</td>
+													<td class="align-center">8.7</td>
+													<td>Joomlal KSAdvertiser 컴포넌트 임의의 파일 업로드 취약성</td>
+													<td>input validation error</td>
+												</tr>
+												<tr>
+													<td class="align-center">2</td>
+													<td class="align-center">7.7</td>
+													<td>Joomlal KSAdvertiser 컴포넌트 임의의 파일 업로드 취약성</td>
+													<td>input validation error</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- 더보기/pagination 옵션 begin -->
+										<div class="more-option align-center">
+											<ul class="pagination">
+											  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+											  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+												<li><a href="#">2</a></li>
+												<li><a href="#">3</a></li>
+												<li><a href="#">4</a></li>
+												<li><a href="#">5</a></li>
+												<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+											</ul>
+										</div>
+										<!-- 더보기/pagination 옵션 end -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- table end -->
+							<!-- 취약점 end -->
+							</div>
+
+							<div class="tab-pane padding-r15 padding-l15" id="tab22">
+							<!-- 악성코드 begin -->
+								<!-- 조회 form begin -->
+								<div class="row">
+									<form role="form" class="form-inline">
+										<div class="col-xs-11">
+											<!-- 첫번째 줄 상세시간 begin -->
+											<div>
+												<!-- 위험도 begin -->
+										    <label class="control-label minwidth-50">위험도</label>
+												<select class="form-control margin-l5 minwidth-200">
+												  <option>전체</option>
+												</select>
+												<!-- 위험도 begin -->
+
+												<!-- 취약유형 begin -->
+										    <label class="control-label margin-l30 minwidth-50">악성코드 종류</label>
+												<select class="form-control margin-l5 minwidth-300">
+												  <option>전체</option>
+												</select>
+												<!-- 취약유형 begin -->
+											</div>
+											<!-- 첫번째 줄 상세시간 end -->
+
+											<!-- 두번째 줄 상세시간 begin -->
+											<div class="margin-t10">
+												<!-- 검색어 begin -->
+										    <label class="control-label minwidth-50">검색어</label>
+												<select class="form-control margin-l5 minwidth-200">
+												  <option>검색필드 선택</option>
+												</select>
+												<input type="text" class="form-control margin-l5 minwidth-400"/>
+												<!-- 검색어 begin -->
+											</div>
+											<!-- 두번째 줄 상세시간 end -->
+										</div>
+										<div class="col-xs-1 padding-clear"><button type="button" class="btn btn-default row2-height col-xs-11">조회</button></div>
+									</form>
+								</div>
+								<!-- 조회 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- table begin -->
+								<div class="row">
+									<!-- info line begin -->
+									<div class="col-xs-12 margin-b5">전체 : <strong>4,877</strong> 건</div>
+									<!-- info line end -->
+
+									<!-- table begin -->
+									<div class="col-xs-12 margin-t5 margin-b5">
+										<table class="table table-vertical-line inside-iconbtn">
+						  		    <thead>
+						  		    	<tr>
+						  		    		<th width="5%">NO</th>
+													<th width="10%">위험도</th>
+													<th width="25%">악성코드명</th>
+													<th width="5%">포트</th>
+													<th>악성코드 종류</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td class="align-center">1</td>
+													<td class="align-center">8.7</td>
+													<td>Android Answerbot</td>
+													<td class="align-center"><button type="button" class="btn-intable-list" data-toggle="modal" data-target=".bs-example-modal-lg"></button></td>
+													<td>back Door, Trojan, Infostealer, Downloader</td>
+												</tr>
+												<tr>
+													<td class="align-center">2</td>
+													<td class="align-center">7.7</td>
+													<td>Android Answerbot</td>
+													<td class="align-center"><button type="button" class="btn-intable-list" data-toggle="modal" data-target=".bs-example-modal-lg"></button></td>
+													<td>back Door, Trojan, Infostealer, Downloader</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- 더보기/pagination 옵션 begin -->
+										<div class="more-option align-center">
+											<ul class="pagination">
+											  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+											  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+												<li><a href="#">2</a></li>
+												<li><a href="#">3</a></li>
+												<li><a href="#">4</a></li>
+												<li><a href="#">5</a></li>
+												<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+											</ul>
+										</div>
+										<!-- 더보기/pagination 옵션 end -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- table end -->
+							<!-- 악성코드 end -->
+							</div>
+
+							<div class="tab-pane padding-r15 padding-l15" id="tab33">
+							<!-- 경고 begin -->
+								<!-- 조회 form begin -->
+								<div class="row">
+									<label class="control-label col-xs-1 margin-t5">검색어</label>
+									<select class="form-control col-xs-3">
+									  <option>검색필드 선택</option>
+									</select>
+									<input type="text" class="form-control col-xs-5 margin-r10 margin-l10"/>
+									<button type="button" class="btn btn-default col-xs-2">조회</button>
+								</div>
+								<!-- 조회 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- table begin -->
+								<div class="row">
+									<!-- info line begin -->
+									<div class="col-xs-12 margin-b5">전체 : <strong>4,877</strong> 건</div>
+									<!-- info line end -->
+
+									<!-- table begin -->
+									<div class="col-xs-12 margin-t5 margin-b5">
+										<table class="table table-vertical-line">
+						  		    <thead>
+						  		    	<tr>
+						  		    		<th width="5%">NO</th>
+													<th width="20%">보고서 명</th>
+													<th>보고서 내용</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td class="align-center">1</td>
+													<td class="align-center">TCP/5000 (UPnP)</td>
+													<td>이 포트경고 보고서는 TCP/5000 포트를 대상으로 발생된 트래픽입니다.</td>
+												</tr>
+												<tr>
+													<td class="align-center">2</td>
+													<td class="align-center">TCP/5000 (UPnP)</td>
+													<td>이 포트경고 보고서는 TCP/5000 포트를 대상으로 발생된 트래픽입니다.</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- 더보기/pagination 옵션 begin -->
+										<div class="more-option align-center">
+											<ul class="pagination">
+											  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+											  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+												<li><a href="#">2</a></li>
+												<li><a href="#">3</a></li>
+												<li><a href="#">4</a></li>
+												<li><a href="#">5</a></li>
+												<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+											</ul>
+										</div>
+										<!-- 더보기/pagination 옵션 end -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- table end -->
+							<!-- 경고 end -->
+							</div>
+				  	</div>
+						<!-- scroll tab content end -->
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : deepsight end -->
+
+		<!-- Modal : 공격정보 검색 begin -->
+		<div class="modal fade" id="modal-attack-info" tabindex="-1" role="dialog" aria-labelledby="modal-attack-info" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>공격 정보 검색</h4>
+		      </div>
+		      <div class="modal-body modal-body-gray-padding">
+						<!-- 조회 form begin -->
+						<form role="form" class="form-inline">
+							<div class="col-xs-11 padding-clear">
+								<!-- 첫번째 줄 상세시간 begin -->
+								<div>
+									<!-- 위험도 begin -->
+							    <label class="control-label minwidth-50">위험도</label>
+									<select class="form-control margin-l5 minwidth-200">
+									  <option>전체</option>
+									</select>
+									<!-- 위험도 begin -->
+
+									<!-- 취약유형 begin -->
+							    <label class="control-label margin-l30 minwidth-50">취약유형</label>
+									<select class="form-control margin-l5 minwidth-300">
+									  <option>전체</option>
+									</select>
+									<!-- 취약유형 begin -->
+								</div>
+								<!-- 첫번째 줄 상세시간 end -->
+
+								<!-- 두번째 줄 상세시간 begin -->
+								<div class="margin-t10">
+									<!-- 검색어 begin -->
+							    <label class="control-label minwidth-50">검색어</label>
+									<select class="form-control margin-l5 minwidth-200">
+									  <option>검색필드 선택</option>
+									</select>
+									<input type="text" class="form-control margin-l5 minwidth-380"/>
+									<!-- 검색어 begin -->
+								</div>
+								<!-- 두번째 줄 상세시간 end -->
+							</div>
+							<div class="col-xs-1 padding-clear"><button type="button" class="btn btn-default row2-height col-xs-12">조회</button></div>
+						</form>
+						<!-- 조회 form end -->
+		      </div>
+
+					<div class="modal-body modal-body-white-padding border-solid-top">
+						<div class="col-xs-2 padding-b5 padding-clear">전체 개수 <strong>321</strong></div>
+						<div class="col-xs-5 padding-b5">
+					    <span class="threat-bg-lv5 rect margin-r5 "></span>Hight <strong>198</strong>
+							<span class="threat-bg-lv4 rect margin-r5 margin-l15"></span>Med <strong>453</strong>
+							<span class="threat-bg-lv3 rect margin-r5 margin-l15"></span>Low <strong>420</strong>
+							<span class="threat-bg-lv2 rect margin-r5 margin-l15"></span>Info <strong>102</strong>
+						</div>
+						<!-- 목록 table begin -->
+						<!-- 내용의 길이에 따라 ...로표시되기 위해서는 table에 class table-fixed 추가,th에 각 width지정, 해당 td에 class overflow-ellipsis 추가가 필요 -->
+		  			<table class="table table-striped table-hover table-vertical-line table-fixed">
+		  		    <thead>
+		  		    	<tr>
+		  		    		<th width="5%">NO</th>
+									<th class="level-narrow"></th>
+		  		    		<th>위험도/공격명</th>
+		  		    		<th width="15%">공격 유형</th>
+		  		    		<th width="15%">CVE-ID</th>
+		  		    	</tr>
+		  		    </thead>
+		  		    <tbody>
+		  		    	<tr>
+		  		    		<td class="align-center">23</td>
+		  		    		<td class="level-narrow threat-bg-lv5"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center">User Signature</td>
+									<td class="align-center">-</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">24</td>
+		  		    		<td class="level-narrow threat-bg-lv4"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center">User Signature</td>
+									<td class="align-center">-</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">25</td>
+		  		    		<td class="level-narrow threat-bg-lv3"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center">User Signature</td>
+									<td class="align-center">-</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">26</td>
+		  		    		<td class="level-narrow threat-bg-lv3"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center">User Signature</td>
+									<td class="align-center">-</td>
+		  		    	</tr>
+		  		    	<tr>
+		  		    		<td class="align-center">27</td>
+		  		    		<td class="level-narrow threat-bg-lv3"></td>
+									<td class="overflow-ellipsis">OpenSSL DTLS CVE-2014-0221 Remote Denial of Service Vulnerability 1</td>
+									<td class="align-center">User Signature</td>
+									<td class="align-center">-</td>
+		  		    	</tr>
+							</tbody>
+						</table>
+
+						<!-- 더보기/pagination 옵션 begin -->
+						<div class="more-option align-center">
+							<ul class="pagination">
+							  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+							  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#">4</a></li>
+								<li><a href="#">5</a></li>
+								<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+							</ul>
+						</div>
+						<!-- 더보기/pagination 옵션 end -->
+
+						<!-- 목록 table end -->
+					</div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : 공격정보 검색 end -->
+
+		<!-- Modal : ip 조회 begin -->
+		<div class="modal fade" id="modal-ip-search" tabindex="-1" role="dialog" aria-labelledby="modal-ip-search" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>IP 조회</h4>
+		      </div>
+					<div class="modal-body modal-body-gray-padding">
+						<!-- 조회 form begin -->
+						<form role="form" class="form-inline">
+							<div class="col-xs-10 padding-clear">
+								<!-- 첫번째 줄 상세시간 begin -->
+								<div class="overflow-hidden">
+									<!-- 위험도 begin -->
+							    <label class="control-label col-xs-2 padding-clear">검색조건</label>
+									<select class="form-control col-xs-3">
+									  <option>전체</option>
+									</select>
+									<!-- 위험도 begin -->
+
+									<!-- 취약유형 begin -->
+							    <label class="control-label col-xs-2">후이즈 서버</label>
+									<select class="form-control col-xs-5">
+									  <option>전체</option>
+									</select>
+									<!-- 취약유형 begin -->
+								</div>
+								<!-- 첫번째 줄 상세시간 end -->
+
+								<!-- 두번째 줄 상세시간 begin -->
+								<div class="margin-t10">
+									<!-- 검색어 begin -->
+							    <label class="control-label col-xs-2 padding-clear">IP 입력</label>
+									<input type="text" class="form-control col-xs-10"/>
+									<!-- 검색어 begin -->
+								</div>
+								<!-- 두번째 줄 상세시간 end -->
+							</div>
+							<div class="col-xs-2"><button type="button" class="btn btn-default row2-height col-xs-12">조회</button></div>
+						</form>
+						<!-- 조회 form end -->
+					</div>
+		      <div class="modal-body-white-padding border-solid-top">
+				  	<!-- scroll tab header begin -->
+						<div id="scroll-tab">
+							<ul class="nav nav-tabs" role="tablist">
+				  	  	<li class="active"><span><a href="#tab-ip1" role="tab" data-toggle="tab">Whois</a></span></li>
+				  	  	<li><span><a href="#tab-ip2" role="tab" data-toggle="tab">TraceRoute</a></span></li>
+								<li><span><a href="#tab-ip3" role="tab" data-toggle="tab">Ping</a></span></li>
+							</ul>
+						</div>
+						<!-- scroll tab header end -->
+
+						<!-- scroll tab content begin -->
+						<div class="tab-content padding-bottom-clear">
+							<div class="tab-pane active" id="tab-ip1">
+								<!-- whois begin -->
+								<div class="search-key"><strong>255.255.10.31</strong>에 대한 <strong class="threat-text-lv1">whois.kmic.net</strong> 검색결과</div>
+
+								<!-- 검색 데이터 없을 경우 표시 begin-->
+								<p class="no-data"><span class="glyphicon glyphicon-search"></span>Can not find data</p>
+								<!-- 검색 데이터 없을 경우 표시 end-->
+
+								<p class="search-msg">
+									Whois Server Version 2.0</br>
+
+									Domain names in the .com and .net domains can now be registered</br>
+									with many different competing registrars. Go to http://www.internic.net
+									for detailed information.</br>
+
+									   Domain Name: WHOIO.COM</br>
+									   Registrar: NAMESILO, LLC</br>
+									   Whois Server: whois.namesilo.com</br>
+									   Referral URL: http://www.namesilo.com</br>
+									   Name Server: NS1.DNBIZ.COM</br>
+									   Name Server: NS2.DNBIZ.COM</br>
+									   Status: clientDeleteProhibited</br>
+									   Status: clientRenewProhibited</br>
+									   Status: clientTransferProhibited
+								</p>
+								<!-- whois end -->
+							</div>
+							<div class="tab-pane" id="tab-ip2">
+								<!-- 등록정보인 경우 예 : 등록정보의 구성 이전과 이후로 나누어 보여줍니다. 폭이나 스타일에서 약간의 조정이 필요합니다. begin -->
+								<div class="tab-pane active" id="tab111">
+									<table class="view-table margin-t5">
+										<tr>
+											<th width="15%">이름</th>
+											<td>10.170.1.103</td>
+										</tr>
+										<tr>
+											<th>설명</th>
+											<td></td>
+										</tr>
+										<tr>
+											<th>사설 IP</th>
+											<td>10.170.1.103</td>
+										</tr>
+										<tr>
+											<th>공인 IP</th>
+											<td>10.170.1.103</td>
+										</tr>
+										<tr>
+											<th>통신방식</th>
+											<td>SSL 인증</td>
+										</tr>
+									</table>
+								</div>
+								<!-- 등록정보인 경우 예 end -->
+							</div>
+
+							<div class="tab-pane" id="tab-ip3"></div>
+				  	</div>
+						<!-- scroll tab content end -->
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : ip 조회 end -->
+
+		<!-- Modal : detail info 2 bgegin -->
+		<div class="modal fade" id="modal-detail-info2" tabindex="-1" role="dialog" aria-labelledby="modal-detail-info2" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-search"></span>상세정보</h4>
+		      </div>
+		      <div class="modal-body modal-body-gray">
+				  	<!-- scroll tab header begin -->
+						<div id="scroll-tab">
+							<ul class="nav nav-tabs" role="tablist">
+				  	  	<li class="active"><span><a href="#tab11" role="tab" data-toggle="tab">탭 1 타이틀</a></span></li>
+				  	  	<li><span><a href="#tab22" role="tab" data-toggle="tab">탭 2 타이틀</a></span></li>
+				  	  	<li><span><a href="#tab33" role="tab" data-toggle="tab">탭 3 타이틀</a></span></li>
+							</ul>
+						</div>
+						<!-- scroll tab header end -->
+
+						<!-- scroll tab content begin -->
+						<div class="tab-content">
+							<div class="tab-pane active padding-r15 padding-l15" id="tab11">
+							<!-- 취약점 begin -->
+
+								<!-- info table begin -->
+								<table class="view-table">
+									<tr>
+										<th width="12%" class="padding-rl-clear">항목명</th>
+										<td width="38%">값</td>
+										<th width="12%" class="padding-rl-clear">항목명</th>
+										<td width="38%">값</td>
+									</tr>
+									<tr>
+										<th class="padding-rl-clear">항목명</th>
+										<td>값</td>
+										<th class="padding-rl-clear">항목명</th>
+										<td>값</td>
+									</tr>
+								</table>
+								<!-- info table end -->
+
+								<!-- 조회 form begin -->
+								<div class="row margin-t15">
+									<form role="form" class="form-inline">
+										<label class="control-label margin-l10">검색 항목명</label>
+										<input type="text" class="form-control margin-l5"/>
+										<button type="button" class="btn btn-default">조회</button>
+									</form>
+								</div>
+								<!-- 조회 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- table begin -->
+								<div class="row">
+									<!-- info line begin -->
+									<div class="col-xs-12 margin-b5">전체 : <strong>4,877</strong> 건</div>
+									<!-- info line end -->
+
+									<!-- table begin -->
+									<div class="col-xs-12 margin-t5 margin-b5">
+										<table class="table table-vertical-line">
+						  		    <thead>
+						  		    	<tr>
+						  		    		<th width="5%">NO</th>
+													<th width="10%">위험도</th>
+													<th width="58%">취약점</th>
+													<th width="27%">취약유형</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td class="align-center">1</td>
+													<td class="align-center">8.7</td>
+													<td>Joomlal KSAdvertiser 컴포넌트 임의의 파일 업로드 취약성</td>
+													<td>input validation error</td>
+												</tr>
+												<tr>
+													<td class="align-center">2</td>
+													<td class="align-center">7.7</td>
+													<td>Joomlal KSAdvertiser 컴포넌트 임의의 파일 업로드 취약성</td>
+													<td>input validation error</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- 더보기/pagination 옵션 begin -->
+										<div class="more-option align-center">
+											<ul class="pagination">
+											  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+											  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+												<li><a href="#">2</a></li>
+												<li><a href="#">3</a></li>
+												<li><a href="#">4</a></li>
+												<li><a href="#">5</a></li>
+												<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+											</ul>
+										</div>
+										<!-- 더보기/pagination 옵션 end -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- table end -->
+							<!-- 취약점 end -->
+							</div>
+
+							<div class="tab-pane padding-r15 padding-l15" id="tab22">
+							<!-- 악성코드 begin -->
+								<!-- 조회 form begin -->
+								<div class="row">
+									<form role="form" class="form-inline">
+										<div class="col-xs-11">
+											<!-- 첫번째 줄 상세시간 begin -->
+											<div>
+												<!-- 위험도 begin -->
+										    <label class="control-label minwidth-50">위험도</label>
+												<select class="form-control margin-l5 minwidth-200">
+												  <option>전체</option>
+												</select>
+												<!-- 위험도 begin -->
+
+												<!-- 취약유형 begin -->
+										    <label class="control-label margin-l30 minwidth-50">악성코드 종류</label>
+												<select class="form-control margin-l5 minwidth-300">
+												  <option>전체</option>
+												</select>
+												<!-- 취약유형 begin -->
+											</div>
+											<!-- 첫번째 줄 상세시간 end -->
+
+											<!-- 두번째 줄 상세시간 begin -->
+											<div class="margin-t10">
+												<!-- 검색어 begin -->
+										    <label class="control-label minwidth-50">검색어</label>
+												<select class="form-control margin-l5 minwidth-200">
+												  <option>검색필드 선택</option>
+												</select>
+												<input type="text" class="form-control margin-l5 minwidth-400"/>
+												<!-- 검색어 begin -->
+											</div>
+											<!-- 두번째 줄 상세시간 end -->
+										</div>
+										<div class="col-xs-1 padding-clear"><button type="button" class="btn btn-default row2-height col-xs-11">조회</button></div>
+									</form>
+								</div>
+								<!-- 조회 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- table begin -->
+								<div class="row">
+									<!-- info line begin -->
+									<div class="col-xs-12 margin-b5">전체 : <strong>4,877</strong> 건</div>
+									<!-- info line end -->
+
+									<!-- table begin -->
+									<div class="col-xs-12 margin-t5 margin-b5">
+										<table class="table table-vertical-line inside-iconbtn">
+						  		    <thead>
+						  		    	<tr>
+						  		    		<th width="5%">NO</th>
+													<th width="10%">위험도</th>
+													<th width="25%">악성코드명</th>
+													<th width="5%">포트</th>
+													<th>악성코드 종류</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td class="align-center">1</td>
+													<td class="align-center">8.7</td>
+													<td>Android Answerbot</td>
+													<td class="align-center"><button type="button" class="btn-intable-list" data-toggle="modal" data-target=".bs-example-modal-lg"></button></td>
+													<td>back Door, Trojan, Infostealer, Downloader</td>
+												</tr>
+												<tr>
+													<td class="align-center">2</td>
+													<td class="align-center">7.7</td>
+													<td>Android Answerbot</td>
+													<td class="align-center"><button type="button" class="btn-intable-list" data-toggle="modal" data-target=".bs-example-modal-lg"></button></td>
+													<td>back Door, Trojan, Infostealer, Downloader</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- 더보기/pagination 옵션 begin -->
+										<div class="more-option align-center">
+											<ul class="pagination">
+											  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+											  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+												<li><a href="#">2</a></li>
+												<li><a href="#">3</a></li>
+												<li><a href="#">4</a></li>
+												<li><a href="#">5</a></li>
+												<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+											</ul>
+										</div>
+										<!-- 더보기/pagination 옵션 end -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- table end -->
+							<!-- 악성코드 end -->
+							</div>
+
+							<div class="tab-pane padding-r15 padding-l15" id="tab33">
+							<!-- 경고 begin -->
+								<!-- 조회 form begin -->
+								<div class="row">
+									<label class="control-label col-xs-1 margin-t5">검색어</label>
+									<select class="form-control col-xs-3">
+									  <option>검색필드 선택</option>
+									</select>
+									<input type="text" class="form-control col-xs-5 margin-r10 margin-l10"/>
+									<button type="button" class="btn btn-default col-xs-2">조회</button>
+								</div>
+								<!-- 조회 form end -->
+
+								<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+								<!-- table begin -->
+								<div class="row">
+									<!-- info line begin -->
+									<div class="col-xs-12 margin-b5">전체 : <strong>4,877</strong> 건</div>
+									<!-- info line end -->
+
+									<!-- table begin -->
+									<div class="col-xs-12 margin-t5 margin-b5">
+										<table class="table table-vertical-line">
+						  		    <thead>
+						  		    	<tr>
+						  		    		<th width="5%">NO</th>
+													<th width="20%">보고서 명</th>
+													<th>보고서 내용</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td class="align-center">1</td>
+													<td class="align-center">TCP/5000 (UPnP)</td>
+													<td>이 포트경고 보고서는 TCP/5000 포트를 대상으로 발생된 트래픽입니다.</td>
+												</tr>
+												<tr>
+													<td class="align-center">2</td>
+													<td class="align-center">TCP/5000 (UPnP)</td>
+													<td>이 포트경고 보고서는 TCP/5000 포트를 대상으로 발생된 트래픽입니다.</td>
+												</tr>
+											</tbody>
+										</table>
+										<!-- 더보기/pagination 옵션 begin -->
+										<div class="more-option align-center">
+											<ul class="pagination">
+											  <li class="disabled"><a href="#" class="glyphicon glyphicon-chevron-left"></a></li>
+											  <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+												<li><a href="#">2</a></li>
+												<li><a href="#">3</a></li>
+												<li><a href="#">4</a></li>
+												<li><a href="#">5</a></li>
+												<li><a href="#" class="glyphicon glyphicon-chevron-right"></a></li>
+											</ul>
+										</div>
+										<!-- 더보기/pagination 옵션 end -->
+									</div>
+									<!-- table end -->
+								</div>
+								<!-- table end -->
+							<!-- 경고 end -->
+							</div>
+				  	</div>
+						<!-- scroll tab content end -->
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : detail info 2 end -->
+
+		<!-- Modal : packet begin -->
+		<div class="modal fade" id="modal-packet" tabindex="-1" role="dialog" aria-labelledby="modal-packet" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-ml"><!-- modal 사이즈 기본과 라지의 중간 사이즈인 770 : modal-ml -->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>ROWDATA</h4>
+		      </div>
+		      <div class="modal-body modal-body-white padding-all-7">
+						<!-- tree begin -->
+						<div class="tree margin-b10">
+							<ul class="scroll-height-150">
+								<li><a href="#"><span class="icon-plus-sign"></span>MAC Header</a>(3)
+									<ul>
+										<li><a href="#">- source - ...</a></li>
+										<li>
+											<a href="#"><span class="icon-plus-sign"></span>Destination</a> (1)
+											<ul>
+												<li><a href="#">- Destination ..</a></li>
+												<li><a href="#">- Destination ..</a></li>
+											</ul>
+										</li>
+										<li><a href="#">- Destination ..</a></li>
+									</ul>
+								</li>
+								<li><a href="#"><span class="icon-plus-sign"></span>IP v4 Header</a>(1)
+									<ul>
+										<li><a href="#">- IP v4</a></li>
+									</ul>
+								</li>
+								<li><a href="#"><span class="icon-plus-sign"></span>TCP Header</a>(1)
+									<ul>
+										<li><a href="#">- TCP</a></li>
+									</ul>
+								</li>
+								<li><a href="#">- Data</a></li>
+							</ul>
+						</div>
+						<!-- tree end -->
+						<textarea class="form-control col-xs-7" rows="7">
+						</textarea>
+
+						<textarea class="form-control maxwidth-300 pull-right" rows="7">
+						</textarea>
+		      </div>
+		      <div class="modal-footer">
+				   <form class="form-inline">
+							<label class="control-label">Character Set</label>
+							<select class="form-control">
+								<option>Korean - 949 (this locale)</option>
+							</select>
+							<button type="button" class="btn btn-default">선택복사</button>
+		        	<button type="button" class="btn btn-default">ASCII 전체복사</button>
+						</form>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : packet begin -->
+
+        <!-- Modal : ip setting begin -->
+        <div class="modal fade bs-example-modal-sm" id="modal-ip-setting" tabindex="-1" role="dialog" aria-labelledby="modal-ip-setting" aria-hidden="true">
+            <!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>IP 셋팅</h4>
+              </div>
+              <div class="modal-body modal-body-gray-padding">
+                    <!-- 조회 form begin -->
+                    <form role="form" class="form-inline">
+                        <div class="col-xs-12 padding-clear">
+                            <!-- 입력방식 begin -->
+                            <label class="control-label col-xs-3 padding-clear">입력방식</label>
+                            <select class="form-control col-xs-9">
+                                <option>범위지정</option>
+                                <option>마스크</option>
+                            </select>
+                            <!-- 입력방식 end -->
+                        </div>
+                    </form>
+                    <!-- 조회 form end -->
+                </div>
+                <div class="modal-body-white-padding border-solid-top overflow-hidden">
+                    <form role="form" class="form-inline">
+                        <div class="col-xs-12 padding-clear">
+                            <!-- 범위 지정 begin -->
+                            <label class="control-label col-xs-3 padding-clear">시작 IP</label>
+                            <input type="text" class="form-control col-xs-9"/>
+                            <label class="control-label col-xs-3 margin-t10 padding-clear">끝 IP</label>
+                            <input type="text" class="form-control margin-t10 col-xs-9"/>
+                             <!-- 범위 지정 end -->
+
+                            <!-- 마스크 begin
+                            <label class="control-label col-xs-3 padding-clear">IP 주소</label>
+                            <input type="text" class="form-control col-xs-9"/>
+                            <label class="control-label col-xs-3 margin-t10 padding-clear">MASK</label>
+                            <input type="text" class="form-control margin-t10 col-xs-4"/>
+                            마스크 end -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default">확인</button>
+                    <button type="button" class="btn btn-default">취소</button>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal : ip setting end -->
+				
+		<!-- Modal : 패턴 세부설명 begin -->
+		<div class="modal fade" id="modal-pattern-detail" tabindex="-1" role="dialog" aria-labelledby="modal-pattern-detail" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+					<form class="form-inline" role="form">
+		      	<div class="modal-header">
+		      	  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		      	  <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>패턴 세부설명</h4>
+		      	</div>
+		      	<div class="modal-body modal-body-white-padding">
+
+							<!-- 상세 정보 view table begin -->
+							<div class="scroll-height-400">
+								<!-- 일반사항 begin -->
+								<div class="icon-subtitle margin-t5">일반사항</div>
+								<div class="border-dotted-all padding-all-5">
+									<ol>
+										<li>하나의 룰은 룰 헤더와 룰 옵션 부분으로 구성됩니다.</li>
+										<li>룰 헤더와 룰 옵션은 "(", ")"으로 구분됩니다.</li>
+									</ol>
+								</div>
+								<!-- 일반사항 end -->
+								
+								<!-- 룰헤더 begin -->
+								<div class="icon-subtitle">룰헤더</div>
+								<div class="border-dotted-all padding-all-5">
+									<ol>
+										<li>룰 헤더는 총 7개의 필드로 구성됩니다.</li>
+										<li>필드와 필드는 공백 문자로 구분합니다.</li>
+										<li>룰 헤더는 "룰타입", "프로토콜", "Src주소", "Src포트","방향", "Dst주소", "Dst포트" 필드로 구성됩니다.
+											<ol>
+												<li>"룰타입"- "alert"을 지정합니다.</li>
+												<li>"프로토콜"- 다음 4가지 프로토콜을 지정할 수 있습니다.
+													<ol>
+														<li>"tcp"</li>
+														<li>"udp"</li>
+														<li>"icmp"</li>
+														<li> "ip" : "tcp" 또는 "udp" 또는 "icmp"를 의미합니다.</li>
+													</ol>	
+												</li>
+												<li>"Src주소", "Dst주소"
+													<ol>
+														<li>임의 호스트 : "any"</li>
+														<li>특정 IP : "x.x.x.x", 1≤x≤255</li>
+														<li> IP/Netbit : x.x.x.x{/y}?, 1≤x≤255, 1≤y≤32- 예: 127.0.0.1/32, !211.1.1.1/32"!"를 붙여서 exeption IP 주소를 지정할 수 있습니다.</li>
+													</ol>	
+												</li>
+											</ol>
+										</li>
+									</ol>
+								</div>
+								<!-- 룰헤더 end -->
+							</div>
+							<!-- 상세 정보 view table end -->
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal : 패턴 세부설명 end -->
+		
+		<!-- Modal : packet begin -->
+		<div class="modal fade" id="modal-exception" tabindex="-1" role="dialog" aria-labelledby="modal-exception" aria-hidden="true">
+			<!-- button에 지정했던 data-target이 위의 id와 같아야 합니다. -->
+		  <div class="modal-dialog modal-ml"><!-- modal 사이즈 기본과 라지의 중간 사이즈인 770 : modal-ml -->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><span class="modal-icon-info"></span>패턴선택</h4>
+		      </div>
+		      <div class="modal-body modal-body-white padding-all-10">
+						<!-- tree begin -->
+						<div class="tree margin-b10 col-xs-4 padding-clear">
+							<!-- 공격명 begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">공격명</label>
+								<input type="text" class="form-control col-xs-7"/>
+								<button type="button" class="btn btn-default margin-l5">검색</button>
+							</div>
+							<!-- 공격명 end -->
+							<ul class="maxwidth-250">
+								<li><a href="#"><span class="icon-plus-sign"></span>MAC Header</a>(3)
+									<ul>
+										<li><a href="#">- source - ...</a></li>
+										<li>
+											<a href="#"><span class="icon-plus-sign"></span>Destination</a> (1)
+											<ul>
+												<li><a href="#">- Destination ..</a></li>
+												<li><a href="#">- Destination ..</a></li>
+											</ul>
+										</li>
+										<li><a href="#">- Destination ..</a></li>
+									</ul>
+								</li>
+								<li><a href="#"><span class="icon-plus-sign"></span>IP v4 Header</a>(1)
+									<ul>
+										<li><a href="#">- IP v4</a></li>
+									</ul>
+								</li>
+								<li><a href="#"><span class="icon-plus-sign"></span>TCP Header</a>(1)
+									<ul>
+										<li><a href="#">- TCP</a></li>
+									</ul>
+								</li>
+								<li><a href="#">- Data</a></li>
+							</ul>
+						</div>
+						<div class="col-xs-8 border-dotted-left">
+							<!-- title begin -->
+							<div class="col-xs-12 padding-clear margin-b20 font-size-15">공격명 : <strong>공격명</strong></div>
+							<!-- title end -->	
+							<!-- 소스ip begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">소스 IP</label>
+								<label class="control-label col-xs-2 padding-clear">시작 IP</label>
+								<input type="text" class="form-control col-xs-3"/>
+								<label class="control-label col-xs-2">끝 IP</label>
+								<input type="text" class="form-control col-xs-3"/>
+							</div>
+							<!-- 소스ip end -->
+							<!-- 포트 begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">포트</label>
+								<input type="text" class="form-control col-xs-10"/>
+							</div>
+							<!-- 포트 end -->
+							<!-- 네트워크 begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">네트워크</label>
+								<select class="form-control col-xs-10">
+									<option>전체</option>
+								</select>
+							</div>
+							<!-- 네트워크 end -->
+							<!-- 대상ip begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">대상 IP</label>
+								<label class="control-label col-xs-2 padding-clear">시작 IP</label>
+								<input type="text" class="form-control col-xs-3"/>
+								<label class="control-label col-xs-2">끝 IP</label>
+								<input type="text" class="form-control col-xs-3"/>
+							</div>
+							<!-- 대상ip end -->
+							<!-- 포트 begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">포트</label>
+								<input type="text" class="form-control col-xs-10"/>
+							</div>
+							<!-- 포트 end -->
+							<!-- 네트워크 begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">네트워크</label>
+								<select class="form-control col-xs-10">
+									<option>전체</option>
+								</select>
+							</div>
+							<!-- 네트워크 end -->
+							<!-- 프로토콜 begin -->
+							<div class="form-group col-xs-12 padding-clear margin-b10">
+						    <label class="control-label col-xs-2 padding-clear">프로토콜</label>
+								<select class="form-control col-xs-10">
+									<option>ANY</option>
+								</select>
+							</div>
+							<!-- 프로토콜 end -->
+						</div>
+						<!-- tree end -->
+		      </div>
+		      <div class="modal-footer">
+				   <form class="form-inline">
+							<button type="button" class="btn btn-primary">확인</button>
+		        	<button type="button" class="btn btn-default">취소</button>
+						</form>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Modal : packet begin -->
+
+
+			<!-- ================== BASE JS beign ================== -->
+			<script src="js/jquery-1.8.2.min.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+			<script src="js/jquery.slimscroll.min.js"></script>
+			<!--[if lt IE 9]>
+				<script src="assets/crossbrowserjs/html5shiv.js"></script>
+				<script src="assets/crossbrowserjs/respond.min.js"></script>
+				<script src="assets/crossbrowserjs/excanvas.min.js"></script>
+			<![endif]-->
+			<script src="js/jquery.scrolltabs.js"></script>
+			<script src="js/jquery.mousewheel.js"></script>
+			<script src="js/tms-js.js"></script>
+			<!-- ================== BASE JS end ================== -->
+			<script>
+				var tabs = null;
+				$(document).ready(function() {
+					tabs = $('#scroll-tab').scrollTabs();
+
+					$('button.closetab').click(function(){
+						var panelId = $(this).closest("a").attr("href");
+						$(this).closest('li').remove();
+						$(panelId).remove();
+						$('#scroll-tab').tabs( "refresh" );
+					});
+
+					$('.policy-list').slimScroll({
+					    height: '500px'
+					});
+				});
+			</script>
+		</body>
+</html>

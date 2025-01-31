@@ -1,0 +1,70 @@
+<!-- page-container begin -->
+<div id="page-container" class="fade page-sidebar-fixed page-header-fixed in page-sidebar-minified">
+	
+	<!-- header begin -->
+	<div id="header" class="header navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="#dashboard" class="navbar-brand brand-image"><span class="navbar-logo"></span>TESS TAS logo</a>
+				
+				<button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			
+			<!-- breadcrumb begin -->
+			<div class="navbar-header breadcrumb">
+				<span><a style="text-decoration:none"></a></span>
+				<span class="navigation"></span>
+				<span class="active"></span>
+			</div>
+			<!-- breadcrumb end -->
+		
+			<ul class="nav navbar-nav navbar-right">
+				<!-- <li><a onclick="javascript:PopupWindow();">popup1</a></li> -->
+				<li class='alarm-msg'></li>
+				<li class="service-time"></li>
+				<li><i class="fa fa-user pull-left margin-t10 user-icon"></i><a class='strUserName pull-right padding-l5 padding-r5'></a></li>
+				<li class="logout">
+					<button type="button" class="btn btn-default btn-info col-xs-12 margin-t6">
+						<span class="glyphicon glyphicon-log-out"></span> <%= locale.logout %>
+					</button>
+				</li>				
+			</ul>
+		</div>
+	</div>
+	<!-- header end -->
+
+	<!-- navigation bar begin -->
+	<div id="sidebar" class="sidebar">
+		<!-- sidebar scrollbar begin-->
+		<div data-scrollbar="true" data-height="100%">
+		</div>
+		<!-- sidebar scrollbar end -->
+	</div>
+	<div class="sidebar-bg"></div>
+	<!-- navigation bar end -->
+
+	<!-- content begin -->
+	<div class="content">
+		<div id="content" class="row">
+		</div>
+	</div>
+	<!-- content end -->
+	
+	<!-- footer begin -->
+	<div class="footer">
+		Copyright ⓒ KORNIC GLORY CO., Ltd. All Rights Reserved
+		<span id="about"><i class="fa fa-info-circle"></i>&nbsp;<%= locale.about%></span>
+	</div>
+	<!-- footer end -->
+</div>
+<!-- container end -->
+
+<!-- alert msg begin -->
+<div class="header-alert">
+	<!-- header-alert 클래스 기본은 경고의 붉은 컬러입니다. 경고의 오랜지 컬러는 warning를 추가해주세요 -->
+	<span class="alert-wrap"></span>
+	<button type="button" data-dismiss="alert" class="close alert-close">X</button>
+</div>
+<!-- alert msg end -->

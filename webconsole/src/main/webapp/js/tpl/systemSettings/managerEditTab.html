@@ -1,0 +1,118 @@
+<!-- <form class="form-inline managerForm" role="form"> -->
+<!--로그인 설정정보-->
+<div class="icon-subtitle"><%= locale.loginConfig %></div>
+<div class="border-dotted-all overflow-hidden padding-t5">
+    <span class="col-xs-12 description"><%= locale.loginConfigInfo %></span>
+    <table class="view-table col-xs-12">
+        <tr class="border-clear">
+            <th width="30%"><%= locale.lockFailCount %></th>
+            <td>
+                <select id="lofinFailCount">
+                    <option value="3" <% if (loginFailCountModel.value == '3') { %>selected='selected'<% } %>>3</option>
+                    <option value="4" <% if (loginFailCountModel.value == '4') { %>selected='selected'<% } %>>4</option>
+                    <option value="5" <% if (loginFailCountModel.value == '5') { %>selected='selected'<% } %>>5</option>
+                </select>
+                (<%= locale.loginCount %>)
+            </td>
+        </tr>
+        <tr class="border-clear">
+            <th width="30%"><%= locale.lockTime %></th>
+            <td>
+                <select id="lockTime">
+                    <option value="5" <% if (loginLockTimeModel.value == '5') { %>selected='selected'<% } %>>5</option>
+                    <option value="10" <% if (loginLockTimeModel.value == '10') { %>selected='selected'<% } %>>10</option>
+                    <option value="15" <% if (loginLockTimeModel.value == '15') { %>selected='selected'<% } %>>15</option>
+                    <option value="20" <% if (loginLockTimeModel.value == '20') { %>selected='selected'<% } %>>20</option>
+                    <option value="30" <% if (loginLockTimeModel.value == '30') { %>selected='selected'<% } %>>30</option>
+                </select>
+                (<%= locale.timeMin %>)
+            </td>
+        </tr>
+        <tr class="border-clear">
+            <th width="30%"><%= locale.sessionTime %></th>
+            <td>
+            	<select id="sessionTime">
+                    <option value="5" <% if(sessionModel.value == '5') { %>selected='selected'<% } %>>5</option>
+                    <option value="10" <% if(sessionModel.value == '10') { %>selected='selected'<% } %>>10</option>
+                </select>
+                (<%= locale.timeMin %>)
+            </td>
+        </tr>
+        <tr>
+            <th style="height: 80px">
+                <%= locale.loginAuthIp %>
+            </th>
+            <td>
+                <input class="form-control col-xs-4 margin-r5 loginIpInput" type="text">
+                <button class="btn btn-default loginIpInsertBtn margin-r5" type="button "><%= locale.add %></button>
+                <button class="btn btn-default loginIpDeleteBtn" type="button"><%= locale.remove %></button>
+                <select class="form-control float-clear col-xs-6 margin-t10 loginIpSelect" size="3" multiple="">
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<!-- 이메일 서버 설정 begin -->
+<div class="icon-subtitle"><%= locale.emailServerSettings %></div>
+<div class="border-dotted-all overflow-hidden padding-t5">
+    <span class="col-xs-12 description"><%= locale.setUpAnEmailServerForSendingEmailAlerts %></span>
+    <table class="view-table col-xs-12">
+        <tr class="border-clear">
+            <th width="30%"><%= locale.emailServer %></th>
+            <td><input type="text" class="form-control col-xs-6" name="strEmailServerInput" id="strEmailServerInput" value="<%= model.emailServer %>" maxlength="50"/></td>
+        </tr>
+        <tr class="border-clear">
+            <th width="30%"><%= locale.emailAccount %></th>
+            <td><input type="text" class="form-control col-xs-6" id="strEmailUserIdInput" value="<%= model.emailUserId %>" maxlength="50"/></td>
+        </tr>
+        <tr class="border-clear">
+            <th width="30%"><%= locale.emailPwd %></th>
+            <td><input type="password" class="form-control col-xs-6" id="strEmailUserPwdInput" maxlength="50" value="<%= model.emailUserPwd %>" <%= model.emailPwdCss %> /></td>
+        </tr>
+        <tr class="border-clear">
+            <th width="30%"><%= locale.protocol %> / <%= locale.port %></th>
+            <td>
+                <select class="form-control col-xs-3" name="strEmailSecurity" id="strEmailSecurity">
+<!--                    <option value="-">사용안함</option>-->
+                    <option value="TLS">TLS</option>
+                    <option value="SSL">SSL</option>
+                </select>
+                <input type="text" class="form-control col-xs-3" name="strEmailPortInput" id="strEmailPortInput" value="<%= model.emailPort %>" maxlength="5"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- 이메일 서버 설정 end -->
+
+<!--SFTP 설정-->
+<div class="icon-subtitle"><%= locale.sftpSetting %></div>
+<div class="border-dotted-all overflow-hidden padding-t5">
+    <span class="col-xs-12 description"><%= locale.sftpComment %></span>
+    <table class="view-table col-xs-12">
+        <tr class="border-clear">
+            <th width="30%"><%= locale.sftpId %></th>
+            <td><input type="text" class="form-control col-xs-6" name="sftpId" id="sftpId" value="<%= sftpId.value %>" maxlength="15"/></td>
+        </tr>
+        <tr class="border-clear">
+            <th width="30%"><%= locale.sftpPwd %></th>
+            <td><input type="password" class="form-control col-xs-6" name="sftpPwd" id="sftpPwd" value="<%= sftpPwd.value %>" maxlength="30"/></td>
+        </tr>
+    </table>
+</div>
+<!--SFTP 설정 END-->
+
+<!-- 센서 전처리기 히트 수 begin -->
+<!--<div class="icon-subtitle"><%= locale.preProcessCount %>&nbsp;<%= locale.setting%></div>
+<div class="border-dotted-all overflow-hidden padding-t5">
+    <span class="col-xs-12 description"><%= locale.setPreProcessCount %></span>
+    <table class="view-table col-xs-12">
+        <tr class="border-clear">
+            <th width="30%"><%= locale.preProcessCount %></th>
+            <td><input type="text" id="preProcessCount" name="preProcessCount" class="form-control col-xs-4 preProcessCount" value="<%= sensorModel.nHyperScanHitCount %>" maxlength="3"/></td>
+        </tr>
+    </table>
+</div>-->
+<!-- 센서 전처리기 히트 수 end -->
+    
+<!-- </form> -->

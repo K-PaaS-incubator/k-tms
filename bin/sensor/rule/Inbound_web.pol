@@ -1,0 +1,19 @@
+#Common Section
+[COMMON]
+Class=SYSTEM_INBOUND
+Version=1.0.0.0
+Time=2007/02/26 18:53:38
+Description=Infosec Technologies
+[/COMMON]
+
+#Info Section
+[INFO]
+Count=1
+[/INFO]
+
+[REC]
+Enable=false
+Type=
+NicInfo=
+IPInfo=
+[/REC]

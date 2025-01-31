@@ -1,0 +1,66 @@
+<!-- info table begin -->
+<table class="view-table">
+	<tr>
+		<th width="8%" class="padding-rl-clear">Service IP</th>
+		<td width="42%"><%= condition.strIp %></td>
+		<th width="8%" class="padding-rl-clear">Service</th>
+		<td width="42%"><%= condition.serverPort %>(<%= condition.serverOrgPort %>)</td>
+	</tr>
+	<tr>
+		<th width="12%" class="padding-rl-clear"><%= locale.search.period %></th>
+		<td width="76%" colspan="3"><%= condition.startDateInput %> ~ <%= condition.endDateInput %></td>
+	</tr>
+</table>
+
+<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+
+<!-- table begin -->
+<div class="row">
+	<!-- info line begin -->
+	<div class="col-xs-12 margin-b5">
+		<%= locale.all %> : <strong id="totalCount"></strong> <%= locale.dashboard.count %>
+	</div>
+	<!-- info line end -->
+
+	<!-- table begin -->
+	<div class="col-xs-12 margin-t5 margin-b5 progressbar">
+		<table class="table table-vertical-line table-fixed">
+                    <colgroup>
+                        <col width="7%"/>
+                        <col width="22%"/>
+                        <col width="20%"/>
+                        <col width="20%"/>
+                        <col width="11%"/>
+                        <col width="20%"/>
+                    </colgroup>
+			<thead>
+			<% if( condition.sessionDirection == 0 ) { %>
+				<tr>
+					<th class="width-number"><%= locale.rank %></th>
+					<th>Client IP</th>
+					<th>Client→Server</br>(byte)</th>
+					<th>Server→Client</br>(byte)</th>
+					<th><%=locale.total%> (byte)</th>
+					<th><%=locale.time%></th>
+				</tr>
+			<% } %>
+			<% if( condition.sessionDirection != 0 ) { %>
+				<tr>
+					<th class="width-number"><%= locale.rank %></th>
+					<th>Server IP</th>
+					<th>Server→Client</br>(byte)</th>
+					<th>Client→Server</br>(byte)</th>
+					<th><%=locale.total%> (byte)</th>
+					<th><%=locale.time%></th>
+				</tr>			
+			<% } %>	
+			</thead>
+			<tbody></tbody>
+		</table>
+		<!-- 더보기/pagination 옵션 begin -->
+		<div class="more-option align-center"></div>
+		<!-- 더보기/pagination 옵션 end -->
+	</div>
+	<!-- table end -->
+</div>
+<!-- table end -->

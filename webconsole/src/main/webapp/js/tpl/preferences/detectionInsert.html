@@ -1,0 +1,205 @@
+<!--<ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#tab1" role="tab" data-toggle="tab"><span class="info"></span><%= locale.registInfo %></a></li>
+</ul>-->
+<!-- tab header end -->
+
+<!-- tab content begin -->
+<div class="tab-content">
+    <form class="form-inline detectionCreationForm" role="form">
+        <!-- 등록정보 begin -->
+        <div class="tab-pane active" id="tab1">
+        <div class="title"><%=locale.detectionFilterviewSetting%></div>
+            <div class="icon-subtitle"><%= locale.outline %></div>
+            <table class="table table-vertical-line table-striped">
+                <tbody>
+                    <tr>
+                        <td width="10%"><%= locale.filterviewName %> *</td>
+                        <td><input type="text" class="form-control col-xs-4 strFilterViewName" name="strFilterViewName" id="strFilterViewName" maxlength="50" /></td>
+                    </tr>
+                    <tr>
+                        <td><%= locale.comment %></td>
+                        <td><textarea class="form-control col-xs-10 strDescription" rows="7" name="strDescription" id="strDescription"></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="icon-subtitle"><%= locale.detailSetting %></div>
+
+            <table class="table table-vertical-line table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:10%;"></th>
+                        <th style="width:20%;"><%= locale.type %></th>
+                        <th style="width:35%;"><%= locale.searchCondition %></th>
+                        <th style="width:35%;"><%= locale.selectColor %></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="orgSensor-toggle" name="orgSensor-toggle"></td>
+                        <td><%= locale.targetType %></td>
+                        <td><span id="targetType"></span></td>
+                        <td class="align-center">											
+                            <input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground0" value="0" checked><label for="orgSensorBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground1" value="1"><label for="orgSensorBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground2" value="2"><label for="orgSensorBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground3" value="3"><label for="orgSensorBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="orgSensorBackground" id="orgSensorBackground4" value="4"><label for="orgSensorBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="attackName-toggle" name="attackName-toggle"></td>
+                        <td><%= locale.attackName %></td>
+                        <td><span id=""><input type="text" class="form-control" id="attackNameInput" maxlength="256"></span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="attackNameBackground" id="attackNameBackground0" value="0" checked><label for="attackNameBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="attackNameBackground" id="attackNameBackground1" value="1"><label for="attackNameBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="attackNameBackground" id="attackNameBackground2" value="2"><label for="attackNameBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="attackNameBackground" id="attackNameBackground3" value="3"><label for="attackNameBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="attackNameBackground" id="attackNameBackground4" value="4"><label for="attackNameBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="attackType-toggle" name="attackType-toggle"></td>
+                        <td><%= locale.attackType %></td>
+                        <td><span id="">
+                                <select class="form-control minwidth-150" id="attackTypeSelect" name="attackTypeSelect">
+                                    <option value=""><%= locale.noSelect %></option>
+                                </select>
+                            </span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="attackTypeBackground" id="attackTypeBackground0" value="0" checked><label for="attackTypeBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="attackTypeBackground" id="attackTypeBackground1" value="1"><label for="attackTypeBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="attackTypeBackground" id="attackTypeBackground2" value="2"><label for="attackTypeBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="attackTypeBackground" id="attackTypeBackground3" value="3"><label for="attackTypeBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="attackTypeBackground" id="attackTypeBackground4" value="4"><label for="attackTypeBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="attackIp-toggle" name="attackIp-toggle"></td>
+                        <td><%= locale.attackIp %></td>
+                        <td><span id=""><input type="text" class="form-control" id="attackIpInput"></span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="attackIpBackground" id="attackIpBackground0" value="0" checked><label for="attackIpBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="attackIpBackground" id="attackIpBackground1" value="1"><label for="attackIpBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="attackIpBackground" id="attackIpBackground2" value="2"><label for="attackIpBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="attackIpBackground" id="attackIpBackground3" value="3"><label for="attackIpBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="attackIpBackground" id="attackIpBackground4" value="4"><label for="attackIpBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="victimIp-toggle" id="victimIp-toggle"></td>
+                        <td><%= locale.dashboard.victimIpType %></td>
+                        <td><span id=""><input type="text" class="form-control" id="victimIpInput"></span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="victimIpBackground" id="victimIpBackground0" value="0" checked><label for="victimIpBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="victimIpBackground" id="victimIpBackground1" value="1"><label for="victimIpBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="victimIpBackground" id="victimIpBackground2" value="2"><label for="victimIpBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="victimIpBackground" id="victimIpBackground3" value="3"><label for="victimIpBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="victimIpBackground" id="victimIpBackground4" value="4"><label for="victimIpBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="attackPort-toggle" name="attackPort-toggle"></td>
+                        <td><%= locale.attackPort %></td>
+                        <td><span id=""><input type="text" class="form-control" id="attackPortInput"></span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="attackPortBackground" id="attackPortBackground0" value="0" checked><label for="attackPortBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="attackPortBackground" id="attackPortBackground1" value="1"><label for="attackPortBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="attackPortBackground" id="attackPortBackground2" value="2"><label for="attackPortBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="attackPortBackground" id="attackPortBackground3" value="3"><label for="attackPortBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="attackPortBackground" id="attackPortBackground4" value="4"><label for="attackPortBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="victimPort-toggle" name="victimPort-toggle"></td>
+                        <td><%= locale.victimPort %></td>
+                        <td><span id=""><input type="text" class="form-control" id="victimPortInput"></span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="victimPortBackground" id="victimPortBackground0" value="0" checked><label for="victimPortBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="victimPortBackground" id="victimPortBackground1" value="1"><label for="victimPortBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="victimPortBackground" id="victimPortBackground2" value="2"><label for="victimPortBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="victimPortBackground" id="victimPortBackground3" value="3"><label for="victimPortBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="victimPortBackground" id="victimPortBackground4" value="4"><label for="victimPortBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="winbound-toggle" name="winbound-toggle"></td>
+                        <td><%= locale.direction %></td>
+                        <td><span id="">
+                                <select class="form-control minwidth-150" id="winBoundSelect" name="winBoundSelect">
+                                    <option value=""><%= locale.noSelect %></option>
+                                    <option value="3">Inbound</option>
+                                    <option value="2">Outbound</option>
+                                </select>
+                            </span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="winboundBackground" id="winboundBackground0" value="0" checked><label for="winboundBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="winboundBackground" id="winboundBackground1" value="1"><label for="winboundBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="winboundBackground" id="winboundBackground2" value="2"><label for="winboundBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="winboundBackground" id="winboundBackground3" value="3"><label for="winboundBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="winboundBackground" id="winboundBackground4" value="4"><label for="winboundBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="severity-toggle" name="severity-toggle"></td>
+                        <td><%= locale.severity %></td>
+                        <td colspan="2">
+                            <div class="checkbox margin-r20">
+                                <label>
+                                    <input type="checkbox" id="severityHCheck" name="severityCheck">
+                                    <span class="threat-bg-lv5 rect"></span>
+                                    High
+                                </label>
+                            </div>
+                            <div class="checkbox margin-r20">
+                                <label>
+                                    <input type="checkbox" id="severityMCheck" name="severityCheck">
+                                    <span class="threat-bg-lv4 rect"></span>
+                                    Medium
+                                </label>
+                            </div>
+                            <div class="checkbox margin-r20">
+                                <label>
+                                    <input type="checkbox" id="severityLCheck" name="severityCheck">
+                                    <span class="threat-bg-lv3 rect"></span>
+                                    Low
+                                </label>
+                            </div>
+                            <div class="checkbox margin-r20">
+                                <label>
+                                    <input type="checkbox" id="severityICheck" name="severityCheck">
+                                    <span class="threat-bg-lv2 rect"></span>
+                                    Info
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+<!--
+                    <% if (SYSTEM_TYPE == 2) { %>
+                    <tr>
+                        <td class="align-center"><input type="checkbox" id="ucCreateLogType-toggle" name="ucCreateLogType-toggle"></td>
+                        <td><%= locale.block %></td>
+                        <td><span id="">
+                                <select class="form-control minwidth-150" id="ucCreateLogTypeSelect" name="ucCreateLogTypeSelect">
+                                    <option value=""><%= locale.noSelect %></option>
+                                    <option value="0"><%= locale.block %></option>
+                                    <option value="1"><%= locale.detection %></option>
+                                </select>
+                            </span></td>
+                        <td class="align-center">
+                            <input type="radio" class="hidden" name="ucCreateLogTypeBackground" id="ucCreateLogTypeBackground0" value="0" checked><label for="ucCreateLogTypeBackground0" class="threat-bg-gray"></label>
+                            <input type="radio" class="hidden" name="ucCreateLogTypeBackground" id="ucCreateLogTypeBackground1" value="1"><label for="ucCreateLogTypeBackground1" class="threat-bg-red"></label>
+                            <input type="radio" class="hidden" name="ucCreateLogTypeBackground" id="ucCreateLogTypeBackground2" value="2"><label for="ucCreateLogTypeBackground2" class="threat-bg-orange"></label>
+                            <input type="radio" class="hidden" name="ucCreateLogTypeBackground" id="ucCreateLogTypeBackground3" value="3"><label for="ucCreateLogTypeBackground3" class="threat-bg-green"></label>
+                            <input type="radio" class="hidden" name="ucCreateLogTypeBackground" id="ucCreateLogTypeBackground4" value="4"><label for="ucCreateLogTypeBackground4" class="threat-bg-blue"></label>
+                        </td>
+                    </tr>
+                    <% } %>
+-->
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!-- 등록정보 end -->
+</div>	

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemStatus.DbUsageMapper">
+
+	<resultMap type="DbUsageVO" id="dbUsageMap">
+		<result property="ltablespaceindex" column="LTABLESPACEINDEX" />
+		<result property="strName" column="STRNAME" />
+		<result property="tmoccur" column="TMCUR" />
+		<result property="dblTotal" column="DBLTOTAL" />
+		<result property="dblUsed" column="DBLUSED" />
+		<result property="dblSpace" column="DBLSPACE" />
+	</resultMap>
+	
+	<select id="selectDbUsageList" parameterType="java.util.List" resultMap="dbUsageMap">
+		SELECT B.LTABLESPACEINDEX, B.STRNAME, DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i:%s') AS TMCUR, DBLTOTAL, DBLUSED, (DBLTOTAL-DBLUSED) AS DBLSPACE
+		FROM(
+		  SELECT LSYSTEMLOGINDEX, TMCUR, 
+		  LTABLESPACEINDEX, DBLTOTAL, DBLUSED
+		  FROM 
+			<foreach item="item" index="index" collection="list">
+			      ${item.name}
+			</foreach>
+		  WHERE TMCUR = (
+		  	SELECT MAX(DISTINCT TMCUR) AS TMCUR 
+		  	FROM 
+			<foreach item="item" index="index" collection="list">
+			      ${item.name}
+			</foreach>
+		  )
+		  ORDER BY LTABLESPACEINDEX ASC
+		) A, SYSTEM_TABLESPACE B
+		WHERE A.LTABLESPACEINDEX = B.LTABLESPACEINDEX
+		ORDER BY LTABLESPACEINDEX ASC
+	</select>
+	
+	<resultMap type="ManagerStateVO" 		id="managerStateMap">
+		<result property="lsystemlogIndex" 	column="LSYSTEMLOGINDEX" />
+		<result property="dwCpuSpeed" 		column="DWCPUSPEED" />
+		<result property="dwCpuNum" 		column="DWCPUNUM" />
+		<result property="dblcurCpuUsage" 	column="DBLCURCPUUSAGE" />
+		<result property="dblcurMemUsed" 	column="DBLCURMEMUSED" />
+		<result property="dwMemTotal" 		column="DWMEMTOTAL" />
+		<result property="dwHddUsed" 		column="DWHDDUSED" />
+		<result property="dwHddTotal" 		column="DWHDDTOTAL" />
+		<result property="dwProcessNum" 	column="DWPROCESSNUM" />
+		<result property="tmoccur" 			column="TMCUR" />
+	</resultMap>
+        
+	<resultMap type="ManagerStateVO" 		id="sensorStateMap">
+		<result property="lsystemlogIndex" 	column="LSYSTEMLOGINDEX" />
+		<result property="dwCpuSpeed" 		column="LCPUSPEED" />
+		<result property="dwCpuNum" 		column="NCPUNUM" />
+		<result property="dblcurCpuUsage" 	column="NCPUUSAGE" />
+		<result property="dblcurMemUsed" 	column="DBLMEMUSED" />
+		<result property="dwMemTotal" 		column="DBLMEMTOTAL" />
+		<result property="dwHddUsed" 		column="DBLHDDUSED" />
+		<result property="dwHddTotal" 		column="DBLHDDTOTAL" />
+		<result property="dwProcessNum" 	column="LPROCESSNUM" />
+		<result property="tmoccur" 			column="TMCUR" />
+	</resultMap>
+	
+	<select id="selectManagerStateList" parameterType="java.util.List" resultMap="sensorStateMap">
+            SELECT DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i:%s') AS TMCUR, LCPUSPEED, NCPUNUM, NCPUUSAGE, DBLMEMUSED, DBLMEMTOTAL, DBLHDDUSED, DBLHDDTOTAL, LPROCESSNUM 
+            FROM
+            <foreach item="item" index="index" collection="list">
+                ${item.name}
+            </foreach>
+            ORDER BY TMCUR DESC
+            LIMIT 1
+        </select>
+        
+	<resultMap type="ChartVO" id="managerStateGraphDataMap">
+		<result property="time" column="TMCUR" />
+		<result property="ddata" column="GRAPH_VALUE" />
+		<result property="minDData" column="MIN_VALUE" />
+		<result property="maxDData" column="MAX_VALUE" />
+		<result property="avgData" column="AVG_VALUE" />
+	</resultMap>
+
+	
+	<select id="selectManagerStateCpuUsedGraphData" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i') AS TMCUR, 
+			TIME_INDEX, 
+			GRAPH_VALUE
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    NCPUUSAGE AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+                        ORDER  BY TIME_INDEX ASC
+	</select>
+        
+	<select id="selectManagerStateCpuUsedGraphDataMinMaxAvg" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT 
+			MIN(GRAPH_VALUE) MIN_VALUE, 
+			MAX(GRAPH_VALUE) MAX_VALUE, 
+			ROUND(AVG(GRAPH_VALUE), 2) AVG_VALUE 
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    NCPUUSAGE AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+	</select>
+	
+	<select id="selectManagerStateMemUsedGraphData" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i') AS TMCUR, 
+			TIME_INDEX, 
+			GRAPH_VALUE
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    ROUND((DBLMEMUSED * 100)/DBLMEMTOTAL,2) AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+                        ORDER  BY TIME_INDEX ASC
+	</select>
+        
+	<select id="selectManagerStateMemUsedGraphDataMinMaxAvg" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT 
+			MIN(GRAPH_VALUE) MIN_VALUE, 
+			MAX(GRAPH_VALUE) MAX_VALUE, 
+			ROUND(AVG(GRAPH_VALUE), 2) AVG_VALUE 
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    ROUND((DBLMEMUSED * 100)/DBLMEMTOTAL,2) AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+	</select>
+	
+	<select id="selectManagerStateHddUsedGraphData" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i') AS TMCUR, 
+			TIME_INDEX, 
+			GRAPH_VALUE
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    ROUND((DBLHDDUSED * 100)/DBLHDDTOTAL,2) AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+                        ORDER  BY TIME_INDEX ASC
+	</select>
+        
+	<select id="selectManagerStateHddUsedGraphDataMinMaxAvg" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT 
+			MIN(GRAPH_VALUE) MIN_VALUE, 
+			MAX(GRAPH_VALUE) MAX_VALUE, 
+			ROUND(AVG(GRAPH_VALUE), 2) AVG_VALUE 
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    ROUND((DBLHDDUSED * 100)/DBLHDDTOTAL,2) AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+	</select>
+	
+	<select id="selectManagerStateProcessNumGraphData" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i') AS TMCUR, 
+			TIME_INDEX, 
+			GRAPH_VALUE
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    LPROCESSNUM AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+                        ORDER  BY TIME_INDEX ASC
+	</select>
+        
+	<select id="selectManagerStateProcessNumGraphDataMinMaxAvg" parameterType="com.kglory.tms.web.model.dto.SearchDto" resultMap="managerStateGraphDataMap">
+			SELECT 
+			MIN(GRAPH_VALUE) MIN_VALUE, 
+			MAX(GRAPH_VALUE) MAX_VALUE, 
+			ROUND(AVG(GRAPH_VALUE), 2) AVG_VALUE 
+			FROM (
+			  SELECT TIMESTAMPDIFF( MINUTE, DATE_FORMAT( #{startDateInput}, '%Y-%m-%d %H:%i'), DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')) AS TIME_INDEX,
+			  TMCUR,
+			  AVG(GRAPH_VALUE)  AS GRAPH_VALUE
+			  FROM(
+			    SELECT TMCUR,
+			    LPROCESSNUM AS GRAPH_VALUE
+			    FROM 
+                            <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                SELECT * FROM ${item.name}
+                                WHERE TMCUR <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMCUR <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                            </foreach>
+			  ) B
+                          GROUP  BY DATE_FORMAT( TMCUR, '%Y-%m-%d %H:%i')
+			) C
+	</select>
+	
+</mapper>

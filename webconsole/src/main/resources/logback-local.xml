@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATTERN" value="[%d{MM.dd HH:mm:ss}][%-5level] %c{1} - %M: %m%n"/>
+
+    <appender name="default" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\default\default.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\default\default.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="web" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\web\web.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\web\web.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="db" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\db\db.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\db\db.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="mybatis" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\db\mybatis.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\db\mybatis.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="session" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\default\session.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\default\session.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="batch" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\default\batch.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\default\batch.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ext" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}\ext\ext.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}\ext\ext.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- /Appenders -->
+
+    <!-- Logger -->
+    <logger name="com.kglory.tms.web.interceptor" level="INFO">
+        <appender-ref ref="web" />
+    </logger>
+    <logger name="com.kglory.tms.web.controller" level="DEBUG">
+        <appender-ref ref="web" />
+    </logger>
+    <logger name="com.kglory.tms.web.filter" level="INFO">
+        <appender-ref ref="web" />
+    </logger>
+    <logger name="com.kglory.tms.web.model" level="INFO">
+        <appender-ref ref="db" />
+    </logger>
+    <logger name="com.kglory.tms.web.services" level="INFO">
+        <appender-ref ref="db" />
+    </logger>
+    <logger name="com.kglory.tms.web.mapper" level="INFO">
+        <appender-ref ref="db" />
+    </logger>
+    <logger name="com.kglory.tms.web.util" level="INFO">
+        <appender-ref ref="default" />
+    </logger>
+    <logger name="com.kglory.tms.web.batch" level="INFO">
+        <appender-ref ref="batch" />
+    </logger>
+    <logger name="com.kglory.tms.web.ext" level="INFO">
+        <appender-ref ref="ext" />
+    </logger>
+    <logger name="org.mybatis" level="INFO">
+        <appender-ref ref="mybatis" />
+    </logger>
+    <logger name="org.apache.ibatis" level="INFO">
+        <appender-ref ref="mybatis" />
+    </logger>
+    <logger name="com.kglory.tms.web.servlet.InitServlet" level="INFO">
+        <appender-ref ref="session" />
+    </logger>
+    <logger name="com.kglory.tms.web.servlet.SessionListener" level="INFO">
+        <appender-ref ref="session" />
+    </logger>
+    <!-- /Logger -->
+
+    <category name="java.sql">
+        <priority value="DEBUG" />
+        <appender-ref ref="db" />
+    </category>
+
+    <root level="INFO">
+        <appender-ref ref="default" />
+    </root>
+
+</configuration>

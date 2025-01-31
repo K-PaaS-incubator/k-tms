@@ -1,0 +1,74 @@
+<div class="content-gray col-xs-5 col-md-5 col-xs-12 border-solid-right content-list-setup-left">
+	<div class="title"><%= locale.report %> <%= locale.reservation %> <%= locale.list %></div>
+	
+	<!-- 버튼 목록 begin -->
+	<div class="float-clear row content-tree-btn">
+	
+		<div class="col-xs-10 padding-clear">
+			<div class="btn-group padding-clear setting-dropdown col-xs-3">
+				<button type="button" id="addBtn" class="btn btn-default creationBtn" data-toggle="dropdown" aria-expanded="true">
+					<%= locale.immediate %> <%= locale.create %> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" id="createType2" role="menu" aria-labelledby="setting-create">
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#report_creation" data-station="1" data-type = "2"><%= locale.analysisOftendency %> <%= locale.report %></a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#report_creation" data-station="2" data-type = "2"><%= locale.intrusionDetection %> <%= locale.report %></a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#report_creation" data-station="3" data-type = "2"><%= locale.network %> <%= locale.amountOfUsage %> <%= locale.report %></a></li>
+				</ul>
+			</div>
+			<div class="btn-group padding-clear setting-dropdown col-xs-3">
+				<button type="button" id="addReservationBtn" class="btn btn-default creationReservationBtn" data-toggle="dropdown" aria-expanded="true">
+					<%= locale.reservation %> <%= locale.create %> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" id="createType3" role="menu" aria-labelledby="setting-create">
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#report_creation" data-station="1" data-type = "3"><%= locale.analysisOftendency %> <%= locale.report %></a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#report_creation" data-station="2" data-type = "3"><%= locale.intrusionDetection %> <%= locale.report %></a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#report_creation" data-station="3" data-type = "3"><%= locale.network %> <%= locale.amountOfUsage %> <%= locale.report %></a></li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+	<!-- 버튼 목록 end -->
+	
+	<div class="content-tree-list">
+		<!-- 목록 table begin -->
+		<table class="table table-striped table-hover table-vertical-line table-fixed float-clear policyTable">
+		<!--table class="table table-striped table-vertical-line"-->
+            <colgroup>
+            	<col width="5%"/>
+                <col width="45%"/>
+                <col width="40%"/>
+                <!-- <col width="10%"/> -->
+            </colgroup>
+            <thead>
+				<tr>
+					<th></th>
+					<th><%= locale.reservationName %></th>
+					<!-- <th colspan="2"><%= locale.create %><%= locale.cycle %></th> -->
+                    <th><%= locale.create %><%= locale.cycle %></th>
+				</tr>
+			</thead>
+			<tbody id="reportReservationItem">
+			</tbody>
+		</table>
+		<!-- 목록 table end -->
+	</div>
+</div>
+<!-- tab 뷰 begin -->
+<div class="content-white col-xs-7 col-md-7 col-xs-12 height-100p">
+
+	<!-- title & button begin -->
+	<div class="title"><%= locale.report %> <%= locale.create %> <%= locale.setting %></div>
+	<!-- title & button end -->
+	
+	<div class="content-tree-btn">
+		<div class="col-xs-8 padding-clear">
+			<span id="subTitle"></span>
+		</div>
+		<div class="col-xs-4 padding-clear text-right">
+			<input type="button" class="btn btn-default btn-sm changeBtn" value="<%= locale.modify %>" style="display:none"></input>
+		</div>
+	</div>
+	
+	<div id="tabs" class="tabContent"></div>
+</div>

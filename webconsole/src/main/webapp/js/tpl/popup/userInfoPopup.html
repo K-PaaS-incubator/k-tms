@@ -1,0 +1,71 @@
+<!-- <div class="modal-body modal-body-gray-padding"> -->
+<!-- 조회 form begin -->
+<form role="form" class="form-inline">
+	<div class="col-xs-12 padding-clear ">
+		<!-- 첫번째 줄 상세시간 begin -->
+		<div class="col-xs-12">
+			<div class="form-group col-xs-12 padding-clear">
+		  		<div class="icon-subtitle"><%= locale.basicInformation %><span class="pull-right"></span></div> 
+				<div class="border-dotted-all overflow-hidden padding-t5">
+					<table class="view-table col-xs-12">
+						<tr class="border-clear">
+							<th width="15%"><%= locale.user %> ID</th>
+							<td><input type="text" id="userId" name="userId" class="form-control col-xs-3 adminId" maxlength="15" disabled/>
+								<div class="btnContent">
+								<!-- 완료 버튼 누를때 중복 검사하도록 변경 -->
+								<!-- <button type="button" id="adminIdCheckBtn" class="btn btn-default margin-l10 col-xs-3">중복 검사</button> -->
+								</div>
+							</td>
+						</tr>
+						<tr class="border-clear">
+							<th><%= locale.encryption %></th>
+							<td><input type="password" id="password" name="password" class="form-control col-xs-3">&nbsp;&nbsp;<span id="passwordScript"  maxlength="20"></span></td>
+						</tr>
+						<tr class="border-clear">
+							<th><%= locale.encryption %><%= locale.ok %></th>
+							<td><input type="password" id="comparePassword" name="comparePassword" class="form-control col-xs-3"  maxlength="20">&nbsp;&nbsp;<span id="comparePasswordScript" ></span></td>
+						</tr>
+						<tr class="border-clear">
+							<th></th>
+							<!-- <td><label><input type="checkbox" name="loginCheck"> 최초 로그인 시 암호 변경</label></td> -->
+						</tr>
+					</table>
+				</div>
+				<div class="icon-subtitle"><%= locale.additionalInformation %></div>
+				<div class="border-dotted-all overflow-hidden padding-t5 padding-b5">
+				<table class="view-table col-xs-12">
+					<tr class="border-clear">
+						<th width="15%"><%= locale.name %></th>
+						<td><input type="text" id="userName" name="userName" class="form-control col-xs-3" maxlength="32"/></td>
+					</tr>
+					<tr class="border-clear">
+						<th><%= locale.affiliation %></th>
+						<td><input type="text" id="company" name="company" class="form-control col-xs-3" maxlength="20"/></td>
+					</tr>
+					<tr class="border-clear">
+						<th><%= locale.comment %></th>
+						<td><input type="text"id="description" name="description" class="form-control col-xs-12" maxlength="64"/></td>
+					</tr>
+					<tr class="border-clear">
+						<th><%= locale.telephone %></th>
+						<td><input type="text" id="telephone" name="telephone" class="form-control col-xs-3" maxlength="13"/>&nbsp;&nbsp;<span id="telephoneScript"></span></td>
+					</tr>
+					<tr class="border-clear">
+						<th><%= locale.cellphone %></th> 
+						<td><input type="text" id="mobile" name="mobile" class="form-control col-xs-3" maxlength="13"/>&nbsp;&nbsp;<span id="mobileScript"></span></td>
+					</tr>
+					<tr class="border-clear">
+						<th><%= locale.email %></th>
+						<td><input type="text" id="email" name="email" class="form-control col-xs-5" maxlength="50"/>&nbsp;&nbsp;<span id="emailScript"></span></td>
+					</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer col-xs-12 text-center padding-t10 padding-b10 margin-t20" style="margin-left:-15px;width:894px;">
+			<button type="button" class="btn btn-info" id="editBtn"><%= locale.save %></button>
+			<!-- <button type="button" class="btn btn-default" id="closeBtn"><%= locale.close %></button> -->
+			<button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true"></span><span class="sr-only"></span><%= locale.close %></button>
+		</div>
+	</div>
+</form>

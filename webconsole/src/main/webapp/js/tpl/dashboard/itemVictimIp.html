@@ -1,0 +1,16 @@
+<td class="overflow-ellipsis">
+	<!--
+	<table class="padding-l5 pull-left"><tr><td width=10 height=10 class="level-narrow top-bg-lv<%=model.get('rNum')%>"></td></tr></table>&nbsp;<span title="<%=model.get('dwDestinationIp')%>"><a class="ipRetrievePopupLink"><%=model.get('dwDestinationIp')%></a></span>
+	-->
+	<span class="victimIp_top-bg victimIp_top-bg-lv<%=model.get('rNum')%>"></span>&nbsp;<span title="<%=model.get('dwDestinationIp')%>"><a class="ipRetrievePopupLink"><%=model.get('dwDestinationIp')%></a></span>
+</td>
+<td>
+	<button type="button" class="btn-intable-chart cursor-pointer victimIpAttackCountPopup" data-toggle="modal" data-target="#modal-trend"></button>
+</td><!-- modal 띄우는 button -->
+<td class="overflow-ellipsis align-right" title="<%=model.get('strEventCount')%>"><a id="originalLogPopup"><%=model.get('strEventCount')%></a></td>
+<td class="overflow-ellipsis align-right chart-text-5 font-size-11" title="<%=model.get('percentCount')%>"><%=model.get('percentCount')%></td>
+<td>
+	<button type="button" class="btn-intable-chart cursor-pointer victimIpBpsPopup" data-toggle="modal" data-target="#modal-trend"></button>
+</td><!-- modal 띄우는 button -->
+<td class="overflow-ellipsis align-right" title="<%=model.get('strDblbps')%>"><%=model.get('strDblbps')%></td>
+<td class="overflow-ellipsis align-right chart-text-5 font-size-11" title="<%=model.get('percentbps')%>"><%=model.get('percentbps')%></td>

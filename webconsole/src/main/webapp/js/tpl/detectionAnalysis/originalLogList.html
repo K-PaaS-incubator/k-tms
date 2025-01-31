@@ -1,0 +1,99 @@
+<!-- 검색결과 begin -->
+
+<!-- 건수 및 버튼 영역  begin -->
+<div class="row margin-t10">
+
+    <!-- 건수 표시 begin -->
+    <div class="col-xs-6">
+        <div class="col-xs-12">
+            <div class="pull-left minwidth-60 text-primary"><%= locale.searchSection %></div>
+            <div class="pull-left" id="listDate"></div>
+        </div>
+        <div class="col-xs-12">
+            <div class="pull-left minwidth-60 margin-t10 text-primary"><%= locale.totalCount %>&nbsp;</div>
+
+            <div class="pull-left margin-t10">
+                <strong class="chart-text-10" id="totalRowSize"></strong>
+                <span class="threat-bg-lv5 rect margin-r5 margin-l15"></span>High <strong><span id="severityHCount"></span></strong>
+                <span class="threat-bg-lv4 rect margin-r5 margin-l10"></span>Medium <strong><span id="severityMCount"></span></strong>
+                <span class="threat-bg-lv3 rect margin-r5 margin-l10"></span>Low <strong><span id="severityLCount"></span></strong>
+                <span class="threat-bg-lv2 rect margin-r5 margin-l10"></span>Info <strong><span id="severityICount"></span></strong>
+            </div>
+        </div>
+    </div>
+    <!-- 건수 표시 end -->
+
+    <!-- 버튼 영역 begin -->
+    <div class="col-xs-6">
+        <form class="form-inline" role="form">
+            <div class="pull-right">
+                <div class="pull-left margin-l20 margin-r10">
+                    <div>					
+                        <input type="radio" class="radio" name="exportRange" id="exportRange2" value="currentPage" checked>&nbsp;<label for="exportRange2" class="label-for-button"><%= locale.currentPage %></label>&nbsp;&nbsp;
+                        <!--<input type="radio" class="radio" name="exportRange" id="exportRange1" value="all">&nbsp;<label for="exportRange1" class="label-for-button"><%= locale.dashboard.total %></label>&nbsp;-->
+                        <%= locale.download %>
+                    </div>
+                    <div class="margin-t5">
+                        <button type="button" class="btn btn-labeled btn-success-fill btnExport" data-format="excel"><span class="btn-label"><i class="fa fa-file-excel-o"></i></span>excel</button>
+                        <button type="button" class="btn btn-labeled btn-primary-fill btnExport" data-format="word"><span class="btn-label"><i class="fa fa-file-word-o"></i></span>word</button>
+                        <button type="button" class="btn btn-labeled btn-info-fill btnExport" data-format="html"><span class="btn-label"><i class="fa fa-file-code-o"></i></span>html</button>
+                        <div class="dropdown">
+                            <button id="set_column" type="button" class="btn btn-labeled btn-opt1-fill" data-toggle="dropdown"><span class="btn-label"><i class="fa fa-cogs"></i></span><%= locale.setColumn %></button>
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-target" role="menu" aria-labelledby="dropdownMenu1" style="padding: 10px;">
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_number" name="selColumn" class="selColumn">&nbsp;<label><%= locale.number %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_attackName" name="selColumn" class="selColumn">&nbsp;<label><%= locale.attackName %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_attackType" name="selColumn" class="selColumn">&nbsp;<label><%= locale.attackType %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_packet" name="selColumn" class="selColumn">&nbsp;<label><%= locale.packet %></label></li>
+<!--                                <li role="presentation"><input type="checkbox" value="detectionOriginal_block" name="selColumn" class="selColumn">&nbsp;<label><%= locale.block %></label></li>-->
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_detectTime" name="selColumn" class="selColumn">&nbsp;<label><%= locale.detectionTime %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_attackIp" name="selColumn" class="selColumn">&nbsp;<label><%= locale.attackerIp %> IP</label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_attackPort" name="selColumn" class="selColumn">&nbsp;<label><%= locale.attackPort %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_victimIp" name="selColumn" class="selColumn">&nbsp;<label><%= locale.victimIp %> IP</label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_victimPort" name="selColumn" class="selColumn">&nbsp;<label><%= locale.victimPort %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_attackCount" name="selColumn" class="selColumn">&nbsp;<label><%= locale.attackCount %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_inOut" name="selColumn" class="selColumn">&nbsp;<label>In/Out</label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_network" name="selColumn" class="selColumn">&nbsp;<label><%= locale.network %></label></li>
+                                <li role="presentation"><input type="checkbox" value="detectionOriginal_setting" name="selColumn" class="selColumn">&nbsp;<label><%= locale.setting %></label></li>
+                                <li><button id="tableRegist" type="button" class="btn btn-default"><%=locale.regist %> </button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 버튼 영역 begin -->
+</div>
+<!-- 건수 및 버튼 영역  end -->
+
+<!-- 최종5분평균 table begin -->
+<div class="progressbar margin-t10">
+    <table class="table table-striped table-hover table-vertical-line table-fixed" id="content_table">
+        <thead>
+            <tr>
+                <th id="detectionOriginal_number" class="width-number"><%= locale.number %></th>
+                <th id="detectionOriginal_attackName" width="16%"><%= locale.attackName %></th>
+                <th id="detectionOriginal_attackType" class="overflow-ellipsis" width="12%" title="<%= locale.attackType %>"><%= locale.attackType %></th>
+                <th id="detectionOriginal_packet" class="overflow-ellipsis" style="width:50px;" title="<%= locale.packet %>"><%= locale.packet %></th>
+<!--                <th id="detectionOriginal_block" width="4%"><%= locale.block %></th>-->
+                <th id="detectionOriginal_detectTime" class="overflow-ellipsis" width="10%" title="<%= locale.detectionTime %>"><%= locale.detectionTime %></th>
+                <th id="detectionOriginal_attackIp" class="overflow-ellipsis" width="8%" title="<%= locale.attackerIp %>"><%= locale.attackerIp %> IP</th>
+                <th id="detectionOriginal_attackPort" class="overflow-ellipsis" width="8%" title="<%= locale.service %>"><%= locale.attackPort %></th>
+                <th id="detectionOriginal_victimIp" class="overflow-ellipsis" width="8%" title="<%= locale.victimIp %>"><%= locale.victimIp %> IP</th>
+                <th id="detectionOriginal_victimPort" class="overflow-ellipsis" width="8%" title="<%= locale.service %>"><%= locale.victimPort %></th>
+                <th id="detectionOriginal_attackCount" class="overflow-ellipsis" title="<%= locale.attackCount %>" style="width:65px;"><%= locale.attackCount %></th>
+                <th id="detectionOriginal_inOut" class="overflow-ellipsis" width="7%" title="In/Out">In/Out</th>
+                <th id="detectionOriginal_network" class="overflow-ellipsis" width="7%" title="<%= locale.network %>"><%= locale.network %></th>
+                <th id="detectionOriginal_setting" class="overflow-ellipsis" title="<%= locale.setting %>" style="width:100px;"><%= locale.setting %></th>
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
+</div>
+<!-- 최종5분평균 table end -->
+
+<!-- 더보기 begin -->
+<!-- 더보기 옵션 begin -->
+<div id="pageLayout"></div>
+<!-- 더보기 end -->
+<!-- 검색결과 end -->

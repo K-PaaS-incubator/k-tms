@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.common.CommonMapper">
+
+	
+	<resultMap type="TargetVO" id="targetOrgMap">
+		<result property="strName"		 		column="STRNAME" />
+		<result property="type" 				column="TYPE" />
+		<result property="lIndex" 				column="LINDEX" />
+		<result property="lParentGroupIndex" 	column="LPARENTGROUPINDEX" />
+		<result property="path"		 			column="PATH" />
+		<result property="cntYType"		 		column="CNTYTYPE" />
+		<result property="lvsensorIndex"		column="LVSENSORINDEX" />
+	</resultMap>
+	 
+	<select id="selectTargetOrg" resultMap="targetOrgMap" parameterType="com.kglory.tms.web.model.dto.TargetOrgDto">
+		SELECT	
+                    /*--[기관정보 조회] --*/
+                    STRNAME, 
+                    TYPE, 
+                    LINDEX, 
+                    LPARENTGROUPINDEX, 
+                    PATH
+		FROM	(
+                        SELECT 
+                            CONCAT(#{lnetworkName},'(',STRNAME,')') AS STRNAME,
+                            'N' AS TYPE, 
+                            LNETWORKINDEX AS LINDEX, 
+                            -1 AS LPARENTGROUPINDEX,
+                            CONCAT(#{lnetworkName},'(',STRNAME,')') AS PATH,
+                            '2' AS ORD
+                        FROM SYSTEM_NETWORK 				
+                        <if test="refIndex != null and refIndex > 0" >
+                        WHERE LNETWORKINDEX = #{refIndex}
+                        </if>								
+                ) A
+		ORDER BY TYPE DESC, LPARENTGROUPINDEX ASC, LINDEX ASC
+	</select>
+        
+        <select id="selectNetGroupByNetwork" resultType="java.math.BigInteger" parameterType="java.math.BigInteger">
+            SELECT LNETWORKINDEX FROM SYSTEM_NETWORK WHERE LPARENTGROUPINDEX = #{lnetgroupIndex}
+        </select>
+        
+        <resultMap type="TableColumnsVO" id="tableColumnsMap">
+		<result property="userId"       column="USERID" />
+		<result property="menuKey"      column="MENUKEY" />
+		<result property="colId"        column="COLID" />
+		<result property="enabled"      column="ENABLED" />
+	</resultMap>
+        
+        <select id="selectTableColumnList" parameterType="com.kglory.tms.web.model.dto.TableColumnsDto" resultMap="tableColumnsMap">
+            SELECT 
+                USERID, MENUKEY, COLID, ENABLED
+            FROM
+                TB_TABLE_COLUMNS
+            WHERE USERID = #{userId}
+            AND MENUKEY = #{menuKey}
+        </select>
+        
+        <insert id="insertTableColumn" parameterType="com.kglory.tms.web.model.dto.TableColumnsDto">
+            INSERT INTO TB_TABLE_COLUMNS (USERID, MENUKEY, COLID, ENABLED)
+            VALUES (#{userId}, #{menuKey}, #{colId}, #{enabled})
+        </insert>
+        
+        <delete id="deleteTableColumn" parameterType="com.kglory.tms.web.model.dto.TableColumnsDto">
+            DELETE FROM TB_TABLE_COLUMNS
+            WHERE USERID = #{userId}
+            AND MENUKEY = #{menuKey}
+        </delete>
+
+        <update id="modifyDbPassword" parameterType="com.kglory.tms.web.model.dto.TableColumnsDto">
+            <![CDATA[
+            SET PASSWORD = PASSWORD(#{userPwd})
+            ]]>
+        </update>
+</mapper>

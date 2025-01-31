@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemSettings.SensorMapper">
+	<resultMap type="SensorVO" 					id="sensorMap">
+		<result property="lIndex" 				column="LINDEX"></result>
+		<result property="sType" 				column="STYPE"></result>
+		<result property="strName" 				column="STRNAME"></result>
+		<result property="strDescription" 		column="STRDESCRIPTION"></result>
+		<result property="lPrivateIp" 			column="LPRIVATEIP" typeHandler="com.kglory.tms.web.util.typehandler.NetworkByteOrderIpTypeHandler" ></result>
+		<result property="lPublicIp" 			column="LPUBLICIP" typeHandler="com.kglory.tms.web.util.typehandler.NetworkByteOrderIpTypeHandler" ></result>
+		<result property="nHyperScanHitCount" 	column="NHYPERSCANHITCOUNT"></result>
+		<result property="sUseBlackList" 		column="SUSEBLACKLIST"></result>
+		<result property="sPort" 				column="SPORT"></result>
+		<result property="sMode" 				column="SMODE"></result>
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX"></result>
+	</resultMap>
+	
+	<resultMap type="SensorVO" 					id="ipMonitoringMap">
+		<result property="lIndex" 				column="LINDEX"></result>
+		<result property="lsensorIndex" 		column="LSENSORINDEX"></result>
+		<result property="strFromIp" 			column="STRFROMIP"></result>
+		<result property="strToIp" 				column="STRTOIP"></result>
+		<result property="bType" 				column="BTYPE"></result>
+	</resultMap>
+	
+	<select id="selectSensorSettingInfo" resultMap="sensorMap">
+		SELECT LINDEX, 
+		       STYPE, 
+		       STRNAME, 
+		       STRDESCRIPTION, 
+		       SMODE,
+		       SPORT
+		FROM   SYSTEM_SENSOR 
+		ORDER BY STRNAME ASC
+	</select>
+        
+	<select id="selectSensorDetailInfo" resultMap="sensorMap">
+		SELECT LINDEX, 
+		       STYPE, 
+		       STRNAME, 
+		       STRDESCRIPTION, 
+		       SMODE,
+		       SPORT,
+		       LPRIVATEIP,
+		       LPUBLICIP,
+		       NHYPERSCANHITCOUNT,
+		       SUSEBLACKLIST
+		FROM   SYSTEM_SENSOR 
+	</select>
+	
+	<select id="selectSensorIpMonitoringList" resultMap="ipMonitoringMap">
+		SELECT 	LINDEX,
+				STRFROMIP,
+				STRTOIP,
+				BTYPE
+		FROM 	SYSTEM_SENSOR_MONIP
+	</select>
+        
+	<select id="selectSensorIpMonitoring" resultMap="ipMonitoringMap" parameterType="com.kglory.tms.web.model.dto.IpMonitorDto">
+		SELECT 	LINDEX,
+				STRFROMIP,
+				STRTOIP,
+				BTYPE
+		FROM 	SYSTEM_SENSOR_MONIP
+                WHERE LINDEX = #{lIndex}
+	</select>
+	
+	<select id="duplicatePrivateIpAndPublicIp"  parameterType="com.kglory.tms.web.model.dto.SystemConfigDto"  resultMap="sensorMap">
+		SELECT 	LINDEX,
+				LPRIVATEIP,
+				LPUBLICIP
+		FROM  	SYSTEM_SENSOR
+		WHERE 	LPRIVATEIP = #{lPrivateIp}
+		AND   	LPUBLICIP = #{lPublicIp}
+	</select>
+	
+	
+	<insert id="insertSensorDetailInfo" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto">
+		INSERT INTO SYSTEM_SENSOR (LINDEX, STYPE, STRNAME, STRDESCRIPTION, LPRIVATEIP, LPUBLICIP, NHYPERSCANHITCOUNT, SUSEBLACKLIST, SPORT, SMODE) 
+			   VALUES (SEQ_SYSTEM_SENSOR.nextval, 
+			   			1, 
+			   			#{strName},
+						#{strDescription, jdbcType=VARCHAR},
+		        		#{lPrivateIp},
+		        		#{lPublicIp},
+		        		#{nHyperScanHitCount},
+		        		#{sUseBlackList},
+		        		4434, 
+		        		2)
+		<selectKey order="AFTER" keyProperty="lIndex" resultType="long">
+			SELECT SEQ_SYSTEM_SENSOR.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<insert id="insertSensorIpMonitoring" parameterType="com.kglory.tms.web.model.dto.IpMonitorDto">
+		INSERT 
+		INTO SYSTEM_SENSOR_MONIP (STRFROMIP, STRTOIP) VALUES (#{strFromIp}, #{strToIp})
+	</insert>
+	
+	<update id="updateSensorIpMonitoring" parameterType="com.kglory.tms.web.model.dto.IpMonitorDto">
+		UPDATE SYSTEM_SENSOR_MONIP 
+		SET    STRFROMIP 		= #{strFromIp},
+		       STRTOIP 			= #{strToIp}
+		WHERE LINDEX 			= #{lIndex}      
+	</update>
+	
+	<resultMap type="SensorVO" 			id="sensorMonitorMaxResultMap">
+		<result property="lIndex"		column="LINDEX" />
+	</resultMap>
+	
+	<delete id="deleteSensorIpMonitor" parameterType="com.kglory.tms.web.model.dto.IpMonitorDto">
+		DELETE FROM SYSTEM_SENSOR_MONIP 
+		WHERE LINDEX = #{lIndex}
+	</delete>
+        
+	<update id="updateSensorUseBlackList" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto">
+		UPDATE SYSTEM_SENSOR 
+		SET    SUSEBLACKLIST		= #{sUseBlackList}
+	</update>
+        
+	<update id="updateSensorHyperscanHitCount" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto">
+		UPDATE SYSTEM_SENSOR 
+		SET    NHYPERSCANHITCOUNT	= #{nHyperScanHitCount}
+	</update>
+        
+	<update id="updateSensorDetailInfo" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto">
+		UPDATE SYSTEM_SENSOR 
+		SET    STRNAME 				= #{strName},
+		       STRDESCRIPTION 		= #{strDescription, jdbcType=VARCHAR},
+		       LPRIVATEIP 			= #{lPrivateIp},
+		       LPUBLICIP 			= #{lPublicIp},
+		       NHYPERSCANHITCOUNT	= #{nHyperScanHitCount},
+		       SUSEBLACKLIST		= #{sUseBlackList}
+		WHERE LINDEX 				= #{lIndex}       
+	</update>
+	
+	<delete id="deleteSensorSettingInfo" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto">
+		DELETE 	FROM SYSTEM_SENSOR
+				WHERE LINDEX = #{lIndex}
+	</delete>
+	
+	<resultMap type="SensorVO" 					id="sensorIntegrityInfoMap">
+		<result property="lIndex" 				column="LINDEX"></result>
+		<result property="nStartIntegrity"		column="NSTARTINTEGRITY"></result>
+		<result property="nAutoIntegrity" 		column="NAUTOINTEGRITY"></result>
+		<result property="nAutoIntegrityMin"	column="NAUTOINTEGRITYMIN"></result>
+	</resultMap>
+	
+	<select id="selectSensorIntegrityInfo" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto" resultMap="sensorIntegrityInfoMap">
+		SELECT LINDEX, NSTARTINTEGRITY, NAUTOINTEGRITY, NAUTOINTEGRITYMIN
+		FROM   SYSTEM_SENSOR 
+	</select>
+	
+	<update id="updateSensorIntegrityInfo" parameterType="com.kglory.tms.web.model.dto.SensorIntegrityFileDto">
+		UPDATE SYSTEM_SENSOR 
+		SET    NSTARTINTEGRITY = #{nStartIntegrity},
+		       NAUTOINTEGRITY = #{nAutoIntegrity},
+		       NAUTOINTEGRITYMIN = #{nAutoIntegrityMin}
+	</update>
+		
+	<resultMap type="SensorInboundVO" 			id="sensorInboundMap">
+		<result property="lsensorIndex"			column="LSENSORINDEX"></result>
+		<result property="strEnable"			column="STRENABLE"></result>
+		<result property="strType"				column="STRTYPE"></result>
+		<result property="strNicInfo"			column="STRNICINFO"></result>
+		<result property="strIpInfo"			column="STRIPINFO"></result>
+	</resultMap>
+	
+	<select id="selectSensorInboundInfo" resultMap="sensorInboundMap">
+		SELECT LSENSORINDEX,
+				STRENABLE,
+				STRTYPE,
+				STRNICINFO,
+				STRIPINFO
+		FROM SENSOR_INBOUND
+	</select>
+
+	<delete id="deleteSensorInboundInfo" parameterType="com.kglory.tms.web.model.dto.SensorInboundDto">
+                DELETE FROM SENSOR_INBOUND
+                WHERE LSENSORINDEX = #{lsensorIndex}
+	</delete>
+	
+	<insert id="insertSensorInboundInfo" parameterType="com.kglory.tms.web.model.dto.SensorInboundDto">
+                INSERT INTO SENSOR_INBOUND (LSENSORINDEX, STRENABLE, STRTYPE, STRNICINFO, STRIPINFO)
+                VALUES (#{lsensorIndex}, #{strEnable}, #{strType}, #{strNicInfo}, #{strIpInfo})
+	</insert>
+        
+	<update id="updateSensorInboundInfo" parameterType="com.kglory.tms.web.model.dto.SensorInboundDto">
+                UPDATE  SENSOR_INBOUND 
+                SET STRENABLE = #{strEnable, jdbcType=VARCHAR}, 
+                    STRTYPE = #{strType, jdbcType=VARCHAR}, 
+                    STRNICINFO = #{strNicInfo, jdbcType=VARCHAR}, 
+                    STRIPINFO = #{strIpInfo, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="isDuplicateSensorName" parameterType="com.kglory.tms.web.model.dto.SystemConfigDto" resultMap="sensorMap">
+		SELECT STRNAME
+			FROM SYSTEM_SENSOR
+		WHERE STRNAME = #{strName}
+	</select>
+</mapper>

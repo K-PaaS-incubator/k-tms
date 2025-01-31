@@ -1,0 +1,12 @@
+<td class="overflow-ellipsis font-size-11">
+	<%=model.get('strProtocol')%> / <%=model.get('wservice')%>
+</td>
+<td>
+	<button type="button" class="btn-intable-chart cursor-pointer bpsPopup" data-toggle="modal" data-target="#modal-trend"></button>
+</td><!-- modal 띄우는 button -->
+<td class="align-right font-size-11">
+	<%=model.get('strDblbps')%>
+</td>
+<td class="overflow-ellipsis align-right chart-text-5 font-size-11" title="<%=model.get('percentbps')%>">
+	<%=model.get('percentbps')%>
+</td>

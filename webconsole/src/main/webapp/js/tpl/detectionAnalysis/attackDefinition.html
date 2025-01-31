@@ -1,0 +1,129 @@
+<div class="modal-body modal-body-white-padding">
+	<div class="security-view-title" id="attackName">
+		<span class="attackType" id="attackType"></span>
+	</div>
+	<!-- 상세 정보 view table begin -->
+	<div class="scroll-height-400">
+		<div class="icon-subtitle margin-t5" id="detectionInfoTitle"><%= locale.detectionInfo %></div>
+		<!-- 탐지정보 begin -->
+		<div class="border-dotted-all padding-all-5 progressbar" id="detectionInfoContent">
+			<!-- info 2column table begin -->
+			<table class="view-table">
+				<tbody>
+					<tr>
+						<th><%= locale.startDateTime %></th>
+						<td id="startDateTime"></td>
+						<th><%= locale.endDateTime %></th>
+						<td id="endDateTime"></td>
+					</tr>
+					<tr>
+						<th>
+							<span><%= locale.dwSourceIp %></span><br>
+						</th>
+						<td class="align-left">
+							<span id="sip"><button class="btn btn-default btn-sm margin-t5 pull-right sipRetrievePopupBtn" data-srcip="srcIp">IP <%=locale.retrieve%></button></span><br>
+						</td>
+						<th>
+							<span><%= locale.destinationIp %></span><br>
+						</th>
+						<td class="align-left">
+							<span id="dip"><button class="btn btn-default btn-sm margin-t5 pull-right dipRetrievePopupBtn" data-dstip="dstIp">IP <%=locale.retrieve%></button></span><br>
+						</td>
+					</tr>
+					<tr>
+						<th><%= locale.nSourcePort %></th>
+						<td id="sPort"></td>
+						<th><%= locale.destinationPort %></th>
+						<td id="dPort"></td>
+					</tr>
+					<tr>
+						<th><%= locale.sourceMac %></th>
+						<td id="sMac"></td>
+						<th><%= locale.destinationMac %></th>
+						<td id="dMac"></td>
+					</tr>
+<!--					<tr>
+						<th><%= locale.startNation %></th>
+						<td id="sourceNation"></td>
+						<th><%= locale.destinationNation %></th>
+						<td id="destinationNation"></td>
+					</tr>-->
+					<tr>
+						<th><%= locale.sourceNetwork %></th>
+						<td id="sourceNetwork"></td>
+						<th><%= locale.destnationNetwork %></th>
+						<td id="destnationNetwork"></td>
+					</tr>
+					<tr>
+						<th><%= locale.packetCount %></th>
+						<td id="packetCount"></td>
+						<th><%= locale.attackCount %></th>
+						<td id="attackCount"></td>
+					</tr>
+					<tr>
+						<th>Bytes</th>
+						<td id="bytes"></td>
+						<th>TTL</th>
+						<td id="ttl"></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- info 2column table end -->
+		</div>
+		<!-- 탐지정보 end -->
+		
+		<div class="icon-subtitle"><%= locale.registrationInfo %></div>
+		<!-- 등록정보 begin -->
+		<div class="border-dotted-all padding-all-5">
+			<table class="view-table">
+				<tr>
+					<th width="15%"><%= locale.severity %></th>
+					<td id="severity"><span class="cell-color-dot-bg" id="severityColor"></span></td>
+				</tr>
+				<tr>
+					<th><%= locale.code %></th>
+					<td id="lCode"></td>
+				</tr>
+<!-- 명확히 확인되지 않는 조건이여서 당분간 주석 처리-->
+<!-- 				<tr> -->
+<!-- 					<th><%= locale.detectionSucceedOrNot %></th> -->
+<!-- 					<td id="detectionSucceedOrNot"></td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<th><%= locale.packetSave %></th> -->
+<!-- 					<td class="threat-text-lv1" id="packetSave"></td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<th><%= locale.threshold %></th> -->
+<!-- 					<td id="threshold"></td> -->
+<!-- 				</tr> -->
+				<tr>
+					<th><%= locale.patternInfo %></th>
+					<td style="word-break:break-all;" id="patternInfo"></td>
+				</tr>
+				<tr>
+					<th><%= locale.summary %></th>
+					<td style="word-break:break-all;" id="summary"></td>
+				</tr>
+				<tr>
+					<th><%= locale.detailComment %></th>
+					<td style="word-break:break-all;" id="detailComment"></td>
+				</tr>
+				<tr>
+					<th><%= locale.solution %></th>
+					<td style="word-break:break-all;" id="solution"></td>
+				</tr>
+				<tr>
+					<th><%= locale.reference %></th>
+					<td style="word-break:break-all;" id="reference"></td>
+				</tr>
+				<!-- 명확히 확인되지 않는 조건이여서 당분간 주석 처리-->
+<!-- 				<tr> -->
+<!-- 					<th>Bug Trap ID</th> -->
+<!-- 					<td id="trapId"></td> -->
+<!-- 				</tr> -->
+			</table>
+		</div>
+	</div>
+	<!-- 상세 정보 view table end -->
+</div> 				

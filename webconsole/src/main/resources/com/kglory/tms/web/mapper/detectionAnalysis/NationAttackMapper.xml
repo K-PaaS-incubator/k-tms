@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.detectionAnalysis.NationAttackMapper">
+
+	<resultMap type="AttackHelpVO" 			id="attackHelpPopupDataResultMap">
+		<result property="lCode" 			column="LCODE" />
+		<result property="strTitle" 		column="STRTITLE" />
+		<result property="strAttackType" 	column="STRATKTYPE" />
+		<result property="bSeverity" 		column="BSEVERITY" />
+		<result property="strSummary" 		column="STRSUMMARY" />
+		<result property="strDescription" 	column="STRDESCRIPTION" />
+		<result property="strFalsePositive" column="STRFALSEPOSITIVE" />
+		<result property="strSolution" 		column="STRSOLUTION" />
+		<result property="strReference" 	column="STRREFERENCE" />
+		<result property="strCveId" 		column="STRCVEID" />
+		<result property="strbId" 			column="STRBID" />
+		<result property="strVul" 			column="STRVUL" />
+		<result property="strNotVul" 		column="STRNOTVUL" />
+		<result property="strAddrspoof" 	column="STRADDRSPOOF" />
+		<result property="strDetect" 		column="STRDETECT" />
+	</resultMap>
+	
+	<select id="selectAttackHelpPopupData" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackHelpPopupDataResultMap">
+            SELECT LCODE,
+                            STRTITLE,
+                            STRATKTYPE,
+                            BSEVERITY,
+                            STRSUMMARY,
+                            STRDESCRIPTION,
+                            STRFALSEPOSITIVE,
+                            STRSOLUTION,
+                            STRREFERENCE,
+                            STRCVEID,
+                            STRBID,
+                            STRVUL,
+                            STRNOTVUL,
+                            STRADDRSPOOF,
+                            STRDETECT
+            FROM SYSTEM_SIGHELP 
+            WHERE LCODE = #{lCode}
+            LIMIT 1
+	</select>
+        
+</mapper>

@@ -1,0 +1,148 @@
+<div>
+	<form class="form-inline reportCreationForm" role="form">
+		<!-- 보고서 종류/예약 설정 begin -->
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.create %> <%= locale.method %></th>
+					<td>
+						<%= locale.reservation %> <%= locale.create %>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"><%= locale.report %> <%= locale.kind %></th>
+					<td>
+						<%= locale.intrusionDetection %> <%= locale.report %> >
+						<%= model.strReportType %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.report %> <%= locale.name %></th>
+					<td>
+						<table class="view-table"  width="80%">
+							<tr class="border-clear">
+								<td>
+									<input type="text" class="form-control col-xs-8" id="strScheduleName" name="strScheduleName" value="<%=model.strScheduleName%>"/>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="border-clear">
+					<th width="20%"><%= locale.fileformat %></th>
+					<td>
+						<table class="view-table" width="34%">
+							<tr class="border-clear">
+								<td>
+									<select class="form-control margin-r5 minwidth-150" id="destFileSelect" name="destFileSelect">
+										<option value=10>pdf</option>
+										<option value=100>word</option>
+										<option value=1000>excel</option>
+										<option value=10000>html</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+			<!-- 보고서 종류/예약 설정 end -->
+			
+		<!-- 구간 및 기간 설정 begin -->
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.targetType %></th>
+					<td>
+						<div class="form-group col-xs-10 padding-clear"  id="targetType"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.term %> <%= locale.setting %></th>
+					<td>
+						<table class="view-table" width="80%">
+							<tr class="border-clear" id="ltimeTypeTr2">
+								<td>
+									<select class="form-control margin-r5 minwidth-150" id="tFlagSelect" name="tFlagSelect">
+										<option value=2><%= locale.yesterday %></option>
+										<option value=3><%= locale.pass %> <%= locale.twoday %></option>
+										<option value=4><%= locale.pass %> <%= locale.threeday %></option>
+										<option value=5><%= locale.pass %> <%= locale.oneweek %></option>
+										<option value=6><%= locale.pass %> <%= locale.twoweek %></option>
+										<option value=0><%= locale.user %> <%= locale.definition %></option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="border-clear" id="userFlag" style="display:none">
+					<th width="20%"></th>
+					<td>
+						<table class="view-table" width="34%">
+							<tr class="border-clear">
+								<td>
+									<%= locale.user %> <%= locale.definition %>&nbsp;&nbsp;&nbsp;
+									<input type="text" id="tmFromInput" name="tmFromInput" class="form-control" readonly>
+									<span id="tt">&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+									<input type="text" id="tmToInput" name="tmToInput" class="form-control" readonly>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="icon-subtitle"></div>
+		<div class="border-dotted-all overflow-hidden margin-t5 padding-t5 padding-b3">
+			<table class="view-table">
+				<tr class="border-clear">
+					<th width="20%"><%= locale.reservation %> <%= locale.setting %></th>
+					<td>
+						<table class="view-table" width="34%">
+							<tr class="border-clear">
+								<td>
+									<select class="form-control margin-r5 minwidth-100" id="schedulePeriodSelect" name="schedulePeriodSelect">
+										<option value="2"><%= locale.everyDay %></option>
+										<option value="1"><%= locale.everyWeek %></option>
+										<option value="0"><%= locale.everyMonth %></option>
+										<option value="3"><%= locale.once %></option>
+									</select>
+									<select class="form-control margin-r5 minwidth-50" id="lMonthSelect" name="lMonthSelect">
+									</select>
+									<select class="form-control margin-r5 minwidth-50" id="lWeekSelect" name="lWeekSelect">
+										<option value=1><%= locale.sunday %></option>
+										<option value=2><%= locale.monday %></option>
+										<option value=3><%= locale.tuesday %></option>
+										<option value=4><%= locale.wednesday %></option>
+										<option value=5><%= locale.thursday %></option>
+										<option value=6><%= locale.friday %></option>
+										<option value=7><%= locale.saturday %></option>
+									</select>
+									<select class="form-control margin-r5 minwidth-50" id="lHourSelect" name="lHourSelect">
+									</select>
+									<%= locale.timeHour %>
+									<select class="form-control margin-r5 minwidth-50" id="lMinuteSelect" name="lMinuteSelect">
+									</select>
+									<%= locale.timeMin %>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>

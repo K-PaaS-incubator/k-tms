@@ -1,0 +1,925 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.trafficAnalysis.ServiceMapper">
+
+	<resultMap type="TrafficServiceVO" 		id="ServiceListResultMap">
+		<result property="nProtocol" 		column="NPROTOCOL" />
+		<result property="wService" 		column="WSERVICE"/>
+		<result property="bps" 				column="BPS"/>
+		<result property="pps" 				column="PPS"/>
+		<result property="cps" 				column="CPS"/>
+		<result property="ingressBps"		column="INGRESS_BPS"/>
+		<result property="egressBps" 		column="EGRESS_BPS"/>
+		<result property="ingressPps" 		column="INGRESS_PPS"/>
+		<result property="egressPps" 		column="EGRESS_PPS"/>
+		<result property="ingressCps" 		column="INGRESS_CPS"/>
+		<result property="egressCps" 		column="EGRESS_CPS"/>
+		<result property="totalRowSize" 	column="TOTAL_ROWS"/>
+		<result property="rNum" 			column="R_NUM"/>
+	</resultMap>
+
+	<select id="selectServiceList" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="ServiceListResultMap">
+            SELECT NPROTOCOL, 
+                    WSERVICE, 
+                    IFNULL(BPS/#{avgTime}, 0) AS BPS, 
+                    IFNULL(PPS/#{avgTime}, 0) AS PPS, 
+                    IFNULL(CPS/#{avgTime}, 0) AS CPS, 
+                    IFNULL(INGRESS_BPS/#{avgTime}, 0) AS INGRESS_BPS, 
+                    IFNULL(EGRESS_BPS/#{avgTime}, 0) AS EGRESS_BPS, 
+                    IFNULL(INGRESS_PPS/#{avgTime}, 0) AS INGRESS_PPS, 
+                    IFNULL(EGRESS_PPS/#{avgTime}, 0) AS EGRESS_PPS, 
+                    IFNULL(INGRESS_CPS/#{avgTime}, 0) AS INGRESS_CPS, 
+                    IFNULL(EGRESS_CPS/#{avgTime}, 0) AS EGRESS_CPS
+            FROM(
+                SELECT NPROTOCOL, 
+                        WSERVICE, 
+                        SUM(DBLSRCBPS + DBLDSTBPS) AS BPS, 
+                        SUM(DBLSRCPPS + DBLDSTPPS) AS PPS, 
+                        SUM(DBLMADECPS)	AS CPS, 
+                        SUM(DBLSRCBPSININ + DBLSRCBPSOUTIN + DBLDSTBPSININ+ DBLDSTBPSOUTIN) AS INGRESS_BPS, 
+                        SUM(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT+ DBLDSTBPSINOUT + DBLDSTBPSOUTOUT)	AS EGRESS_BPS, 
+                        SUM(DBLSRCPPSININ + DBLSRCPPSOUTIN + DBLDSTPPSININ+ DBLDSTPPSOUTIN) AS INGRESS_PPS, 
+                        SUM(DBLSRCPPSINOUT + DBLSRCPPSOUTOUT+ DBLDSTPPSINOUT + DBLDSTPPSOUTOUT) AS EGRESS_PPS, 
+                        SUM(DBLMADECPSININ + DBLMADECPSOUTIN) AS INGRESS_CPS, 
+                        SUM(DBLMADECPSINOUT + DBLMADECPSOUTOUT) AS EGRESS_CPS
+                FROM
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT * FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                        AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    <if test="lnetworkIndex == 0">
+                        AND LNETWORKINDEX = 0
+                    </if>
+                    <if test="protocolSelect != 0">
+                        AND NPROTOCOL = #{protocolSelect}
+                    </if>
+                    <if test="destPortInput != null">
+                        AND WSERVICE IN (#{destPortInput})
+                    </if>
+
+                    GROUP  BY WSERVICE, NPROTOCOL 
+                ) B
+            <if test="thresholdSelect != null and thresholdSelect.equals('bps')">
+                    WHERE bps  >= (#{thresholdNumInput} * #{avgTime})
+            </if>
+            <if test="thresholdSelect != null and !thresholdSelect.equals('bps')">
+                    WHERE pps   >= (#{thresholdNumInput} * #{avgTime})
+            </if>	
+            <if test= "(winBoundSelect == 0 or winBoundSelect == 1) and sortSelect  == 'bps'" >
+                ORDER  BY BPS DESC, PPS DESC, CPS DESC
+            </if> 
+            <if test= "(winBoundSelect == 0 or winBoundSelect == 1) and sortSelect  == 'pps'" >
+                ORDER  BY PPS DESC, BPS DESC, CPS DESC
+            </if> 
+            <if test= "winBoundSelect == 2 and sortSelect  == 'bps'" >
+                ORDER  BY EGRESS_BPS DESC, EGRESS_PPS DESC, EGRESS_CPS DESC
+            </if> 
+            <if test= "winBoundSelect == 2 and sortSelect  == 'pps'" >
+                ORDER  BY EGRESS_PPS DESC, EGRESS_BPS DESC, EGRESS_CPS DESC
+            </if> 
+            <if test= "winBoundSelect == 3 and sortSelect == 'bps'" >
+                ORDER  BY INGRESS_BPS DESC, INGRESS_PPS DESC, INGRESS_CPS DESC
+            </if> 
+            <if test= "winBoundSelect == 3 and sortSelect == 'pps'" >
+                ORDER  BY INGRESS_PPS DESC,  INGRESS_BPS DESC, INGRESS_CPS DESC
+            </if>
+            <if test="isDownload neq 'Y'.toString()" >
+            LIMIT #{rowSize} OFFSET #{startRowSize}
+            </if>
+        </select>
+        
+	<select id="selectServiceListTotal" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultType="long">
+            SELECT COUNT(NPROTOCOL) AS totalRowSize 
+            FROM(
+                SELECT NPROTOCOL, 
+                        WSERVICE
+				<if test="thresholdSelect != null and thresholdSelect.equals('bps')">
+					,SUM(DBLSRCBPS + DBLDSTBPS) AS BPS
+				</if>
+				<if test="thresholdSelect != null and !thresholdSelect.equals('bps')">
+					,SUM(DBLSRCPPS + DBLDSTPPS) AS PPS
+				</if>
+				FROM
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                        SELECT * FROM ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                        AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    <if test="lnetworkIndex == 0">
+                        AND LNETWORKINDEX = 0
+                    </if>
+                    <if test="protocolSelect != 0">
+                        AND NPROTOCOL = #{protocolSelect}
+                    </if>
+                    <if test="destPortInput != null">
+                        AND WSERVICE IN (#{destPortInput})
+                    </if>
+
+                    GROUP  BY WSERVICE, NPROTOCOL 
+                ) B
+            <if test="thresholdSelect != null and thresholdSelect.equals('bps')">
+                    WHERE bps  >= (#{thresholdNumInput} * #{avgTime})
+            </if>
+            <if test="thresholdSelect != null and !thresholdSelect.equals('bps')">
+                    WHERE pps >= (#{thresholdNumInput} * #{avgTime})
+            </if>	
+        </select>
+        
+	<resultMap type="TrafficServiceVO" 		id="ServiceTotalResultMap">
+		<result property="bps" 				column="BPS"/>
+		<result property="pps" 				column="PPS"/>
+		<result property="cps" 				column="CPS"/>
+		<result property="ingressBps"		column="INGRESS_BPS"/>
+		<result property="egressBps" 		column="EGRESS_BPS"/>
+		<result property="ingressPps" 		column="INGRESS_PPS"/>
+		<result property="egressPps" 		column="EGRESS_PPS"/>
+		<result property="ingressCps" 		column="INGRESS_CPS"/>
+		<result property="egressCps" 		column="EGRESS_CPS"/>
+	</resultMap>
+	
+	<select id="selectServiceTotal" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="ServiceTotalResultMap"> 
+	SELECT 
+            IFNULL(SUM(BPS)/#{avgTime}, 0)				AS BPS,
+            IFNULL(SUM(PPS)/#{avgTime}, 0)				AS PPS,
+            IFNULL(SUM(CPS)/#{avgTime}, 0)				AS CPS,
+            IFNULL(SUM(INGRESS_BPS)/#{avgTime}, 0) 	AS INGRESS_BPS, 
+            IFNULL(SUM(EGRESS_BPS)/#{avgTime}, 0) 		AS EGRESS_BPS,
+            IFNULL(SUM(INGRESS_PPS)/#{avgTime}, 0)		AS INGRESS_PPS, 
+            IFNULL(SUM(EGRESS_PPS)/#{avgTime}, 0) 		AS EGRESS_PPS,
+            IFNULL(SUM(INGRESS_CPS)/#{avgTime}, 0) 	AS INGRESS_CPS, 
+            IFNULL(SUM(EGRESS_CPS)/#{avgTime}, 0) 		AS EGRESS_CPS
+	FROM (
+            SELECT
+                WSERVICE,
+                SUM(DBLSRCBPS + DBLDSTBPS) AS BPS, 
+                SUM(DBLSRCPPS + DBLDSTPPS) AS PPS, 
+                SUM(DBLMADECPS)	AS CPS, 
+                SUM(DBLSRCBPSININ + DBLSRCBPSOUTIN + DBLDSTBPSININ+ DBLDSTBPSOUTIN) AS INGRESS_BPS, 
+                SUM(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT+ DBLDSTBPSINOUT + DBLDSTBPSOUTOUT)	AS EGRESS_BPS, 
+                SUM(DBLSRCPPSININ + DBLSRCPPSOUTIN + DBLDSTPPSININ+ DBLDSTPPSOUTIN) AS INGRESS_PPS, 
+                SUM(DBLSRCPPSINOUT + DBLSRCPPSOUTOUT+ DBLDSTPPSINOUT + DBLDSTPPSOUTOUT) AS EGRESS_PPS, 
+                SUM(DBLMADECPSININ + DBLMADECPSOUTIN) AS INGRESS_CPS, 
+                SUM(DBLMADECPSINOUT + DBLMADECPSOUTOUT) AS EGRESS_CPS
+            FROM
+                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                    SELECT * FROM ${item.name}
+                </foreach>
+            WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND LNETWORKINDEX = #{lnetworkIndex}
+            </if>
+            <if test="lnetworkIndex == 0">
+                AND LNETWORKINDEX = 0
+            </if>
+            GROUP  BY WSERVICE, NPROTOCOL
+        ) B
+        </select>
+        
+	<resultMap type="TrafficServiceChartVO" id="serviceChartResultMap">
+		<result property="time" 			column="TMSTART" />
+		<result property="data" 			column="DATA"/>
+		<result property="strName"			column="STRNAME"/>
+	</resultMap>
+	
+	<select id="selectServiceChart" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceChartResultMap">
+	SELECT TMSTART, IFNULL(DATA,0) AS DATA,
+	<if test='graphItem == -1'>
+		'TOTAL' AS STRNAME
+	</if>
+	<if test='graphItem != -1'>
+	CONCAT('[' , 
+		CASE 	WHEN NPROTOCOL = 0 THEN 'MPLS'
+                        WHEN NPROTOCOL = 1 THEN	'ICMP'
+                        WHEN NPROTOCOL = 2 THEN	'ARP'
+                        WHEN NPROTOCOL = 3 THEN	'RARP'
+                        WHEN NPROTOCOL = 4 THEN	'LLC'
+                        WHEN NPROTOCOL = 6 THEN	'TCP'
+                        WHEN NPROTOCOL = 17 THEN 'UDP'
+                        WHEN NPROTOCOL = 58 THEN 'ICMPv6'
+		END
+	 , '] ' , #{graphItem}) AS STRNAME
+	</if>
+	FROM (	
+		SELECT  
+		<if test='graphItem == -1'>
+		TMSTART, SUM(DATA) AS DATA
+		</if>
+		<if test='graphItem != -1'>
+		TMSTART, SUM(DATA) AS DATA, NPROTOCOL
+		</if>
+		FROM (
+			SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, NPROTOCOL, WSERVICE, 
+			<if test="winBoundSelect == 0">
+			(DBLSRCBPS + DBLDSTBPS) AS DATA
+			</if>
+			<if test="winBoundSelect == 2">
+			(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT + DBLDSTBPSINOUT + DBLDSTBPSOUTOUT) AS DATA
+			</if>
+			<if test="winBoundSelect == 3">
+			(DBLSRCBPSININ + DBLSRCBPSOUTIN + DBLDSTBPSININ+ DBLDSTBPSOUTIN) AS DATA
+			</if>
+			FROM
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                              SELECT * FROM ${item.name}
+                        </foreach>
+			WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+			<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+                        <if test="lnetworkIndex == 0">
+                            AND LNETWORKINDEX = 0
+                        </if>
+			<if test="graphItem != -1">
+				AND WSERVICE = #{graphItem}
+			</if>
+			<if test="graphPlusItem != -1">
+				AND NPROTOCOL = #{graphPlusItem}
+			</if>
+		) B
+		<if test='graphItem == -1'>
+			GROUP BY TMSTART
+		</if>
+		<if test='graphItem != -1'>
+			GROUP BY TMSTART, NPROTOCOL
+		</if>
+	) C
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<resultMap type="TrafficServiceChartVO" id="serviceInOutChartResultMap">
+		<result property="time" 			column="TMSTART" />
+		<result property="data" 			column="DATA"/>
+		<result property="dataIn" 			column="DATA_IN" />
+		<result property="dataOut" 			column="DATA_OUT" />
+		<result property="strName"			column="STRNAME"/>
+	</resultMap>
+	
+	<select id="selectServiceInOutChart" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceInOutChartResultMap">
+	SELECT TMSTART, IFNULL(DATA,0) AS DATA, NVL(DATA_IN,0) AS DATA_IN, NVL(DATA_OUT,0) AS DATA_OUT,
+	<if test='graphItem == -1'>
+		'TOTAL' AS STRNAME
+	</if>
+	<if test='graphItem != -1'>
+	CONCAT('[' , 
+		CASE 	WHEN NPROTOCOL = 0 THEN 'MPLS'
+                        WHEN NPROTOCOL = 1 THEN	'ICMP'
+                        WHEN NPROTOCOL = 2 THEN	'ARP'
+                        WHEN NPROTOCOL = 3 THEN	'RARP'
+                        WHEN NPROTOCOL = 4 THEN	'LLC'
+                        WHEN NPROTOCOL = 6 THEN	'TCP'
+                        WHEN NPROTOCOL = 17 THEN 'UDP'
+                        WHEN NPROTOCOL = 58 THEN 'ICMPv6'
+		END
+	 , '] ' , #{graphItem}) AS STRNAME
+	</if>
+	FROM (	
+		SELECT  
+		<if test='graphItem == -1'>
+                    TMSTART, SUM(DATA) AS DATA,
+                    SUM(DATA_IN) AS DATA_IN, 
+                    SUM(DATA_OUT) AS DATA_OUT
+		</if>
+		<if test='graphItem != -1'>
+                    TMSTART, SUM(DATA) AS DATA, 
+                    SUM(DATA_IN) AS DATA_IN, 
+                    SUM(DATA_OUT) AS DATA_OUT, 
+                    NPROTOCOL
+                </if>
+		FROM (
+			SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, NPROTOCOL, WSERVICE, 
+			(DBLSRCBPS + DBLDSTBPS) AS DATA,
+			(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT+ DBLDSTBPSINOUT + DBLDSTBPSOUTOUT) AS DATA_OUT,
+			(DBLSRCBPSININ + DBLSRCBPSOUTIN + DBLDSTBPSININ+ DBLDSTBPSOUTIN) AS DATA_IN
+			FROM
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                              SELECT * FROM ${item.name}
+                        </foreach>
+			WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+			<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+                        <if test="lnetworkIndex == 0">
+                            AND LNETWORKINDEX = 0
+                        </if>
+			<if test="graphItem != -1">
+				AND WSERVICE = #{graphItem}
+			</if>
+			<if test="graphPlusItem != -1">
+				AND NPROTOCOL = #{graphPlusItem}
+			</if>
+		) B
+		<if test='graphItem == -1'>
+			GROUP BY TMSTART
+		</if>
+		<if test='graphItem != -1'>
+			GROUP BY TMSTART, NPROTOCOL
+		</if>
+	) C
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<resultMap type="ChartVO" 			id="serviceTrendBpsResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectServiceTrendBpsGraphData" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendBpsResultMap">
+	SELECT TMSTART,  
+	GRAPH_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM (	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE, TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				<if test='winBoundSelect == 0'>
+					(DBLSRCBPS + DBLDSTBPS)  AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 3'>
+					(DBLSRCBPSOUTIN + DBLSRCBPSININ + DBLDSTBPSOUTIN + DBLDSTBPSININ) AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 2'>
+					(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT + DBLDSTBPSINOUT + DBLDSTBPSOUTOUT) AS GRAPH_VALUE
+				</if>			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+		) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectServiceTrendBpsGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendBpsResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM (	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE, TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				<if test='winBoundSelect == 0'>
+					(DBLSRCBPS + DBLDSTBPS)  AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 3'>
+					(DBLSRCBPSOUTIN + DBLSRCBPSININ + DBLDSTBPSOUTIN + DBLDSTBPSININ) AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 2'>
+					(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT + DBLDSTBPSINOUT + DBLDSTBPSOUTOUT) AS GRAPH_VALUE
+				</if>			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+		) C
+	) D
+	</select>
+        
+	<select id="selectServiceTrendBpsGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendBpsResultMap">
+	SELECT 
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM (	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE, TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				<if test='winBoundSelect == 0'>
+					(DBLSRCBPS + DBLDSTBPS)  AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 3'>
+					(DBLSRCBPSOUTIN + DBLSRCBPSININ + DBLDSTBPSOUTIN + DBLDSTBPSININ) AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 2'>
+					(DBLSRCBPSINOUT + DBLSRCBPSOUTOUT + DBLDSTBPSINOUT + DBLDSTBPSOUTOUT) AS GRAPH_VALUE
+				</if>			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+		) C
+	) D
+	</select>
+        
+	<resultMap type="ChartVO" 			id="serviceTrendBpsInOutResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="ddataIn" 		column="GRAPH_VALUE_IN" />
+		<result property="ddataOut" 	column="GRAPH_VALUE_OUT" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectServiceTrendBpsInOutGraphData" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendBpsInOutResultMap">
+	SELECT TMSTART,  
+            GRAPH_VALUE, 
+            GRAPH_VALUE_IN,
+            GRAPH_VALUE_OUT
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE,
+		IFNULL(GRAPH_VALUE_IN,0) GRAPH_VALUE_IN,
+		IFNULL(GRAPH_VALUE_OUT,0) GRAPH_VALUE_OUT
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) 				AS GRAPH_VALUE,
+			SUM(GRAPH_VALUE_IN)					AS GRAPH_VALUE_IN,
+			SUM(GRAPH_VALUE_OUT)					AS GRAPH_VALUE_OUT,
+			TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				(DBLSRCBPS+DBLDSTBPS)  AS GRAPH_VALUE,
+				(DBLSRCBPSOUTIN+DBLSRCBPSININ+DBLDSTBPSOUTIN+DBLDSTBPSININ) AS GRAPH_VALUE_IN,
+				(DBLSRCBPSINOUT+DBLSRCBPSOUTOUT+DBLDSTBPSINOUT+DBLDSTBPSOUTOUT) AS GRAPH_VALUE_OUT			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+		) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectServiceTrendBpsInOutGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendBpsInOutResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE,
+		IFNULL(GRAPH_VALUE_IN,0) GRAPH_VALUE_IN,
+		IFNULL(GRAPH_VALUE_OUT,0) GRAPH_VALUE_OUT
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) 				AS GRAPH_VALUE,
+			SUM(GRAPH_VALUE_IN)					AS GRAPH_VALUE_IN,
+			SUM(GRAPH_VALUE_OUT)					AS GRAPH_VALUE_OUT,
+			TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				(DBLSRCBPS+DBLDSTBPS)  AS GRAPH_VALUE,
+				(DBLSRCBPSOUTIN+DBLSRCBPSININ+DBLDSTBPSOUTIN+DBLDSTBPSININ) AS GRAPH_VALUE_IN,
+				(DBLSRCBPSINOUT+DBLSRCBPSOUTOUT+DBLDSTBPSINOUT+DBLDSTBPSOUTOUT) AS GRAPH_VALUE_OUT			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+		) C
+	) D
+	</select>
+        
+	<select id="selectServiceTrendBpsInOutGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendBpsInOutResultMap">
+	SELECT 
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE,
+		IFNULL(GRAPH_VALUE_IN,0) GRAPH_VALUE_IN,
+		IFNULL(GRAPH_VALUE_OUT,0) GRAPH_VALUE_OUT
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) 				AS GRAPH_VALUE,
+			SUM(GRAPH_VALUE_IN)					AS GRAPH_VALUE_IN,
+			SUM(GRAPH_VALUE_OUT)					AS GRAPH_VALUE_OUT,
+			TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				(DBLSRCBPS+DBLDSTBPS)  AS GRAPH_VALUE,
+				(DBLSRCBPSOUTIN+DBLSRCBPSININ+DBLDSTBPSOUTIN+DBLDSTBPSININ) AS GRAPH_VALUE_IN,
+				(DBLSRCBPSINOUT+DBLSRCBPSOUTOUT+DBLDSTBPSINOUT+DBLDSTBPSOUTOUT) AS GRAPH_VALUE_OUT			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+		) C
+	) D
+	</select>
+        
+	<resultMap type="ChartVO" 			id="serviceTrendPpsResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectServiceTrendPpsGraphData" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendPpsResultMap">
+	SELECT TMSTART, GRAPH_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE, TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				<if test='winBoundSelect == 0'>
+					(DBLSRCPPS+DBLDSTPPS)  AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 3'>
+					(DBLSRCPPSOUTIN+DBLSRCPPSININ+DBLDSTPPSOUTIN+DBLDSTPPSININ) AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 2'>
+					(DBLSRCPPSINOUT+DBLSRCPPSOUTOUT+DBLDSTPPSINOUT+DBLDSTPPSOUTOUT) AS GRAPH_VALUE
+				</if>			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+                ) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectServiceTrendPpsGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendPpsResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE, TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				<if test='winBoundSelect == 0'>
+					(DBLSRCPPS+DBLDSTPPS)  AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 3'>
+					(DBLSRCPPSOUTIN+DBLSRCPPSININ+DBLDSTPPSOUTIN+DBLDSTPPSININ) AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 2'>
+					(DBLSRCPPSINOUT+DBLSRCPPSOUTOUT+DBLDSTPPSINOUT+DBLDSTPPSOUTOUT) AS GRAPH_VALUE
+				</if>			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+                ) C
+	) D
+	</select>
+        
+	<select id="selectServiceTrendPpsGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendPpsResultMap">
+	SELECT 
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE, TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				<if test='winBoundSelect == 0'>
+					(DBLSRCPPS+DBLDSTPPS)  AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 3'>
+					(DBLSRCPPSOUTIN+DBLSRCPPSININ+DBLDSTPPSOUTIN+DBLDSTPPSININ) AS GRAPH_VALUE
+				</if>			
+				<if test='winBoundSelect == 2'>
+					(DBLSRCPPSINOUT+DBLSRCPPSOUTOUT+DBLDSTPPSINOUT+DBLDSTPPSOUTOUT) AS GRAPH_VALUE
+				</if>			
+                                FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+                ) C
+	) D
+	</select>
+        
+	<resultMap type="ChartVO" 			id="serviceTrendPpsInOutResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="ddataIn" 		column="GRAPH_VALUE_IN" />
+		<result property="ddataOut" 	column="GRAPH_VALUE_OUT" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectServiceTrendPpsInOutGraphData" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendPpsInOutResultMap">
+	SELECT TMSTART, 
+            GRAPH_VALUE, 
+            GRAPH_VALUE_IN,
+            GRAPH_VALUE_OUT
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE,
+		IFNULL(GRAPH_VALUE_IN,0) GRAPH_VALUE_IN,
+		IFNULL(GRAPH_VALUE_OUT,0) GRAPH_VALUE_OUT
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE,
+			SUM(GRAPH_VALUE_IN)	AS GRAPH_VALUE_IN,
+			SUM(GRAPH_VALUE_OUT)	AS GRAPH_VALUE_OUT,
+                        TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				(DBLSRCPPS + DBLDSTPPS)  AS GRAPH_VALUE,			
+				(DBLSRCPPSOUTIN + DBLSRCPPSININ + DBLDSTPPSOUTIN + DBLDSTPPSININ) AS GRAPH_VALUE_IN,	
+				(DBLSRCPPSINOUT + DBLSRCPPSOUTOUT + DBLDSTPPSINOUT + DBLDSTPPSOUTOUT) AS GRAPH_VALUE_OUT
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                             SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+                ) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectServiceTrendPpsInOutGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendPpsInOutResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE,
+		IFNULL(GRAPH_VALUE_IN,0) GRAPH_VALUE_IN,
+		IFNULL(GRAPH_VALUE_OUT,0) GRAPH_VALUE_OUT
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE,
+			SUM(GRAPH_VALUE_IN)	AS GRAPH_VALUE_IN,
+			SUM(GRAPH_VALUE_OUT)	AS GRAPH_VALUE_OUT,
+                        TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				(DBLSRCPPS + DBLDSTPPS)  AS GRAPH_VALUE,			
+				(DBLSRCPPSOUTIN + DBLSRCPPSININ + DBLDSTPPSOUTIN + DBLDSTPPSININ) AS GRAPH_VALUE_IN,	
+				(DBLSRCPPSINOUT + DBLSRCPPSOUTOUT + DBLDSTPPSINOUT + DBLDSTPPSOUTOUT) AS GRAPH_VALUE_OUT
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                             SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+			GROUP  BY TMSTART 
+                ) C
+	) D
+	</select>
+        
+	<select id="selectServiceTrendPpsInOutGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="serviceTrendPpsInOutResultMap">
+	SELECT 
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE,
+		IFNULL(GRAPH_VALUE_IN,0) GRAPH_VALUE_IN,
+		IFNULL(GRAPH_VALUE_OUT,0) GRAPH_VALUE_OUT
+		FROM
+		(	
+			SELECT SUM(GRAPH_VALUE) AS GRAPH_VALUE,
+			SUM(GRAPH_VALUE_IN)	AS GRAPH_VALUE_IN,
+			SUM(GRAPH_VALUE_OUT)	AS GRAPH_VALUE_OUT,
+                        TMSTART
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+				(DBLSRCPPS + DBLDSTPPS)  AS GRAPH_VALUE,			
+				(DBLSRCPPSOUTIN + DBLSRCPPSININ + DBLDSTPPSOUTIN + DBLDSTPPSININ) AS GRAPH_VALUE_IN,	
+				(DBLSRCPPSINOUT + DBLSRCPPSOUTOUT + DBLDSTPPSINOUT + DBLDSTPPSOUTOUT) AS GRAPH_VALUE_OUT
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                             SELECT * FROM ${item.name}
+                                </foreach>
+				WHERE  NPROTOCOL = #{nProtocol} 
+				AND WSERVICE = #{wService} 
+				AND TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+				<if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="lnetworkIndex == 0">
+                                    AND LNETWORKINDEX = 0
+                                </if>
+			) B
+                ) C 
+	) D
+	</select>
+        
+	<resultMap type="TrafficServiceVO" id="ProtocolIpTrafficMap">
+		<result property="ip" 			column="IP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="bps" 			column="BPS" />
+		<result property="pps" 			column="PPS" />
+		<result property="bpsSum" 		column="BPS_SUM" />
+		<result property="ppsSum" 		column="PPS_SUM" />
+		<result property="totalRowSize" column="TOTAL_ROWS" />
+		<result property="rNum" 		column="RNUM" />
+	
+	</resultMap>
+	
+	<select id="selectProtocolIpTrafficList" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultMap="ProtocolIpTrafficMap">
+            SELECT IP, BPS, PPS, BPS_SUM, PPS_SUM
+            FROM   (SELECT IP, 
+                           IFNULL(BPS/#{timeDifference}, 0) AS BPS, 
+                           IFNULL(PPS/#{timeDifference}, 0) AS PPS,
+                           IFNULL(BPS/#{timeDifference}, 0) AS BPS_SUM, 
+                           IFNULL(PPS/#{timeDifference}, 0) AS PPS_SUM
+                    FROM   (SELECT IP, 
+                                   SUM(BPS) AS BPS, 
+                                   SUM(PPS) AS PPS 
+                            FROM   (SELECT
+                                        <if test="ipSelectboxValue == 0">
+                                            DWSOURCEIP AS IP,
+                                        </if>
+                                        <if test="ipSelectboxValue == 1">
+                                            DWDESTINATIONIP AS IP,
+                                        </if> 
+                                        ( DBLSRCBPS + DBLDSTBPS ) AS BPS, 
+                                        ( DBLSRCPPS + DBLDSTPPS ) AS PPS 
+                                    FROM
+                                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                         SELECT TMSTART, DWSOURCEIP, DWDESTINATIONIP, WSRCPORT, WDSTPORT, NPROTOCOL, DBLSRCBPS, 
+                                                DBLDSTBPS, DBLSRCPPS, DBLDSTPPS, LNETWORKINDEX
+                                         FROM   ${item.name}
+                                    </foreach>
+                                    WHERE  TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                    <if test="indexType == 0">
+                                        AND LNETWORKINDEX = 0
+                                    </if>
+                                    <if test="indexType == 4">
+                                        AND LNETWORKINDEX = #{lnetworkIndex}
+                                    </if>
+                                    AND NPROTOCOL = #{nProtocol}
+                                    AND WSRCPORT = #{wService}
+                            ) B
+                            GROUP  BY IP 
+                            ORDER  BY BPS DESC
+                    ) C
+            ) D
+            LIMIT #{rowSize} OFFSET #{startRowSize}
+	</select>
+        
+	<select id="selectProtocolIpTrafficListTotalCount" parameterType="com.kglory.tms.web.model.dto.TrafficServiceDto" resultType="long">
+            SELECT COUNT(IP) AS TOTAL_ROWS
+            FROM   (
+                SELECT IP, 
+                        SUM(BPS) AS BPS, 
+                        SUM(PPS) AS PPS 
+                FROM   (
+                    SELECT
+                        <if test="ipSelectboxValue == 0">
+                            DWSOURCEIP AS IP,
+                        </if>
+                        <if test="ipSelectboxValue == 1">
+                            DWDESTINATIONIP AS IP,
+                        </if> 
+                        ( DBLSRCBPS + DBLDSTBPS ) AS BPS, 
+                        ( DBLSRCPPS + DBLDSTPPS ) AS PPS 
+                    FROM
+                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                         SELECT TMSTART, DWSOURCEIP, DWDESTINATIONIP, WSRCPORT, WDSTPORT, NPROTOCOL, DBLSRCBPS, 
+                                DBLDSTBPS, DBLSRCPPS, DBLDSTPPS, LNETWORKINDEX
+                         FROM   ${item.name}
+                    </foreach>
+                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                    <if test="indexType == 0">
+                        AND LNETWORKINDEX = 0
+                    </if>
+                    <if test="indexType == 4">
+                        AND LNETWORKINDEX = #{lnetworkIndex}
+                    </if>
+                    AND NPROTOCOL = #{nProtocol}
+                    AND WSRCPORT = #{wService}
+                ) B
+                GROUP BY IP 
+            ) C
+	</select>
+</mapper>

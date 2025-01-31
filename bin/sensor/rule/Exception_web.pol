@@ -1,0 +1,12 @@
+#Common Section
+[COMMON]
+Class=POLICY_EXCEPTION
+Version=1.0.0.0
+Time=
+Description=Infosec Technology
+[/COMMON]
+
+#Info Section
+[INFO]
+Count=0
+[/INFO]

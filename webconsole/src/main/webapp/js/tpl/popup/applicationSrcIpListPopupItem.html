@@ -1,0 +1,8 @@
+<td class="align-center width-number"><%= model.rNum %></td>
+<td class="overflow-ellipsis"><a class="ipRetrievePopupLink">
+<% if (ipType == 4) { %><%= model.dwSourceIp %><% } %>
+<% if (ipType == 6) { %><%= model.strSourceIp %><% } %>
+</a></td>
+<td class="align-right width-popup-td"><span id="srcIpPopup" style="cursor:pointer;color: #4f7fc1;"><%= model.srcIpCount %></span></td>
+<!--<td class="align-right width-popup-td"><a id="srcPort"><%= model.sPortCount %></a></td>
+<td class="width-date"><%= model.tmLogTime %></td>-->

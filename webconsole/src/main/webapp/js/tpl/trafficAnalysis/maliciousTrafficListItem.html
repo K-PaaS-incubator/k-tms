@@ -1,0 +1,26 @@
+<% if(model.get('ucType') != null) { %>
+<tr>
+<td class="align-center"><input type="checkbox" id="graphItemCheckTotal" name="graphItemCheckTotal" value="-1"></td>
+<td><span class="traffic-color"></span>전체트래픽</td>
+<td class="align-center <%= isHighLight('bps') %>"><button type="button" class="totalBpsPopup btn-intable-chart"></button></td>
+<td class="align-right <%= isHighLight('bps') %>"><span class="pull-left" id="totalBps"></span><%= model.get('bps') %></td>
+<td class="align-right <%= isHighLight('bps') %>"><span class="pull-left" id="totalIngressBps"></span><%= model.get('ingressBps') %></td>
+<td class="align-right <%= isHighLight('bps') %>"><span class="pull-left" id="totalEgressBps"></span><%= model.get('egressBps') %></td>
+<td class="align-center <%= isHighLight('pps') %>"><button type="button" class="totalPpsPopup btn-intable-chart"></button></td>
+<td class="align-right <%= isHighLight('pps') %>"><span class="pull-left" id="totalPps"></span><%= model.get('pps') %></td>
+<td class="align-right <%= isHighLight('pps') %>"><span class="pull-left" id="totalIngressPps"></span><%= model.get('ingressPps') %></td>
+<td class="align-right <%= isHighLight('pps') %>"><span class="pull-left" id="totalEgressPps"></span><%= model.get('egressPps') %></td>
+</tr>
+<tr>
+<td name="graphItemCheckTdItem" id="graphItemCheckTdItem" class="align-center"><input type="checkbox" id="graphItemCheck" name="graphItemCheck" value="61"></td>
+<td><span class="traffic-color"></span>유해트래픽</td>
+<td class="align-center <%= isHighLight('bps') %>"><button type="button" class="maliciousBpsPopup btn-intable-chart"></button></td>
+<td class="align-right <%= isHighLight('bps') %>"><span class="pull-left" id="malTotalBps"></span><%= model.get('malBps') %></td>
+<td class="align-right <%= isHighLight('bps') %>"><span class="pull-left" id="malTotalIngressBps"></span><%= model.get('malIngressBps') %></td>
+<td class="align-right <%= isHighLight('bps') %>"><span class="pull-left" id="malTotalEgressBps"></span><%= model.get('malEgressBps') %></td>
+<td class="align-center <%= isHighLight('pps') %>"><button type="button" class="maliciousPpsPopup btn-intable-chart"></button></td>
+<td class="align-right <%= isHighLight('pps') %>"><span class="pull-left" id="malTotalPps"></span><%= model.get('malPps') %></td>
+<td class="align-right <%= isHighLight('pps') %>"><span class="pull-left" id="malTotalIngressPps"></span><%= model.get('malIngressPps') %></td>
+<td class="align-right <%= isHighLight('pps') %>"><span class="pull-left" id="malTotalEgressPps"></span><%= model.get('malEgressPps') %></td>
+</tr>
+<% } %>

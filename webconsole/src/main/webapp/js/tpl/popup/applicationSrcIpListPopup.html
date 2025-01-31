@@ -1,0 +1,74 @@
+<!-- info table begin -->
+<table class="view-table">
+	<tr>
+		<th width="8%" class="padding-rl-clear"><%= locale.targetType %></th>
+		<td width="42%"><%= pathName %></td>
+		<th width="8%" class="padding-rl-clear"><%= locale.search.period %></th>
+		<td width="42%"><%= condition.startDateInput %> ~ <%= condition.endDateInput %></td>
+	</tr>
+	<tr>
+		<th class="padding-rl-clear"><%= locale.type %></th>
+		<td><%= bType %></td>
+		<th class="padding-rl-clear"><!-- 출발IP수 --></th>
+		<td></td>		
+	</tr>
+	<tr>
+		<th class="padding-rl-clear"></th>
+		<td></td>
+		<th class="padding-rl-clear"></th>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+<!-- info table end -->
+<!-- 조회 form begin
+<div class="row margin-t15">
+	<form role="form" class="form-inline">
+		<label class="control-label margin-l10"><%= locale.victimPort %></label> <input id="victimPort" type="text"
+			class="form-control margin-l5"
+		/>
+		<button type="button" class="btn btn-default"><%= locale.search.search %></button>
+	</form>
+</div>
+<!-- 조회 form end
+
+<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>-->
+
+<!-- table begin -->
+<div class="row">
+	<!-- info line begin -->
+	<div class="col-xs-12 margin-t10 margin-b5">
+		<%= locale.all %> : <strong id="totalCount"></strong> <%= locale.dashboard.count %>
+	</div>
+	<!-- info line end -->
+
+	<!-- table begin -->
+	<div class="col-xs-12 margin-t5 margin-b5 progressbar">
+		<table class="table table-vertical-line">
+                    <colgroup>
+                        <col width="20%" />
+                        <col width="60%" />
+                        <col width="20%" />
+<!--                        <col width="10%" />
+                        <col width="20%" />-->
+                    </colgroup>
+			<thead>
+				<tr>
+					<th><%= locale.number %></th>
+					<th><%= locale.dwSourceIp %></th>
+					<th><%= locale.sourceIpCount %></th>
+<!--					<th>포트수</th>
+					<th>탐지시간</th>-->
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<!-- 더보기/pagination 옵션 begin -->
+		<div class="more-option align-center">
+		</div>
+		<!-- 더보기/pagination 옵션 end -->
+	</div>
+	<!-- table end -->
+</div>
+<!-- table end -->

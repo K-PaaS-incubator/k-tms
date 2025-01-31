@@ -1,0 +1,8 @@
+Package:cloudtas
+Version: 1.1
+Section: misc
+Priority: optional
+Architecture: all
+Depends:
+Description:KornicGlory
+Maintainer:bhryu@kglory.co.kr

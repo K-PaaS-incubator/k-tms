@@ -1,0 +1,197 @@
+<!-- 탐지정책 유형그룹 목록 begin -->
+<div class="content-gray col-lg-5 col-xs-5  border-solid-right content-list-setup-left">
+    <div class="title"><%= locale.intrusionDetection %> <%= locale.list %></div>
+    <!-- 버튼 목록 begin -->
+    <div class="float-clear row content-tree-btn">
+        <div class="col-lg-8 col-md-8 col-xs-12 padding-clear">
+            <div class="col-lg-4 col-md-4 col-xs-3 padding-clear">	
+                <!-- 간편검색 레이어 begin -->
+                <div class="dropdown col-lg-11 padding-clear">
+                    <button type="button" class="btn btn-default col-lg-12" data-toggle="dropdown" class="dropdown-toggle">
+                        <span class="margin-r15"></span><%= locale.searching %> <span class="caret margin-l5"></span>
+                    </button>
+                    <div class="dropdown-menu media-list pull-right animated fadeInDown security-detail-search">
+                        <form class="form-inline detectionPolicyForm" role="form">
+                            <div class="icon-subtitle col-xs-12 margin-l25 margin-t10"><%= locale.search.simpleSearch %></div>
+                            <!--간편검색 begin-->
+                            <div class="col-xs-11 border-dotted-all margin-l25 padding-all-10">
+                                <!-- 공격유형 선택 begin -->
+                                <div class="form-group col-xs-12 padding-clear">
+                                    <label class="control-label col-xs-2"><%= locale.attackType %></label>
+                                    <select id="attackTypeSelect" name="attackTypeSelect" class="form-control col-xs-10">
+                                        <option value=""><%= locale.all %></option>
+                                    </select>
+                                </div>
+                                <!-- 공격유형 선택 end -->
+
+                                <!-- 공격명 선택 begin -->
+                                <div class="form-group col-xs-12 margin-t10 padding-clear">
+                                    <label class="control-label col-xs-2"><%= locale.attackName %> *</label>
+                                    <input type="text" id="attackNameInput" name="attackNameInput" class="form-control col-xs-10" placeholder="<%= locale.attackNameSearchInput %>" maxlength="256"/>
+                                </div>
+                                <!-- 공격명 선택 end -->
+                            </div>
+                            <!--간편검색 end-->	
+
+                            <div class="icon-subtitle col-xs-12 margin-l25"><%= locale.search.detailSearch %></div>
+                            <!--상세검색 begin-->
+                            <div class="col-xs-11 border-dotted-all margin-l25 padding-all-10">
+                                <!-- 위험도 / 프로토콜 선택 begin -->
+                                <div class="form-group col-xs-12 padding-clear">
+                                    <label class="control-label col-xs-2"><%= locale.severity %></label>
+                                    <select name="severityLevel" id="severityLevel" class="form-control col-xs-4">
+                                        <option value=""><%= locale.noCondition %></option>
+                                        <option value="5"><%= locale.high %></option>
+                                        <option value="3"><%= locale.med %></option>
+                                        <option value="1"><%= locale.low %></option>
+                                        <option value="0"><%= locale.information %></option>
+                                    </select>
+                                    <label class="control-label col-xs-2"><%= locale.protocol %></label>
+                                    <select name="protocol" id="protocol" class="form-control col-xs-4">
+                                        <option value=""><%= locale.noCondition %></option>
+                                        <option value="icmp">ICMP</option>
+                                        <option value="tcp">TCP</option>
+                                        <option value="udp">UDP</option>
+                                    </select>
+                                </div>
+                                <!-- 위험도 / 프로토콜 선택 end -->
+
+                                <!-- 임계값 / 패킷저장 선택 begin -->
+                                <div class="form-group col-xs-12 margin-t10 padding-clear">
+                                    <label class="control-label col-xs-2"><%= locale.thresholdValue %></label>
+                                    <div class="col-xs-2 padding-clear">
+                                        <input type="text" id="thresholdNumInput" name="thresholdNum" class="form-control col-xs-12 lThresholdNumValue" placeholder="개"/>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <input type="text" id="thresholdTimeInput" name="thresholdTime" class="form-control col-xs-12 lThresholdTimeValue" placeholder="초"/>
+                                    </div>
+                                    <!-- <label class="control-label col-xs-2">패킷저장</label>
+                                                <select name="lResponseSelect" id="lResponseSelect" class="form-control col-xs-4 font-size-12">
+                                                        <option value="131073">Log without raw</option>
+                                                        <option value="131074">Log with raw</option>
+                                                </select> -->
+                                </div>
+                                <!-- 임계값 / 패킷저장 선택 end -->
+
+                                <!-- 차단여부 / CVE id 선택 begin -->
+                                <!-- <div class="form-group col-xs-12 margin-t10 padding-clear">
+                            <label class="control-label col-xs-2">차단여부</label>
+                                        <select name="blockSelect" id="blockSelect" class="form-control col-xs-4">
+                                                <option value="">조건없음</option>
+                                        <option value="1">Packet Drop</option>
+                                        <option value="0">Off</option>
+                                        </select>
+                                </div> -->
+                                <!-- 차단여부 / CVE id 선택 end -->
+                            </div>
+                            <!--상세검색 end-->
+
+                            <!-- 체크 옵션 begin -->
+                            <!-- <div class="col-xs-12 align-center padding-t10 padding-b5">
+                                    <div class="checkbox">
+                                      <label>
+                                        <input type="checkbox" id="useSignature" name="useSignature">
+                                        사용중 정책
+                                      </label>
+                                    </div>
+
+                                    <div class="checkbox margin-l10">
+                                      <label>
+                                        <input type="checkbox" id="unUseSignature" name="unUseSignature">
+                                        미사용 정책
+                                      </label>
+                                    </div>
+                                    
+                                    <div class="checkbox margin-l10">
+                                      <label>
+                                        <input type="checkbox" name="resultInsearh">
+                                        결과 내
+                                      </label>
+                                    </div>
+                            </div> -->
+                            <!-- 체크 옵션 end -->
+
+                            <!-- buttons begin -->
+                            <div class="dropdown-footer col-xs-12">
+                                <!-- <button type="button" id="prevSearch" class="btn btn-default margin-l20 pull-left">이전 검색 목록</button>
+                                <button type="button" id="recentSearch" class="btn btn-default margin-l5 pull-left">최근 사용 목록</button>-->					
+                                <button type="button" id="cancelBtn" class="btn btn-default margin-r20 pull-right"><%= locale.reset %></button>
+                                <button type="button" id="attackSearchBtn" class="btn btn-default btn-primary margin-r5 pull-right minwidth-100"><%= locale.searching %></button>
+                            </div>
+                            <!-- buttons end -->
+                        </form>
+                    </div>
+                </div>
+                <!-- 간편검색 레이어 end -->
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-3 padding-clear">
+
+                <!--유형추가 begin-->
+                <div class="dropdown col-lg-11 padding-clear">
+                    <button type="button" class="btn btn-default col-lg-12" data-toggle="dropdown" class="dropdown-toggle">
+                        <%= locale.attackType %> <span class="caret margin-l5"></span>
+                    </button>
+                    <div class="dropdown-menu media-list animated fadeInDown security-detail-type">
+                        <form class="form-inline padding-r15 padding-l15" role="form">
+                            <!-- 코드, 이름, 추가버튼 begin -->
+                            <div class="form-group col-xs-12 margin-t10 margin-b5 padding-clear">
+                                <!--<input type="text" id="nClassType" class="form-control col-xs-4" placeholder="코드"/>-->
+                                <input type="text" id="strName" class="form-control col-xs-7 margin-l5" placeholder="<%= locale.name %>" maxlength="10"/>
+                                <button type="button" id="addUserSignatureBtn" class="addUserSignatureBtn btn btn-default col-xs-3 margin-l5"><%= locale.regist %></button>
+                            </div>
+                            <!-- 코드, 이름, 추가버튼 end -->
+                            <!-- list begin -->
+                            <ul class="signatureClassType-list">
+                                <!-- <li>
+                                        <a href="#" class="overflow-ellipsis">- list</a>
+                                        <button type="button" class="btn btn-default btn-sm col-xs-2 pull-right margin-tm20 margin-l5"><%=locale.remove%></button>
+                                        <button type="button" class="btn btn-default btn-sm col-xs-2 pull-right margin-tm20"><%=locale.edit%></button>				
+                                </li> -->
+                            </ul>
+                            <!-- list end -->
+                        </form>
+                    </div>
+                </div>
+                <!--유형추가 end-->
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-3 padding-clear">
+                <button type="button" id="newTabBtn" class="btn btn-default newTabBtn col-lg-11"><%= locale.createNewItem %></button>
+            </div>
+            <!-- <div class="col-lg-3 padding-clear">		
+                    <button type="button" id="deleteBtn" class="btn btn-default deleteBtn col-lg-11">삭제</button>
+            </div> -->
+        </div>
+
+        <!-- icon 버튼 영역 begin -->
+        <div class="col-lg-4 col-md-4 col-xs-12 padding-clear text-right">
+            <!--                        <div class="btn btn-default btn-icon" id="importCSVBtn" title="<%= locale.import %>"><i class="fa fa-download"></i></div>
+                                    <div class="btn btn-default btn-icon" id="exportCSVBtn" title="<%= locale.export %>"><i class="fa fa-upload"></i></div>-->
+            <!-- 아코디언 모두펼치기 모두닫기 버튼 -->
+            <div class="btn btn-default icon-spread" id="accordion-opening" title="<%= locale.accordionOpen %>"></div>
+            <div class="btn btn-default icon-fold" id="accordion-closing" title="<%= locale.accordionClose %>"></div>
+        </div>
+        <!-- icon 버튼 영역 end -->
+
+    </div>
+    <!-- 버튼 목록 end -->
+
+
+    <!-- 탐지정책 collapsible table begin -->
+    <div class="content-tree-list">
+        <div class="panel-group table-accordion dark-header-accordion has-gap setting-list" id="accordion">
+            <!-- 유형그룹 및 룰 데이터가 들어갈 영역 -->
+        </div>
+    </div>
+    <!-- 탐지정책 collapsible table end -->	
+
+</div>
+<!-- 탐지정책 유형그룹 목록 end -->
+
+<!-- tab 뷰 begin -->
+<div class="content-white col-xs-7 height-100p">
+    <% if (WRITE_MODE == 1) { %>
+    <input type="button" class="btn btn-default btn-sm margin-t5 margin-r5 changeBtn pull-right" value="<%= locale.modify %>" style="display:none"></input>
+    <% } %>
+    <div id="tabs"></div>
+</div>
+<!-- tab 뷰 end -->

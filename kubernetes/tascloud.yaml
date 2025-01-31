@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tas-deployment
+  labels:
+    app: tas
+spec:
+  replicas: 1  # Number of pods to run
+  selector:
+    matchLabels:
+      app: tas
+  template:
+    metadata:
+      labels:
+        app: tas
+    spec:
+      volumes:
+      - name: tas-storage
+        persistentVolumeClaim:
+          claimName: tas-claim
+      containers:
+      - name: tascloud
+        image: tascloud:v1.0  # Replace with your actual Docker image
+        imagePullPolicy: "Always"
+        command: ['/bin/bash','-c','tascloud_install.sh && sleep 36000']
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "300m"
+      - name: tas-mariadb
+        image: tas-mariadb:v1.0 # MariaDB 이미지
+        imagePullPolicy: "Always"
+        ports:
+         - containerPort: 3306 # Container 포트
+           name: tas-mariadb
+           command: ['/bin/bash','-c','tasdb_install.sh && sleep 36000']
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "200m"
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      hostNetwork: true
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim

@@ -1,0 +1,17 @@
+
+<td class="font-size-11 overflow-ellipsis" title="<%= strMagic %>"><a class="fileMetaName"><%= strMagic %></a></td>
+<td class="overflow-ellipsis" title="<%= tmLogTime %>"><%= tmLogTime %></td>
+<td class="overflow-ellipsis" title="<%= dwSourceIp %>"><a class="ipRetrieveAttackPopupLink"><%= dwSourceIp %></a></td>
+<td class="font-size-11 overflow-ellipsis" title="<%= nProtocol %>/<%= nSourcePort %>"><%= nProtocol %>/<%= nSourcePort %></td>
+<td class="overflow-ellipsis" title="<%= deDestinationIp %>"><a class="ipRetrieveVictimPopupLink"><%= deDestinationIp %></a></td>
+<td class="font-size-11 overflow-ellipsis" title="<%= nProtocol %>/<%= nDestinationPort %>"><%= nProtocol %>/<%= nDestinationPort %></td>
+<td class="overflow-ellipsis" title="<%= strFileName %>"><%= strFileName %></td>
+<td class="overflow-ellipsis align-right" title="<%= dwFileSize %>"><%= dwFileSize %></td>
+<td class="overflow-ellipsis" title="<%= strRuleName %>">
+	<% if (lCode > 0) { %>
+	<span class="cell-color-dot-bg severity-bg-lv<%=bSeverity %>"></span>
+	<% } else { %>
+	<span class="cell-color-dot-bg %>"></span>
+	<% } %>
+	<%= strRuleName %>
+</td>

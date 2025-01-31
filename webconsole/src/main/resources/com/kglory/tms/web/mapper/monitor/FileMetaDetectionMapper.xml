@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.monitor.FileMetaDetectionMapper">
+	<resultMap type="FileMetaDetectionEventVO" id="fileMetaDetectionEventResultMap">
+		<result property="lIndex" 			column="LINDEX" />
+		<result property="tmLogTime" 		column="TMLOGTIME" />
+		<result property="nProtocol" 		column="NPROTOCOL" />
+		<result property="dwSourceIp" 		column="DWSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="strSourceIp" 		column="STRSOURCEIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="nSourcePort" 		column="NSOURCEPORT" />
+		<result property="destinationIp" 	column="DWDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="strDestinationIp" column="STRDESTINATIONIP" typeHandler="com.kglory.tms.web.util.typehandler.HostByteOrderIpTypeHandler" />
+		<result property="nDestinationPort" column="NDESTINATIONPORT" />
+		<result property="bIpType" 			column="BIPTYPE" />
+		<result property="lSrcNetIndex" 	column="LSRCNETINDEX" />
+		<result property="lDstNetIndex" 	column="LDSTNETINDEX" />
+		<result property="lvsensorIndex" 	column="LVSENSORINDEX" />
+		<result property="lsensorIndex" 	column="LSENSORINDEX" />
+		<result property="vsensorName" 		column="VSENSORNAME" />
+		<result property="sensorName" 		column="SENSORNAME" />
+		<result property="strUri" 			column="STRURI" />
+		<result property="strReferer" 		column="STRREFERER" />
+		<result property="strHost" 			column="STRHOST" />
+		<result property="strUserAgent" 	column="STRUSERAGENT" />
+		<result property="strMagic" 		column="STRMAGIC" />
+		<result property="nState" 			column="NSTATE" />
+		<result property="nPktNum" 			column="NPKTNUM" />
+		<result property="dwFileSize" 		column="DWFILESIZE" />
+		<result property="strFileName" 		column="STRFILENAME" />
+		<result property="strFileHash" 		column="STRFILEHASH" />
+		<result property="strStoreFileName" column="STRSTOREFILENAME" />
+		<result property="tmDbTime" 		column="TMDBTIME" />
+                <result property="lCode"                        column="LCODE" />
+                <result property="nGrpIndex"                    column="NGRPINDEX" />
+                <result property="bSeverity"                   column="BSEVERITY" />
+                <result property="strRuleName"                  column="STRRULENAME" />
+                <result property="strGrpName"                   column="STRGRPNAME" />
+	</resultMap>
+	
+        <select id="selectFileMetaDetectionEvent" parameterType="com.kglory.tms.web.model.dto.FileMetaMonitorSearchDto" resultMap="fileMetaDetectionEventResultMap" >
+            SELECT LINDEX, DATE_FORMAT( TMLOGTIME, '%Y-%m-%d %H:%i:%s') AS TMLOGTIME, DWSOURCEIP, STRSOURCEIP, DWDESTINATIONIP, STRDESTINATIONIP, NPROTOCOL, NSOURCEPORT, NDESTINATIONPORT, BIPTYPE, 
+                   STRURI, STRREFERER, STRHOST, STRUSERAGENT, STRMAGIC, NSTATE, NPKTNUM, DWFILESIZE, STRFILENAME, STRFILEHASH, STRSTOREFILENAME, LSRCNETINDEX, 
+                   LDSTNETINDEX, TMDBTIME, LCODE, NGRPINDEX, BSEVERITY, STRRULENAME, STRGRPNAME,
+                    (SELECT STRNAME FROM   SYSTEM_NETWORK WHERE  LSRCNETINDEX = LNETWORKINDEX) AS SRCNETNAME, 
+                    (SELECT STRNAME FROM   SYSTEM_NETWORK WHERE  LDSTNETINDEX = LNETWORKINDEX) AS DSTNETNAME
+            FROM ${queryTableName}
+            WHERE TMDBTIME <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+            AND TMDBTIME <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+            AND BIPTYPE = #{ipType}
+            <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                AND (
+                    LSRCNETINDEX = #{lnetworkIndex}
+                    OR LDSTNETINDEX = #{lnetworkIndex}
+                )
+            </if>
+            <if test="srcPortInput != null">
+                AND NSOURCEPORT = #{srcPortInput} 
+            </if>
+            <if test="destPortInput != null">
+                AND NDESTINATIONPORT = #{destPortInput} 
+            </if>
+            <if test="destinationIp != null">
+                AND DWDESTINATIONIP = #{destinationIp}
+            </if>
+            <if test="strDestinationIp != null and ipType == 6">
+                AND STRDESTINATIONIP = #{strDestinationIp}
+            </if>
+            <if test="sourceIp != null">
+                AND DWSOURCEIP = #{sourceIp}
+            </if>
+            <if test="strSourceIp != null and ipType == 6">
+                AND STRSOURCEIP = #{strSourceIp}
+            </if>
+            <if test="fileNameInput != null">
+                AND UPPER(STRFILENAME) LIKE CONCAT('%', UPPER(#{fileNameInput}) ,'%')
+            </if>
+            ORDER BY TMLOGTIME ASC
+            LIMIT #{monitorLimitLength}
+        </select>
+
+</mapper>

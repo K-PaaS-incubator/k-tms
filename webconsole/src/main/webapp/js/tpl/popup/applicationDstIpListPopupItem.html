@@ -1,0 +1,6 @@
+<td class="align-center width-number"><%= model.rNum %></td>
+<td class="overflow-ellipsis"><a class="ipRetrievePopupLink">
+<% if (ipType == 4) { %><%= model.deDestinationIp %><% } %>
+<% if (ipType == 6) { %><%= model.strDestinationIp %><% } %>
+</a></td>
+<td class="align-right width-popup-td"><span id="destIpPopup" style="cursor:pointer;color: #4f7fc1;"><%= model.dstIpCount %></span></td>

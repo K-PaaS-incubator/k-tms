@@ -1,0 +1,15 @@
+#!/bin/sh
+export CATALINA_HOME=/usr/share/tomcat9
+export CLASSPATH=/usr/share/tomcat9
+export PATH=$PATH:/opt/TESS/current/sensor:/opt/TESS/current/infoshell:
+export TMOUT=0
+ulimit -c unlimited
+KERNELVERSION=`uname -r`
+KERNELMACHINE=`uname -m`
+alias version="echo 'TESS/IFOS-II ver ${KERNELVERSION} (${KERNELMACHINE})'; cat /.version"
+alias fwa="find . | xargs grep"
+alias ts="cd /opt/TESS/current/sensor;unset TMOUT"
+alias tess="cd /opt/TESS/current/sensor"
+alias start="/opt/TESS/current/sensor/config -start"
+alias stop="/opt/TESS/current/sensor/config -stop"
+alias status="/opt/TESS/current/sensor/config -status"

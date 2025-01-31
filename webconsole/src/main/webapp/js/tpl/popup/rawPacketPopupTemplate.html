@@ -1,0 +1,92 @@
+<div class="modal-body modal-body-white padding-all-7" id="rawPacketPopup">
+	<div class="modal-sub nodata">
+	<!-- <div class="security-view-title"><%= model.strTitle %>
+		<span><%= model.bType %></span>
+	</div> -->
+	<div class="security-view-title">
+		<span><%= model.bType %></span>
+		<%= model.strTitle %>
+	</div>
+	
+	<!-- tree begin -->
+	<div class="tree margin-b10">
+		<ul class="scroll-height-150">
+			<li><a id="macHighLight" class="cursor-pointer" ><span id="macSpan" class="icon-plus-sign"></span>MAC Header</a> 
+				<ul class="macHeader">
+				<!-- 하위 <li></li> 태그 영역 -->
+				</ul>
+			</li>
+			<% if (ipType == 4) { %>
+			<li><a id="ipHighLight" class="cursor-pointer"><span id="ipSpan" class="icon-plus-sign"></span>IPv4 Header</a>
+				<ul class="ipv4Header">
+					<!-- 하위 <li></li> 태그 영역 -->
+				</ul>
+			</li>
+            <% } else if (ipType == 6) { %>
+			<li><a id="ipHighLight" class="cursor-pointer"><span id="ipSpan" class="icon-plus-sign"></span>IPv6 Header</a>
+				<ul class="ipv6Header">
+					<!-- 하위 <li></li> 태그 영역 -->
+				</ul>
+			</li>
+            <% } %>
+			<% if (model.nProtocol == 1) { %>
+			<li><a id="icmpHighLight" class="cursor-pointer"><span id="icmpSpan" class="icon-plus-sign"></span>ICMP Header</a>
+				<ul class="icmpHeader">
+					<!-- 하위 <li></li> 태그 영역 -->
+				</ul>
+			</li>
+			<% } else if (model.nProtocol == 6) { %>
+			<li><a id="tcpHighLight" class="cursor-pointer"><span id="tcpSpan" class="icon-plus-sign"></span>TCP Header</a>
+				<ul class="tcpHeader">
+					<!-- 하위 <li></li> 태그 영역 -->
+				</ul>
+			</li>	
+			<% } else if (model.nProtocol == 17) { %>
+			<li><a id="udpHighLight" class="cursor-pointer"><span id="udpSpan" class="icon-plus-sign"></span>UDP Header</a>
+				<ul class="udpHeader">
+					<!-- 하위 <li></li> 태그 영역 -->
+				</ul>
+			</li>	
+			<% } %>
+			<li><a id="dataHighLight">- Data</a></li>
+			<li><a id="patternDetected">- Pattern Detected</a></li>
+		</ul>
+	</div>	
+	
+	<div class="col-xs-7 padding-clear overflow-x:hidden; border-dotted-all overflow-hidden padding-all-5">
+		<div style="overflow-y:scroll; overflow-x:hidden; width:430px; height:140px;margin:0 0; padding:0px;">
+	        <table id="hexaTable" class="drag">
+	            <tbody></tbody>
+	        </table>
+		</div>
+	</div>
+	
+	<div class="col-xs-5 padding-clear border-dotted-all overflow-hidden padding-all-5">
+		<div name="clipboard-text_outer" id="clipboard-text_outer" class="maxwidth-300 drag" style="overflow-y:scroll;max-width:300px; width:295px; height:140px; margin:0 2px; padding:0 0;">
+			<div name="clipboard-text" id="clipboard-text" class="maxwidth-120 drag" style="overflow-x:hidden; word-break:break-all; max-width:120px; width:120px; margin:0 2px; padding:0 0; line-height:22px;">
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<form class="form-inline">
+		<label class="control-label">Character Set</label>
+		<select class="form-control" id="packetCharacterSet">
+			<option	value="US-ASCII">Ascii character Set only</option>
+			<option value="GBK">Chinese(PRC, Singapore) - 936</option>
+			<option value="x-IBM950">Chinese(Taiwan, Hong kong) - 950</option>
+			<option value="EUC-JP">Japanese(euc-jp) - 20932</option>
+			<option value="Shift_JIS">Japanese(shift_jis) - 932</option>
+			<option value="x-windows-949">Korean - 949 (this locale)</option>
+			<option value="IBM437">United States - 437</option>
+			<option value="UTF-8">UTF-8 - 65001</option>
+			<option value="windows-1252">Windows 3.1 US (ANSI) - 1252</option>
+		</select>
+		<button type="button" id="drag-button" class="btn btn-default choiceCopy"><%=locale.selectedCopy%></button>
+	    <button type="button" id="copy-button" data-clipboard-target="clipboard-text" class="btn btn-default">ASCII <%=locale.allCopy%></button>
+	    <button type="button" class="btn btn-default btnAcp"><%=locale.export%></button>
+            <input type="text" id="tempText" style="display: none;">
+	</form>
+</div>

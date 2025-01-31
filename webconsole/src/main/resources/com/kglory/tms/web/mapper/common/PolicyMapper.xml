@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.common.PolicyMapper">
+
+	
+	<resultMap type="Integer" id="policyLcodeMap">
+		<result property="lCode"	column="LCODE" />
+	</resultMap>
+	 
+	<select id="selectPolicyLcode" parameterType="com.kglory.tms.web.model.dto.PolicyDto" resultMap="policyLcodeMap">
+		SELECT LCODE, STRDESCRIPTION, ATTACKTYPE, SSEVERITY  
+		FROM(
+		  SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS ATTACKTYPE, SSEVERITY
+		  FROM POLICY_SIGNATURE
+		  UNION
+		  SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS ATTACKTYPE, SSEVERITY
+		  FROM POLICY_USERSIG
+		) A
+		<if test="attackNames.length > 0">
+			WHERE 
+			<foreach item="item" index="index" collection="attackNames"  open="(" separator="or" close=") B">
+			      UPPER(STRDESCRIPTION) LIKE CONCAT('%' , UPPER(#{item}) , '%')
+			</foreach>
+		</if>
+	</select>
+	
+	<select id="selectPolicyLcodeByAttackType" parameterType="com.kglory.tms.web.model.dto.PolicyDto" resultMap="policyLcodeMap">
+		SELECT LCODE, STRDESCRIPTION, ATTACKTYPE, SSEVERITY  
+		FROM(
+		  SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS ATTACKTYPE, SSEVERITY
+		  FROM POLICY_SIGNATURE
+		  UNION
+		  SELECT DISTINCT LCODE, STRDESCRIPTION, SCLASSTYPE AS ATTACKTYPE, SSEVERITY
+		  FROM POLICY_USERSIG
+		) A
+		<if test="attackType != null">
+			WHERE ATTACKTYPE = #{attackType}
+		</if>
+	</select>
+	
+	<resultMap type="PolicyVO" id="policySignatureRuleMap">
+		<result property="lCode" 			column="LCODE" />
+		<result property="strDescription" 	column="STRDESCRIPTION" />
+		<result property="signatureRule" 	column="SIGNATURERULE" />
+	</resultMap>
+	
+	<select id="selectPolicySignatureRuleBylCode" parameterType="com.kglory.tms.web.model.dto.PolicyDto" resultMap="policySignatureRuleMap">
+            SELECT LCODE, STRDESCRIPTION, ATTACKTYPE, BSEVERITY, SIGNATURERULE
+            FROM(
+                    SELECT 	DISTINCT LCODE, 
+                                    STRDESCRIPTION,
+                                    SCLASSTYPE 		AS ATTACKTYPE, 
+                                    SSEVERITY 		AS BSEVERITY, 
+                                    STRSIGRULE 		AS SIGNATURERULE
+                    FROM 	POLICY_SIGNATURE
+
+                    UNION
+
+                    SELECT 	DISTINCT LCODE, 
+                                    STRDESCRIPTION, 
+                                    SCLASSTYPE AS ATTACKTYPE, 
+                                    SSEVERITY AS BSEVERITY, 
+                                    STRSIGRULE AS SIGNATURERULE
+                    FROM 	POLICY_USERSIG
+            ) A
+            WHERE LCODE = #{lCode}
+	</select>
+</mapper>

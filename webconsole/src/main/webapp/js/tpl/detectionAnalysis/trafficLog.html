@@ -1,0 +1,89 @@
+<div id="search" class="content-gray">
+    <form role="form" class="form-inline trafficLogForm">
+        <div class="row">
+            <!-- search option set -->
+            <div class="sch_area_option border-dotted-right">
+                <!-- search option - default -->
+                <div class="sch_option_set">
+                    <div class="sch_option_set_row">
+                        <!-- 조회대상 -->
+<!--                        <label class="control-label col-xs-1"><%= locale.targetType %></label>
+                        <div class="col-xs-3" id="targetType"></div>-->
+                        <!-- / 조회대상 -->
+                        <div class="col-xs-3">
+                            <div class="row_radio">
+                                <input type="radio" class="radio" name="ipType" id="ipType1" value="4" checked>&nbsp;<label for="ipType1" class="label-for-button">IPv4</label>&nbsp;&nbsp;
+                                <input type="radio" class="radio" name="ipType" id="ipType2" value="6">&nbsp;<label for="ipType2" class="label-for-button">IPv6</label>&nbsp;
+                            </div>
+                        </div>
+
+                        <!-- 분석기간 -->
+                        <label class="control-label col-xs-1"><%= locale.search.period %></label>
+                        <div class="col-xs-7" id="period"></div>
+                        <!-- / 분석기간  -->
+                    </div>
+<!--
+                    <div class="sch_option_set_row">
+                        <label class="control-label col-xs-1"><%= locale.type %></label>
+                        <div class="col-xs-3">
+                            <select class="form-control" id="lMode" style="width:100px;" name="lMode">
+                                <option value=""><%= locale.noSelect %></option>
+                                <option value="0"><%= locale.allow %></option>
+                                <option value="1"><%= locale.block %></option>
+                            </select>
+                        </div>
+                    </div>
+-->
+                </div>
+                <!-- / search option - default -->
+
+                 <!--search option - detail--> 
+                <div class="sch_option_set detail-search" id="detail-search">
+                    <div class="sch_option_set_row">	
+                        <!-- server ip -->
+                        <label class="control-label col-xs-1"><%= locale.dwSourceIp %></label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" id="sourceIp" name="sourceIp" maxlength="39">
+                        </div>
+                        <!-- server ip end -->
+                        <!-- client ip -->
+                        <label class="control-label col-xs-1"><%= locale.destinationIp %></label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" id="destnationIp" name="destnationIp" maxlength="39">
+                        </div>
+                        <!-- client ip end -->
+                    </div>
+                    <div class="sch_option_set_row">	
+                        <!-- server ip -->
+                        <label class="control-label col-xs-1"><%= locale.nSourcePort %></label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" id="sourcePort" name="sourcePort" maxlength="5">
+                        </div>
+                        <!-- server ip end -->
+                        <!-- client ip -->
+                        <label class="control-label col-xs-1"><%= locale.destinationPort %></label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" id="destnationPort" name="destnationPort" maxlength="5">
+                        </div>
+                        <!-- client ip end -->
+                    </div>
+                </div>
+                <!-- / search option - detail -->
+            </div>
+            <!-- / search option set -->
+
+            <!-- search button -->
+            <div class="sch_area_btn text-right">				
+                <button type="button" class="btn btn_sch_detail margin-r10 cancelBtn"><%= locale.reset %></button>
+                <button type="button" class="btn btn_sch_detail margin-r10 detailBtn" id="detail-search-toggle"><%= locale.search.detailSearch %>&nbsp;<i class="fa fa-caret-down"></i></button>
+                <button type="button" class="btn btn-primary searchBtn"><i class="fa fa-search"></i><%= locale.search.search %></button>
+            </div>
+            <!-- / search button -->
+        </div>
+    </form>
+</div>
+<!-- 검색 조건 end -->
+
+<!-- 원본로그 조회 테이블 begin -->
+<div id="table" class="content-white border-solid-top"></div>
+<!-- 원본로그 조회 테이블 end -->

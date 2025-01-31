@@ -1,0 +1,292 @@
+.axis path {
+	fill: none;
+	stroke: gray;
+	shape-rendering: crispEdges;
+}
+
+.axis line {
+	fill: none;
+	stroke: #ccc;
+	shape-rendering: crispEdges;
+}
+
+.x.axis path {
+	display: '';
+	stroke: #BDBDBD;
+}
+.x.axis text,.y.axis text{
+	font-family:'Tahoma';
+	font-size:10px;
+	fill:#777;
+}
+
+.y.axis path {
+	display: '';
+	stroke: #BDBDBD;	
+}
+
+.line {
+	stroke: black;
+	fill: none;
+	stroke-width: 0.75px;
+}
+
+/* 듀얼 라인차트(전체트래픽) 좌측 */
+.y.axis.axisLeft text {
+	font-family:'Tahoma';
+	fill:#999;
+	font-size: 10px;
+	stroke-opacity: 0;
+}
+
+.line.line0 {
+	stroke: #000;	
+	stroke-width: .5px;
+	stroke-opacity: 0.4;
+}
+
+path.area0 {
+	fill: #000;
+	fill: #03586a;
+	fill-opacity: 0.5;
+}
+
+/* LinePlusLine - 대시보드 전체트래픽/유해트래픽, 전체 공격건수/유해트래픽 - 유해트래픽 면적 */
+path.area1 {
+	/*fill: #f7061d;*/
+	/*fill: #03586a;*/
+	fill: #ed5565;
+	/*fill: #03586a;*/
+	/*fill: #6a4c03;*/
+	/*fill: #d74532;*/
+	fill-opacity: 0.80;
+}
+
+path.area0-2 {
+	fill: #d74532;
+	fill-opacity: 0.30;
+}
+
+.focus circle.y0 {
+	stroke: #999;
+}
+
+.focus circle.maxY0 {
+	stroke: #bbb;
+	stroke-width: 2px;
+	fill: #fff;
+}
+
+.focus line.y0 {
+	stroke: #666;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+.focus text{
+	font-size:11px;	
+	font-family:'Tahoma';
+}
+.focus text.y0{
+	font-family:'Tahoma';
+	fill:#737373;
+}
+.focus text.y1{
+	font-family:'Tahoma';
+	fill:#fc5f29;
+	fill: #000;
+}
+
+/* 듀얼 라인차트(유해트래픽) 우측 */
+.y.axis.axisRight text {
+	/*fill:#f7612e;*/
+	/*fill: #26b99a;*/
+	fill: #ed5565;
+	font-size: 10px;
+}
+
+/* 유해트래픽 라인 */
+.line.line1 {
+	/*stroke: #f7612e;*/
+	/*stroke: #03586a;*/
+	stroke: #ed5565;
+	stroke: #03586a;
+	stroke-width: 0px;
+	/*stroke-opacity: 0.50;*/
+}
+
+.focus circle.y1 {
+	stroke: #f7061d;
+	stroke: #ed5565;
+}
+
+.focus circle.maxY1 {
+	/*stroke: #f7612e;*/
+	/*stroke: #26b99a;*/
+	/*stroke: #34495e;*/
+	stroke: #ed5565;
+	stroke-width: 2.4px;
+	fill: #fff;
+}
+
+.focus line.y1 {
+	/*stroke: #f7061d;*/
+	stroke: #ed5565;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+
+.focus line.y4 {
+	stroke: navy;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+
+.focus line.y5 {
+	stroke: navy;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+
+/* 듀얼 라인차트(공격이벤트)*/
+.bar {
+	fill: #d065e9;
+	fill-opacity: 0.3;
+}
+
+.y.axis.axisLeft2 text {
+	font-family:'Tahoma';
+	stroke: #d065e9;
+	font-size: 0.8em;
+	stroke-opacity: 0.5;
+}
+
+.focus circle.y2 {
+	stroke: #d065e9;
+}
+
+.focus circle.maxY2 {
+	stroke: #d065e9;
+	stroke-width: 1.5px;
+	fill: #d065e9;
+}
+
+.focus line.y2 {
+	stroke: #d065e9;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+
+/* 버블 차트*/
+.x.axis.axixBubble text {
+	font-family:'Tahoma';	
+	font-size: 10px;	
+}
+
+.y.axis.axixBubble path {
+	display: '';
+	stroke: #BDBDBD;
+}
+
+.y.axis.axixBubble text {
+	font-family:'Tahoma';
+	fill: #f7612e;
+	fill: #26b99a;
+	font-size: 10px;	
+}
+
+.focus line.x3 {
+	stroke: #5599de;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+
+.focus line.y3 {
+	stroke: #f7061d;
+	stroke-dasharray: 3 3;
+	opacity: .5;
+}
+
+.line.line2 {
+	stroke: #D1B2FF;
+	stroke-width: 1.5px;
+}
+
+.line.fadeout {
+	fill-opacity: 0.2;
+	stroke-opacity: 0.2;
+}
+
+.line.highlight {
+	fill-opacity: 1;
+	stroke-opacity: 1;
+}
+
+.main .line.highlight {
+	stroke-width: 2;
+}
+
+.main2 .line.highlight {
+	stroke-width: 2;
+}
+
+.mini .line.highlight {
+	stroke-width: 1;
+}
+
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+
+.focus circle {
+	fill: none;
+}
+
+.brush .extent {
+	stroke: #83BFDA;
+	fill: #A7E4FF;
+	fill-opacity: .1;
+	shape-rendering: crispEdges;
+}
+
+.grid .tick {
+	stroke: lightgrey;
+	stroke-opacity: 0.7;
+	stroke-opacity: 0.4;
+	shape-rendering: crispEdges;
+}
+
+.grid .path {
+	stroke-width: 0;
+	stroke: lightgrey;
+}
+
+.grid-background {
+	fill: none;
+}
+
+.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
+}
+
+.graph-svg-component {
+    background-color: AliceBlue;
+}
+
+.arc path {
+  /*stroke: #fff;*/
+}
+
+/*path:hover {  opacity:0.7; }*/
+
+.test1 {
+	/*stroke: #f7612e;*/
+	/*stroke: #03586a;*/
+	fill: #fff;
+	fill-opacity: 0.10;
+	stroke: #26b99a;
+	stroke-width: 2px;
+	/*stroke-opacity: 0.50;*/
+}

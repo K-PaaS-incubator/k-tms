@@ -1,0 +1,31 @@
+	<td class="align-center view">
+		<% if (model.lNetworkIndex == null) {%>
+			<input type="checkbox" value="<%= model.lvsensorIndex %>" <%= model.checkedYn %> disabled>
+		<% } %>
+		<% if (model.lvsensorIndex == null) {%>
+			<input type="checkbox" value="<%= model.lNetworkIndex %>" <%= model.checkedYn %> disabled>
+		<% } %>
+	</td>
+	<td class="view"><%= model.strName %></td>
+	<% if (model.lNetworkIndex != null) { %>
+	<td class="view align-right">
+		<span><%= model.dblBandWidth %></span>
+		<span>bps</span>
+	</td>
+	<% } %>
+
+	<td class="align-center edit">
+		<% if (model.lNetworkIndex == null) {%>
+			<input type="checkbox" class="editlvSensorIndex" value="<%= model.lvsensorIndex %>" <%= model.checkedYn %> >
+		<% } %>
+		<% if (model.lvsensorIndex == null) {%>
+			<input type="checkbox" class="editlNetworkIndex" value="<%= model.lNetworkIndex %>" <%= model.checkedYn %> >
+		<% } %>
+	</td>
+	<td class="edit"><%= model.strName %></td>
+	<% if (model.lNetworkIndex != null) { %>
+	<td class="edit align-right">
+		<span><%= model.dblBandWidth %></span>
+		<span>bps</span>
+	</td>
+	<% } %>

@@ -1,0 +1,32 @@
+<!-- 내용구분 선택 begin -->
+<form class="form-inline margin-t10 contentForm" role="form">
+    <label class="control-label"><%= locale.contentClassification %></label>
+    <select class="form-control margin-l5 contentSelect">
+        <option value="0"><%= locale.all %></option>
+        <option value="1"><%= locale.sensor %></option>
+        <option value="3"><%= locale.console %></option>
+    </select>
+</form>
+<!-- 내용구분 선택 end -->
+
+<!-- 검색결과 table begin -->
+<!--행위,오류,경고의 테이블은 외형상 같기 때문에 차별화를 위해 아이콘이 각각 틀립니다.-->
+<!--위의 이유로 td 내용에 들어가는 span의 class명으로 구분 행위:log-action, 오류:log-error, 경고:log-warning -->
+<table class="table table-striped table-hover table-vertical-line inside-iconbtn margin-t10 audit-log-table table-fixed">
+    <thead>
+        <tr>
+            <th width="5%" style="display: none;"><input type="checkbox" class="allUsedCheck" name="allUsedCheck" disabled="disabled">&nbsp;<%= locale.usage %></th>
+            <th width="30%"><%= locale.content %></th>
+            <th width="10%"><%= locale.code %></th>
+            <th width="11%" style="display: none;"><input type="checkbox" class="allEmergencyAlarm" name="allEmergencyAlarm" disabled="disabled">&nbsp;<%= locale.emergencyAlertDisp %></th>
+            <th width="11%" style="display: none;"><input type="checkbox" class="allAudibilityAlarm" name="allAudibilityAlarm" disabled="disabled">&nbsp;<%= locale.visualAuralAlert %></th>
+            <th width="11%" style="display: none;"><input type="checkbox" class="allProgramAlarm" name="allProgramAlarm" disabled="disabled">&nbsp;<%= locale.programAlert %></th>
+            <th width="11%"><%= locale.mailSend %></th>
+            <!--<th width="11%"><%= locale.smsSend %></th>-->
+        </tr>
+    </thead>
+    <tbody class="auditLogTbody">
+    </tbody>
+</table>
+<!-- 검색결과 table end -->
+<!-- 행위 end -->

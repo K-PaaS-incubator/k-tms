@@ -1,0 +1,78 @@
+<!-- 시스템설정 정책 리스트 begin -->
+<div class="content-gray col-xs-4 col-md-4 border-solid-right content-list-setup-left">
+    <div class="title"><%= locale.list %></div>
+
+    <!-- 버튼 목록 begin -->
+    <div class="float-clear row content-tree-btn">
+
+        <div class="col-sm-9 padding-clear">
+            <!-- 신규생성 목록 begin -->
+            <div class="btn-group padding-clear setting-dropdown">
+                <button type="button" class="btn btn-default col-xs-12" data-toggle="dropdown" aria-expanded="true">
+                    <%= locale.createNewItem %> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="setting-create">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#systemSettings_systemConfig" data-station="3"><%= locale.network %></a></li>
+                </ul>
+            </div>
+            <!-- 신규생성 목록 end -->
+        </div>
+        <!-- 아이콘 버튼 영역 begin -->
+        <div class="col-sm-3 padding-clear text-right">
+            <!-- 아코디언 모두펼치기 모두닫기 버튼 -->
+<!--            <div class="btn btn-default icon-spread" id="accordion-open" title="<%= locale.accordionOpen %>"></div>
+            <div class="btn btn-default icon-fold" id="accordion-close" title="<%= locale.accordionClose %>"></div>-->
+        </div>
+        <!-- 아이콘 버튼 영역 end -->
+    </div>
+    <!-- 버튼 목록 end -->
+
+    <!-- 시스템설정 collapsible table begin -->
+    <div class="content-tree-list">
+        <div class="panel-group table-accordion dark-header-accordion has-gap setting-list" id="accordion">
+            <!-- 매니저 collapse cell begin -->
+            <div class="panel panel-default">
+                <!-- collapse header begin -->
+                <div id="manager" class="panel-heading">
+                    <h4 class="panel-title">
+                        <a style="text-decoration:none" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="true" aria-controls="collapse1" class="manager"><%=locale.system%>
+                        </a>
+                    </h4>
+                </div>
+                <!-- collapse header end -->
+            </div>
+            <!-- 매니저 collapse cell end -->
+
+            <!-- 네트워크 collapse cell begin -->
+            <div class="panel panel-default panel-dp-selected">
+                <!-- collapse header begin -->
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a style="text-decoration:none" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="true" aria-controls="collapse5" class="network"><%=locale.network%>
+                            <span id="netotalCount" class="badge pull-right"></span>
+                        </a>
+                    </h4>
+                </div>
+                <!-- collapse header end -->
+                <!-- collapse content begin -->
+                <div id="collapse5" class="panel-collapse collapse">
+                    <div id="network" class="panel-body">
+                    </div>
+                </div>
+                <!-- collapse content end -->
+            </div>
+            <!-- 네트워크 collapse cell end -->
+        </div>
+        <!-- 시스템설정 collapsible table end -->	
+    </div>
+</div>
+<!-- 시스템설정 정책 리스트 end -->
+
+<!-- tab 뷰 begin -->
+<div class="content-white col-xs-8 height-100p">
+    <% if (WRITE_MODE == 1) { %>
+    <input type="button" class="btn btn-default btn-sm margin-t5 margin-r5 changeBtn pull-right" value="<%=locale.modify%>" style="display:none" />
+    <% } %>
+    <div id="tabs" class="sys_tab"></div>
+</div>
+<!-- tab 뷰 end -->

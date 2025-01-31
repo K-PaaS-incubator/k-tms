@@ -1,0 +1,42 @@
+<div class="login-cert">
+    <div class="login-img">
+        <h1>
+            Welcome to <strong>TESS TAS</strong>
+        </h1>
+    </div>
+
+    <div class="row login-contents">
+
+        <form role="form" class="login-form-cert">
+
+            <div class="login-type" id="login-normal">
+
+                <h2><%= locale.sign_in_id%></h2>					
+
+                <div class="pull-left" style="width:190px;">				
+                    <!-- id field begin -->
+                    <div class="form-group">
+                        <input type="text" id="userid" class="user-id" placeholder="<%= locale.id %>" required	autofocus maxlength="32"/>
+                    </div>
+                    <!-- id field end -->
+
+                    <!-- pw field begin -->
+                    <div class="form-group">
+                        <input type="password" id="password" class="user-pw" placeholder="<%= locale.password %>" required maxlength="64"/>
+                    </div>
+                    <!-- pw field end -->
+                </div>
+
+                <button type="button" id="loginBtn" class="login"><%= locale.sign_in %></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- alert msg begin -->
+<div class="header-alert">
+    <!-- header-alert 클래스 기본은 경고의 붉은 컬러입니다. 경고의 오랜지 컬러는 warning를 추가해주세요 -->
+    <span class="alert-wrap"></span>
+    <button type="button" data-dismiss="alert" class="close alert-close">X</button>
+</div>
+<!-- alert msg end -->

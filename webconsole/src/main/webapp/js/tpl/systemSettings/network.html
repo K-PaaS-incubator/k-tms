@@ -1,0 +1,45 @@
+<table class="view-table col-xs-12 margin-t5" id="readNetwork">
+    <tr>
+        <th width="15%"><%= locale.name %></th>
+        <td class="readStrName" id="readStrName"></td>
+    </tr>
+    <tr>
+        <th><%= locale.comment %></th>
+        <td class="readStrDescription" id="readStrDescription"></td>
+    </tr>
+    <!-- <tr>
+            <th><%= locale.bandWidth%></th>
+            <td><span class="readDbLbandWidthMbps" id="readDbLbandWidthMbps"></span> Kbps</td>
+    </tr> -->
+    <tr>
+        <th><%= locale.type %></th>
+        <td id="readStype"></td>
+    </tr>
+    <tr>
+        <th><%= locale.ipBlock %> <%= locale.list %></th>
+        <td>
+            <!-- header 시작 begin -->
+            <div>
+                <table class="fancyTable table-hover table table-striped table-vertical-line" id="header-fix">
+                    <colgroup>
+                        <col width="8%" />
+                        <col width="40%" />
+                        <col width="40%" />
+                        <col width="12%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="align-center"></th>
+                            <th class="align-center">From IP</th>
+                            <th class="align-center">To IP</th>
+                            <th class="align-center">Mask</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ipBlockTbody">
+                    </tbody>
+                </table>
+            </div>
+            <!-- header 끝 end -->
+        </td>
+    </tr>
+</table>

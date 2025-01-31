@@ -1,0 +1,117 @@
+<div class="tab-pane active padding-t5 padding-r15 padding-l15 margin-t10" id="tab111">
+	<!-- 그래프 생성 form begin -->
+	<form role="form" class="form-inline">
+		<div class="col-xs-10 padding-clear">
+		
+			<!-- 타겟구분 선택 begin -->
+			<div class="form-group col-xs-12 padding-clear">
+				<label class="control-label col-xs-2"><%= locale.targetType %></label>
+				<div class="col-xs-10" id="targetType"></div>
+			</div>
+			<!-- 타겟구분 선택 end -->
+			
+			<!-- 분석기간 선택 begin -->
+			<div class="form-group col-xs-12 padding-clear margin-t10">
+				<label class="control-label col-xs-2"><%= locale.search.period %></label>
+				<div class="col-xs-10" id="period"></div>
+			</div>
+			<!-- 분석기간 선택 end -->
+			
+			<!-- 조회 유형 선택 begin -->
+			<div class="form-group col-xs-6 padding-clear margin-t10">
+				<label class="control-label col-xs-4"><%= locale.searchType %></label>
+				<div class="col-xs-8">
+					<select id="searchType" name="searchType" class="form-control col-xs-6">
+						<option value=0><%= locale.attackCount %></option>
+						<option value=1>bps</option>
+						<option value=2>pps</option>
+					</select>
+				</div>
+			</div>
+			<!-- 조회 유형 선택 end -->
+			
+			<!-- 탐지방향 선택 begin -->
+			<div class="form-group col-xs-6 padding-clear margin-t10">
+				<label class="control-label col-xs-4"><%= locale.search.inbound %></label>
+				<div class="col-xs-8">
+					<select id="winBoundSelect" name="winBoundSelect" class="form-control col-xs-8">
+						<option value=0><%= locale.search.sum %></option>
+						<option value=3>Inbound</option>
+						<option value=2>Outbound</option>
+					</select>
+				</div>
+			</div>
+			<!-- 탐지방향 선택 end -->
+		</div>
+		<div class="col-xs-2">
+			<button type="button" class="genGraph btn btn-default row3-height col-xs-12"><%= locale.makeGraph %></button>
+		</div>
+	</form>
+	<!-- 그래프 생성 form end -->
+	
+	<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+	
+	<!-- 그래프 & table begin -->
+	<div class="row">
+		<!-- chart begin -->
+	<!-- 	<div class="col-xs-10">
+			<span class="pull-right margin-b5 font-size-11">(<%= locale.unit %> : <%=dataType%>)</span>
+			<svg width="100%" height="160px"></svg>
+			<div class="popupChart"></div>
+		</div> -->
+		<div class="col-xs-10"><!--class 가 모두 바뀌었습니다.-->
+			<!-- <span class="pull-right margin-b5 font-size-11">(<%= locale.unit %> : <%=dataType%>)</span> -->
+			<div class="popupChart margin-r15"></div>
+		</div>
+		<!-- chart end -->
+	
+		<!-- table begin -->
+		<div class="col-xs-2 padding-left-clear">
+			<!-- <span class="pull-right margin-b5 font-size-11 unit">(<%= locale.unit %> : <%=dataType%>)</span> -->
+			<span class="pull-right margin-b5 font-size-11 unit"></span>
+			<ul class="chart-subinfo float-clear"><!--이부분이 table 구조에서 ul구조로 변경되었습니다.-->
+				<li>
+					<span class="pull-left font-size-11">Last </span>&nbsp;<span id="last" ></span>
+				</li>
+				<li>
+					<span class="pull-left threat-text-lv5 font-size-11">Max </span>&nbsp;<span id="max" class="threat-text-lv5"></span>
+					<!-- <span class="time font-size-10">2015-01-12 10:35</span> -->
+				</li>
+				<li>
+					<span class="pull-left threat-text-lv1 font-size-11">Min </span>&nbsp;<span id="min" class="threat-text-lv1"></span>
+					<!-- <span class="time font-size-10">2015-01-12 10:35</span> -->
+				</li>
+				<li>
+					<span class="pull-left font-size-11" id="tdName"></span>&nbsp;<span id="avg"></span>
+
+				</li>
+			</ul>
+			<!-- <table class="table table-vertical-line">
+				<tr>
+					<td class="align-center">last</td>
+					<td id="last" class="align-right"></td>
+					하위 컨텐츠의 우측정열 클래스명 :  align-right
+				</tr>
+				<tr>
+					<td class="align-center">Max.</td>
+					<td id="max" class="align-right threat-text-lv5">999,999,999.00
+						<div class="chart-text-6 font-size-11">2014.05.27 22:31</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center">Min.</td>
+					<td id="min" class="align-right threat-text-lv1">99.00
+						<div class="chart-text-6 font-size-11">2014.05.27 22:31</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="align-center" id="tdName"></td>
+					<td id="avg" class="align-right">999.00</td>
+					하위 컨텐츠의 우측정열 클래스명 :  align-right
+				</tr>
+			</table> -->
+		</div>
+		<!-- table end -->
+	</div>
+</div>
+<!-- 그래프 & table end -->

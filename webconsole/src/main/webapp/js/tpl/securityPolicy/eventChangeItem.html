@@ -1,0 +1,28 @@
+<td class="align-center">
+	<%= model.ucSeverityName %>
+</td>
+<td class="align-right">
+	<%= model.dblThreshold %> 
+	<% if(model.ucSubType1 == 1) { %>
+		<%= locale.dashboard.count %>
+	<% } else if(model.ucSubType1 == 2 ) { %>
+		%
+	<% } else { %>
+		<%= locale.anomaliRank %>
+	<% } %>
+</td>
+<td class="align-right">
+	<%= model.dblCondition %> <%= locale.dashboard.count %>
+</td>
+<td class="align-center" style="display: none;">
+	<input type="checkbox" <%= model.secondType2 %> disabled>
+</td>
+<td class="align-center" style="display: none;">
+	<input type="checkbox" <%= model.secondType1 %> disabled>
+</td>
+<td class="align-center">
+	<%= model.mailType %>
+</td>
+<td class="align-center">
+	<%= model.smsType %>
+</td>

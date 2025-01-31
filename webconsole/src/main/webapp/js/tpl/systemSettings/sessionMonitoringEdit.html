@@ -1,0 +1,63 @@
+<div class="icon-subtitle"><%= locale.serviceList%></div>
+<table class="table table-vertical-line table-striped">
+    <thead>
+        <tr>
+            <th><%= locale.service%> (<%= locale.port%>)</th>
+            <th><%= locale.sessionInfoSend%></th>
+            <th width="10%"><%= locale.logging%></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>FTP-DATA(20)</td>
+            <td><%= locale.start%>, <%= locale.theEnd%></td>
+            <td class="align-center"><input type="checkbox" value="" checked/></td>
+        </tr>
+        <tr>
+            <td>FTP(21)</td>
+            <td><%= locale.start%>, <%= locale.theEnd%></td>
+            <td class="align-center"><input type="checkbox" value=""/></td>
+        </tr>
+        <tr>
+            <td>SSH(22)</td>
+            <td><%= locale.start%>, <%= locale.theEnd%></td>
+            <td class="align-center"><input type="checkbox" value=""/></td>
+        </tr>
+    </tbody>
+</table>
+<!-- 서비스 목록 end -->
+
+<!-- 로깅 파일 begin -->
+<div class="icon-subtitle"><%= locale.loggingFile%></div>
+<div class="border-dotted-all overflow-hidden">
+    <table class="view-table col-xs-12">
+        <tr class="border-clear">
+            <th width="20%"><%= locale.fileMaxHdd%></th>
+            <td width="30%"><input type="text" class="form-control col-xs-4 align-right input-sm margin-r5" placeholder="0"/> MB</td>
+            <th width="10%"><%= locale.excess%></th>
+            <td>
+                <select class="form-control input-sm maxwidth-150">
+                    <option><%= locale.overWrite%></option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- 로깅 파일 end -->
+
+<!-- 휴면 세션 설정 begin -->
+<div class="icon-subtitle"><%= locale.sleepSessionSetting%></div>
+<div class="border-dotted-all overflow-hidden">
+    <table class="view-table col-xs-12">
+        <tr class="border-clear">
+            <th width="20%"><%= locale.sleepSessionEndTime%></th>
+            <td width="30%"><input type="text" class="form-control col-xs-4 align-right input-sm margin-r5" placeholder="0"/> <%= locale.timeMin%></td>
+            <td width="20%"></td>
+            <td width="30%"></td>
+        </tr>
+    </table>
+</div>
+<!-- 휴면 세션 설정 end -->
+</div>
+<!-- 세션감시 end -->
+

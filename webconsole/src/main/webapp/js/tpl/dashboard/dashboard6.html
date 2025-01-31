@@ -1,0 +1,123 @@
+<!-- 좌측 챠트 컨텐츠 begin -->
+<div class="container-fluid" style="background:#f3f3f4;padding: 10px;">
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="x_panel" style="height:40px;overflow-y:hidden;">
+				<div class="title pull-left padding-l5"><%= locale.search.period %></div>
+				<div class="pull-left col-xs-4 padding-t2 padding-l10 align-left" id="chartDateTotMal"></div>
+		</div>
+	</div>
+</div>
+<div class="row custom-row">
+	<div class="col-xs-4">
+		<div class="x_panel" style="height:320px;overflow-y:hidden;">
+			<div class="x_title">
+				<div class="title pull-left"><%=locale.dashboard.total%>&nbsp;/&nbsp;<%=locale.dashboard.maliciousTraffic%></div>
+			</div>
+			<div class="x_content">
+				<div id="totMalTrafficChart"></div>
+				<div class="chart-legend pull-right padding-t10">
+					<span class="chart-bg-12"></span><%=locale.dashboard.totalTraffic%>
+					<span class="chart-bg-11 margin-l10"></span><%=locale.dashboard.maliciousTraffic%>
+				</div>
+			</div>
+		</div>	 
+	</div>
+	<div class="col-xs-4">
+		<div class="x_panel" style="height:320px;overflow-y:hidden;">
+			<div class="x_title">
+				<div class="title pull-left"><%=locale.dashboard.attackCount%>&nbsp;/&nbsp;<%=locale.dashboard.maliciousTraffic%></div>
+			</div>
+			<div class="x_content">			
+				<div id="malTrafficEventChart"></div>
+				<div class="chart-legend pull-right padding-t10">
+					<span class="chart-bg-12"></span><%= locale.dashboard.totalEventCount %>
+					<span class="chart-bg-11 margin-l10"></span><%= locale.dashboard.maliciousTraffic %>
+				</div>
+			</div>
+		</div>	 
+	</div>
+	<!--div class="col-xs-4"-->
+	<div class="pull-left" style="width:33.333%;padding: 0px 10px;">
+		<div class="x_panel" style="height:320px;overflow-y:hidden;">
+			<div class="x_title">
+				<div class="title pull-left"><%= locale.protocolPerProgress %></div>
+			</div>
+			<div class="x_content">		
+				<div id="protocolChart"></div>
+				<div class="protocol chart-legend pull-right padding-t10">
+<!--					 <span class="trend-blue-bg-lv1"></span>TCP
+					<span class="trend-blue-bg-lv2 margin-l10"></span>UDP
+					<span class="trend-blue-bg-lv3 margin-l10"></span>ICMP 
+					<span class="protocol-level1 margin-l10"></span><span class="protocol-tcp margin-r10"></span>
+					<span class="protocol-level2 margin-l10"></span><span class="protocol-udp margin-r10"></span>
+					<span class="protocol-level3 margin-l10"></span><span class="protocol-icmp margin-r10"></span>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row custom-row">
+	<div class="col-xs-4 padding-clear">
+		<div class="col-xs-12">
+			<div class="x_panel" style="height:540px;overflow:hidden;">
+				<div class="x_title">
+					<h2><%=locale.dashboard.victimIpTopN%></h2>
+				</div>
+				<div class="x_content">
+					<div class="col-xs-12">
+						<div style="width:100%;height: 240px" class="pull-left" id="victimIpChart" >
+						</div>				
+					</div>
+					<div class="col-xs-12 padding-clear">
+						<div style="width:100%" class="pull-right" id="tableVictimIpTopN"></div>
+					</div>				
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-8 padding-clear">
+		<div class="col-xs-6">
+			<div class="x_panel" style="height:300px;">
+				<div class="x_title">
+					<h2><%=locale.dashboard.serviceTopN%></h2>
+				</div>
+				<div class="x_content">
+					<div class="col-xs-12 padding-clear">
+						<div style="width:100%" class="pull-right" id="tableServiceTopN"></div>
+					</div>
+				</div>
+			</div>	 
+		</div>
+		<div class="col-xs-6">
+			<div class="x_panel" style="height:300px;">
+				<div class="x_title">
+					<h2><%=locale.dashboard.eventTopN%></h2>
+				</div>
+				<div class="x_content">
+					<div class="col-xs-12 padding-clear">
+						<div style="width:100%" class="pull-right" id="tableEventTopN"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<% if(targetCategory == 0) { %>
+			<div class="col-xs-12">
+				<div class="x_panel" style="height:230px;">
+					<div class="x_title">
+						<h2><%=locale.dashboard.auditTopN%></h2>
+					</div>	
+					<div class="x_content">
+						<div id="tableAuditTopN"></div>
+					</div>		
+				</div>
+			</div>
+		<% } %>
+	</div>
+</div>
+
+</div>

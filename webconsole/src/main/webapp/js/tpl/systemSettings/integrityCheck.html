@@ -1,0 +1,31 @@
+<!-- 검사주기 설정 begin -->
+<div class="icon-subtitle"><%= locale.inspectionPeriodSetting %><% if(SYSTEM_TYPE == 2) { %> <button class="btn btn-default sensorIntegrityBtn margin-l5" id="sensorIntegrityBtn" type="button" disabled >센서무결성검사</button> <% } %></div>
+<div class="border-dotted-all overflow-hidden padding-t5">
+	<span class="col-xs-12 description"><%= locale.setUpAutomaticIntegrityTestCycleForTheConfigurationFilesAndExecutables %></span>
+	<table class="view-table col-xs-12">
+		<tr class="border-clear">
+			<th width="20px" class="padding-right-clear padding-bottom-clear">
+				<input type="checkbox" id="nStartIntegrity" name="nStartIntegrity" value=""  disabled/>
+			</th>
+			<td><%= locale.performServicesAtTheBeginningOfTheIntegrityCheck %><br/><span class="description" id="autoIntegrityDescription"></span></td>
+		</tr>
+	</table>
+</div>
+<!-- 검사주기 설정 end -->
+	
+<!-- 검사항목 설정 begin -->
+<% if (SYSTEM_TYPE != 2) { %>
+<div class="icon-subtitle"><%= locale.checkFileSettings %></div>
+<table class="table table-vertical-line table-striped">
+	<thead>
+  	<tr>  		
+		<th class="width-check"></th>
+		<th><%= locale.fileName %></th>
+  	</tr>
+  	</thead>
+	<tbody id="integrityFileListTbody">
+	</tbody>
+</table>
+<% } %>
+<!-- 검사항목 설정 end -->
+<!-- 무결성검사 end -->

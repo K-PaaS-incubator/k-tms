@@ -1,0 +1,174 @@
+<div id="search" class="content-gray">
+    <form role="form" class="form-inline originalLogForm">
+        <div class="row">
+            <!-- search option set -->
+            <div class="sch_area_option border-dotted-right">
+                <!-- search option - default -->
+                <div class="sch_option_set">
+                    <div class="sch_option_set_row">
+                        <!-- 조회대상 -->
+                        <label class="control-label col-xs-1"><%= locale.targetType %></label>
+                        <div class="col-xs-3" id="targetType"></div>
+                        <!-- / 조회대상 -->
+
+                        <!-- 분석기간 -->
+                        <label class="control-label col-xs-1"><%= locale.search.period %></label>
+                        <div class="col-xs-7" id="period"></div>
+                        <!-- / 분석기간  -->
+                    </div>
+
+                    <div class="sch_option_set_row margin-t10">
+                        <!-- 공격명 begin -->
+                        <label class="control-label col-xs-1"><%= locale.dashboard.eventType %></label>
+                        <div class="col-xs-3">
+                            <input id="attackNameInput" name="attackNameInput" type="text" class="form-control" placeholder="<%=locale.attackNameSearchInput%>" maxlength="256"/>
+                            <!-- <button type="button" class="btn btn-default btn-sm">?</button> -->
+                        </div>
+                        <!-- 공격명 end -->
+
+                        <!-- 주소체계 begin -->
+                        <!-- 
+                <label class="control-label col-xs-1"><%= locale.ipType %></label>
+                        -->
+                        <div class="col-xs-3">
+                            <div class="row_radio">
+                                <input type="radio" class="radio" name="ipType" id="ipType1" value="4" checked>&nbsp;<label for="ipType1" class="label-for-button">IPv4</label>&nbsp;&nbsp;
+                                <input type="radio" class="radio" name="ipType" id="ipType2" value="6">&nbsp;<label for="ipType2" class="label-for-button">IPv6</label>&nbsp;
+                            </div>
+                        </div>
+                        <!-- 주소체계 end -->
+                    </div>
+                </div>
+                <!-- / search option - default -->
+
+                <!-- search option - detail -->
+                <div class="sch_option_set detail-search" id="detail-search">
+                    <div class="sch_option_set_row">					
+                        <!-- 공격유형 선택 begin -->
+                        <label class="control-label col-xs-1"><%= locale.attackType %></label>
+                        <div class="col-xs-3">
+                            <select id="attackTypeSelect" name="attackTypeSelect" class="form-control col-xs-7">
+                                <option value=""><%= locale.dashboard.total %></option>
+                            </select>
+                        </div>
+                        <!-- 공격유형 선택 end -->
+
+                        <!-- 위험도 선택 begin -->
+                        <label class="control-label col-xs-1"><%= locale.severity %></label>
+                        <div class="col-xs-3">
+                            <div class="checkbox margin-r5 padding-clear">
+                                <label>
+                                    <input type="checkbox" id="severityHCheck" name="severityHCheck">
+                                    <span class="threat-bg-lv5 rect"></span>
+                                    High
+                                </label>
+                            </div>
+                            <div class="checkbox margin-r5">
+                                <label>
+                                    <input type="checkbox" id="severityMCheck" name="severityMCheck">
+                                    <span class="threat-bg-lv4 rect"></span>
+                                    Medium
+                                </label>
+                            </div>
+                            <div class="checkbox margin-r5">
+                                <label>
+                                    <input type="checkbox" id="severityLCheck" name="severityLCheck">
+                                    <span class="threat-bg-lv3 rect"></span>
+                                    Low
+                                </label>
+                            </div>
+                            <div class="checkbox margin-r5">
+                                <label>
+                                    <input type="checkbox" id="severityICheck" name="severityICheck">
+                                    <span class="threat-bg-lv2 rect"></span>
+                                    Info
+                                </label>
+                            </div>
+                        </div>
+                        <!-- 위험도 선택 end -->
+
+                        <!-- 탐지방향 선택 begin -->
+                        <label class="control-label col-xs-1"><%= locale.search.inbound %></label>
+                        <div class="col-xs-3">
+                            <select id="winBoundSelect" name="winBoundSelect" class="form-control col-xs-7">
+                                <option value=""><%= locale.search.sum %></option>
+                                <option value="3">Inbound</option>
+                                <option value="2">Outbound</option>
+                            </select>
+                        </div>
+                        <!-- 탐지방향 선택 end -->
+                    </div>
+
+                    <div class="sch_option_set_row margin-t10">
+                        <!-- 공격포트 begin -->
+                        <label class="control-label col-xs-1"><%= locale.attackPort %></label>
+                        <div class="col-xs-3">
+                            <input id="attackPortInput" name="attackPortInput" type="text" class="form-control col-xs-7" maxlength="5"/>
+                        </div>
+                        <!-- 공격포트 end -->
+
+                        <!-- 피해포트 begin -->
+                        <label class="control-label col-xs-1"><%= locale.victimPort %></label>
+                        <div class="col-xs-3">
+                            <input id="destPortInput" name="destPortInput" type="text" class="form-control col-xs-7" maxlength="5"/>
+                        </div>
+                        <!-- 피해포트 end -->
+
+                        <!-- IP 선택 begin -->
+                        <label class="control-label col-xs-1">IP</label>
+                        <div class="col-xs-3">
+                            <!-- <select class="form-control" id="ipConditionSelect">
+                                    <option value="1">기본조회</option>
+                                    <option value="2">기관별 조회</option>
+                            </select> -->
+                            <input type="text" class="form-control maxwidth-120" id="ipInput" name="ipInput" placeholder="IP <%=locale.address%>"/>
+                            <input type="text" class="form-control maxwidth-60" placeholder="MASK" name="maskInput" id="maskInput" maxlength="2"/>
+
+                            <input type="hidden" class="form-control" name="fromIpInput" id="fromIpInput" placeholder="From IP" id="fromIp" />
+                            <input type="hidden" class="form-control" name="toIpInput" id="toIpInput" placeholder="TO IP" id="toIp" />
+                        </div>
+                        <!-- IP 선택 end -->
+
+                        <!-- 결과행수 begin -->
+                        <!-- <div class="form-group col-xs-4 margin-t10 padding-clear">
+                    <label class="control-label col-xs-3">결과행수</label>
+                                <select class="form-control col-xs-9">
+                                        <option>결과행수</option>
+                                </select>
+                        </div> -->
+                        <!-- 결과행수 end -->
+                    </div>
+<!--
+                    <% if (SYSTEM_TYPE == 2) { %>
+                    <div class="sch_option_set_row margin-t10">
+                        <label class="control-label col-xs-1"><%= locale.block %></label>
+                        <div class="col-xs-3">
+                            <select id="ucCreateLogType" name="ucCreateLogType" class="form-control col-xs-7">
+                                <option value=""><%= locale.all %></option>
+                                <option value="1"><%= locale.detection %></option>
+                                <option value="0"><%= locale.block %></option>
+                            </select>
+                        </div>
+                    </div>
+                    <% } %>
+-->
+                </div>
+                <!-- / search option - detail -->
+            </div>
+            <!-- / search option set -->
+
+            <!-- search button -->
+            <div class="sch_area_btn text-right">				
+                <button type="button" class="btn btn_sch_detail margin-r10 cancelBtn"><%= locale.reset %></button>
+                <button type="button" class="btn btn_sch_detail margin-r10 detailBtn" id="detail-search-toggle"><%= locale.search.detailSearch %>&nbsp;<i class="fa fa-caret-down"></i></button>
+                <button type="button" class="btn btn-primary searchBtn"><i class="fa fa-search"></i><%= locale.search.search %></button>
+            </div>
+            <!-- / search button -->
+        </div>
+    </form>
+</div>
+<!-- 검색 조건 end -->
+
+<!-- 원본로그 조회 테이블 begin -->
+<div id="table" class="content-white border-solid-top"></div>
+<!-- 원본로그 조회 테이블 end -->

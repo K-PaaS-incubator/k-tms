@@ -1,0 +1,150 @@
+<div id="applicationSearch" class="content-gray">
+	<form role="form" class="form-inline applicationForm">
+		<div class="row">
+			<!-- search option set -->
+			<div class="sch_area_option border-dotted-right">
+				<!-- search option - default -->
+					<div class="sch_option_set">
+						<div class="sch_option_set_row">
+							<!-- 조회대상 -->
+							<label class="control-label col-xs-1"><%= locale.targetType %></label>
+							<div class="col-xs-3" id="targetType"></div>
+							<!-- / 조회대상 -->
+							
+							<!-- 분석기간 -->
+							<label class="control-label col-xs-1"><%= locale.search.period %></label>
+							<div class="col-xs-7" id="period"></div>
+							<!-- / 분석기간  -->
+						</div>
+                                            <div class="sch_option_set_row">
+                                                <div class="row_radio">
+                                                    <input type="radio" class="radio" name="ipType" id="ipType1" value="4" checked>&nbsp;<label for="ipType1" class="label-for-button">IPv4</label>&nbsp;&nbsp;
+                                                    <input type="radio" class="radio" name="ipType" id="ipType2" value="6">&nbsp;<label for="ipType2" class="label-for-button">IPv6</label>&nbsp;
+                                                </div>
+                                            </div>
+					</div>
+				<!-- / search option - default -->
+				
+				<!-- search option - detail -->
+					<div class="sch_option_set detail-search" id="detail-search">
+						<div class="sch_option_set_row">
+							<!-- 탐지방향 선택 begin -->
+					    	<label class="control-label col-xs-1"><%= locale.type %></label>
+					    	<div class="col-xs-3">
+								<select id="bType" name="bType" class="form-control col-xs-7">
+									<option value=""><%= locale.dashboard.total %></option>
+									<option value="1">http</option>
+									<option value="2">dns</option>
+									<option value="3">tls</option>
+									<option value="4">smtp</option>
+									<option value="5">ftp</option>
+								</select>
+							</div>
+							<!-- 탐지방향 선택 end -->
+												
+							<!-- 출발포트 begin -->
+					    	<label class="control-label col-xs-1"><%=locale.nSourcePort%></label>
+					    	<div class="col-xs-3">
+					    		<input id="attackPortInput" name="attackPortInput" type="text" class="form-control col-xs-7" maxlength="5"/>
+							</div>
+							<!-- 출발포트 end -->
+						</div>
+					
+						<div class="sch_option_set_row margin-t10">
+							
+							<!-- 대상포트 begin -->
+					    	<label class="control-label col-xs-1"><%=locale.destinationPort%></label>
+					    	<div class="col-xs-3">
+					    		<input id="destPortInput" name="destPortInput" type="text" class="form-control col-xs-7" maxlength="5"/>
+							</div>
+							<!-- 대상포트 end -->
+							
+							<!-- IP 선택 begin -->
+					    	<label class="control-label col-xs-1">IP</label>
+					    	<div class="col-xs-3">
+								<!-- <select class="form-control" id="ipConditionSelect">
+									<option value="1">기본조회</option>
+									<option value="2">기관별 조회</option>
+								</select> -->
+                                                                <input type="text" class="form-control maxwidth-120" id="ipInput" name="ipInput" placeholder="IP <%=locale.address%>"/>
+								<input type="text" class="form-control maxwidth-60" placeholder="MASK" name="maskInput" id="maskInput" maxlength="2"/>
+								
+								<input type="hidden" class="form-control" name="fromIpInput" id="fromIpInput" placeholder="From IP" id="fromIp" />
+								<input type="hidden" class="form-control" name="toIpInput" id="toIpInput" placeholder="TO IP" id="toIp" />
+							</div>
+							<!-- IP 선택 end -->
+						</div>
+				<!-- 공격유형 선택 begin -->
+				<!-- div class="form-group col-xs-4 margin-t10 padding-clear">
+			    <label class="control-label col-xs-3">공격유형</label>
+					<select id="attackTypeSelect" name="attackTypeSelect" class="form-control col-xs-7">
+						<option value=0>전체 공격유형</option>
+						<option value=1>Access_Attempt</option>
+						<option value=2>Backdoor/Trojan</option>
+						<option value=3>DOS/DDOS</option>
+						<option value=4>Information</option>
+						<option value=5>Policy_Violation</option>
+						<option value=6>Probe</option>
+						<option value=7>Protocol_Vulnerability</option>
+						<option value=8>Web_Access</option>
+						<option value=9>Worm/Virus</option>
+						<option value=99>User_Signature</option>
+						<option value="">전체</option>
+					</select>
+				</div> -->
+				<!-- 공격유형 선택 end -->	
+				<!-- 위험도 선택 begin -->
+				<!-- <div class="form-group col-xs-8 margin-t10 padding-clear">
+			    <label class="control-label col-xs-2">위험도</label>
+					<div class="checkbox margin-r15 padding-clear">
+					  <label>
+					    <input type="checkbox" id="severityHCheck" name="severityHCheck">
+					    <span class="threat-bg-lv5 rect"></span>
+							High
+					  </label>
+					</div>
+					<div class="checkbox margin-r15">
+					  <label>
+					    <input type="checkbox" id="severityMCheck" name="severityMCheck">
+					    <span class="threat-bg-lv4 rect"></span>
+							Medium
+					  </label>
+					</div>
+					<div class="checkbox margin-r15">
+					  <label>
+					    <input type="checkbox" id="severityLCheck" name="severityLCheck">
+					    <span class="threat-bg-lv3 rect"></span>
+							Low
+					  </label>
+					</div>
+					<div class="checkbox margin-r15">
+					  <label>
+					    <input type="checkbox" id="severityICheck" name="severityICheck">
+					    <span class="threat-bg-lv2 rect"></span>
+							Info
+					  </label>
+					</div>
+				</div> -->
+					</div>
+				<!-- / search option - detail -->
+			</div>
+			<!-- / search option set -->
+			
+			<!-- search button -->
+			<div class="sch_area_btn text-right">
+				<button type="button" class="btn btn_sch_detail margin-r10 cancelBtn"><%=locale.reset%></button>
+				<button type="button" class="btn btn_sch_detail margin-r10 detailBtn" id="detail-search-toggle"><%=locale.search.detailSearch%>&nbsp;<i class="fa fa-caret-down"></i></button>
+				<button type="button" class="btn btn-primary searchBtn"><i class="fa fa-search"></i><%=locale.search.search%></button>
+			</div>
+			<!-- / search button -->
+		</div>
+	</form>
+</div>
+<!-- 검색 조건 end -->
+
+<!-- Application 조회 테이블 begin -->
+<div id="table" class="content-white border-solid-top"></div>
+<!-- Application 조회 테이블 end -->
+
+<!-- 검색 조건 end -->
+<!-- 검색결과 end -->

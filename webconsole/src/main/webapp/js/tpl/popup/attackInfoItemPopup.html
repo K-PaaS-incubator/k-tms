@@ -1,0 +1,5 @@
+<td class="align-center <%= model.lCode %>"><%= model.rNum %></td>
+<!-- <td class="level-narrow <%= model.severityColor %>"></td> -->
+<td class="overflow-ellipsis attackNamePopup" title="<%= model.strDescription %>"><span class="cell-color-dot-bg severity-bg-lv<%= model.severityColor %>"></span><a id="attackNamePopup" data-sseverity="<%= model.severityColor %>" data-strdescription="<%= model.strDescription %>" data-attackname="<%= model.attackTypeName %>"><%= model.strDescription %></a></td>
+<td class="overflow-ellipsis" title="<%= model.attackTypeName %>"><%= model.strAttackType %></td>
+<td class="overflow-ellipsis" title="<%= model.strCveId %>"><%= model.strCveId %></td>

@@ -1,0 +1,125 @@
+<div class="box-profile">
+	<svg id="profileWeekChart"></svg>
+	<a class="batch"><span></span></a>
+	<a class="day sunChart" ><span class="stroke"></span><span class="dot"></span>SUN</a>
+	<a class="day monChart" ><span class="stroke"></span><span class="dot"></span>MON</a>
+	<a class="day tueChart" ><span class="stroke"></span><span class="dot"></span>TUE</a>
+	<a class="day wedChart" ><span class="stroke"></span><span class="dot"></span>WED</a>
+	<a class="day thuChart" ><span class="stroke"></span><span class="dot"></span>THU</a>
+	<a class="day friChart" ><span class="stroke"></span><span class="dot"></span>FRI</a>
+	<a class="day satChart" ><span class="stroke"></span><span class="dot"></span>SAT</a>
+</div>
+<!-- <form class="form-inline unitForm" role="form"> -->
+<!-- 	<label class="control-label">단위</label> -->
+<!-- 	<select class="form-control margin-l5 graphUnit"> -->
+<!-- 	</select> -->
+<!-- 	<button class="btn btn-default" type="button">패턴 변경 적용</button> -->
+<!-- </form> -->
+<div class="border-solid-bottom margin-t10 setBatchLine"></div>
+<div class="icon-subtitle pull-left setBatchLabel"><%= locale.allSetting%></div>
+<form class="col-xs-12 padding-clear margin-b10 setBatchForm" role="form">
+	<div class="weekSetBatchForm margin-t20">
+		<div class="form-group form-inline">
+			<label class="control-label"><%= locale.upperLimitValue%></label>
+			<label class="control-label margin-r5"><%= locale.howToSetUp%></label>
+			<select class="form-control weekUpperSettingSelect">
+				<option value="1"><%= locale.assignmentFixedValue%>(=)</option>
+				<option value="2"><%= locale.batchIncreas%>(+/-)</option>
+				<option value="3"><%= locale.batchRate%>(%)</option>
+			</select>
+			<label class="control-label margin-l20 margin-r5"><%= locale.settingValue%></label>
+			<select class="form-control weekUpperTrafficSelect">
+				<option value="avgTraffic"><%= locale.avgTraffic%></option>
+				<option value="maxTraffic"><%= locale.maxTraffic%></option>
+				<option value="minTraffic"><%= locale.minTraffic%></option>
+				<option value="profileUpper"><%= locale.profileMax%></option>
+				<option value="profileLower"><%= locale.profileMin%></option>
+			</select>
+			<label class="control-label weekUpperPlusLabel">+</label>
+			<label class="control-label weekUpperMultiplyLabel">x</label>
+			<input class="form-control align-right weekUpperInput" type="text" placeholder="0" value="0">
+			<select class="form-control weekUpperUnit">
+			</select>
+			<label class="control-label weekUpperPercentLabel">%</label>
+		</div>
+		<div class="form-group form-inline">
+			<label class="control-label"><%= locale.minValue%> </label>
+			<label class="control-label margin-r5"><%= locale.howToSetUp%></label>
+			<select class="form-control weekLowerSettingSelect">
+				<option value="1"><%= locale.assignmentFixedValue%>(=)</option>
+				<option value="2"><%= locale.batchIncreas%>(+/-)</option>
+				<option value="3"><%= locale.batchRate%>(%)</option>
+			</select>
+			<label class="control-label margin-l20 margin-r5"><%= locale.settingValue%></label>
+			<select class="form-control weekLowerTrafficSelect">
+				<option><%= locale.avgTraffic%></option>
+				<option><%= locale.maxTraffic%></option>
+				<option><%= locale.minTraffic%></option>
+				<option><%= locale.profileMax%></option>
+				<option><%= locale.profileMin%></option>
+			</select>
+			<label class="control-label weekLowerPlusLabel">+</label>
+			<label class="control-label weekLowerMultiplyLabel">x</label>
+			<input class="form-control align-right weekLowerInput" type="text" placeholder="0" value="0">
+			<select class="form-control weekLowerUnit">
+			</select>
+			<label class="control-label weekLowerPercentLabel">%</label>
+		</div>
+	<button class="btn btn-default weekSetBatchBtn pull-right" type="button"><%= locale.apply%></button>
+	<button class="btn btn-default selectSampleBtn pull-right margin-r5" type="button"><%= locale.viewReferenceData%></button>;
+	</div>
+</form>
+
+<form class="col-xs-12 padding-clear margin-b10 sampleDataForm" role="form" style="display:none">
+	<div class="border-solid-bottom margin-t10"></div>
+	<div class="form-group form-inline">
+		<div class="icon-subtitle pull-left"><span class="dayName"></span> <%= locale.referenceData%></div>
+	</div>
+<!-- 상세 그래프  -->
+<!-- 	<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="200px" /> -->
+
+	
+	<!-- 상한값, 하한값 설정 시작 -->
+	<div class="daySetBatchForm border-solid-all padding-all-5">
+		<div class="form-group form-inline">
+			<div class="form-group col-xs-8 padding-clear"  id="targetType"></div>
+		</div>
+		<div class="form-group form-inline">
+                        <label class="control-label margin-r5"><%= locale.howToSetUp%></label>
+			<select class="form-control typeSelect">
+				<option value="ALL"><%= locale.totalTraffic%></option>
+				<option value="PROTOCOL1H"><%= locale.protocolTraffic%></option>
+				<option value="SERVICE1H"><%= locale.serviceTraffic%></option>	
+			</select>
+                        <label class="control-label margin-l20 margin-r5 protocolLabel" style="display:none"><%= locale.protocol%></label>
+			<select class="form-control protocolSelect" style="display:none">
+			</select>
+                        <label class="control-label margin-l20 margin-r5 serviceLavel" style="display:none"><%= locale.servicePort%></label>
+                        <input type="text" name="servicePort" class="form-control servicePort" style="display:none"/>
+                </div>
+                <div class="form-group form-inline">
+			<label class="control-label margin-l23 margin-r5"><%= locale.term%></label>
+                        <select name="simpleTimeSelect" class="form-control simpleTimeSelect margin-r5">
+                                <option value="detail"><%= locale.search.detailPeriod %></option>
+                                <option value="1d"><%= locale.sampleDataDate.day1 %></option>
+                                <option value="3d"><%= locale.sampleDataDate.day3 %></option>
+                                <option value="7d" selected="selected"><%= locale.sampleDataDate.weark1 %></option>
+                                <option value="14d"><%= locale.sampleDataDate.weark2 %></option>
+                                <option value="21d"><%= locale.sampleDataDate.weark3 %></option>
+                                <option value="28d"><%= locale.sampleDataDate.weark4 %></option>
+                        </select>
+			<input type="text" name="startDateInput" class="form-control startDateInput" readonly>
+                        ~
+                        <input type="text" name="endDateInput" class="form-control endDateInput" readonly>
+                        <button class="btn btn-default sampleDataSearch margin-b10 pull-right" type="button"><%= locale.search.search %></button>
+		</div>
+	</div>
+	<!-- 상한값, 하한값 설정 끝 -->
+	<!-- 상세설정 table begin -->
+        <div class="margin-">
+            <%= locale.allSecect%><input type="checkbox" class="sampleAllCheck">
+            <button class="btn btn-default sampleDataAccept margin-b10 pull-right" type="button"><%= locale.btn.accept %></button>
+            <div class="sampleCharts"></div>
+        </div>
+</form>
+<!-- 상세설정 table end -->

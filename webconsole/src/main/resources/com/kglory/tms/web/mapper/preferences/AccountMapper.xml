@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.preferences.AccountMapper">
+
+	<resultMap type="AccountVO" 			id="accountResultMap">
+		<id property="userIndex" 			column="LUSERINDEX" />
+		<result property="id" 				column="STRID" />
+		<result property="password" 		column="STRPASSWD" />
+		<result property="groupType" 		column="SGROUPTYPE" />
+		<result property="name" 			column="STRNAME" />
+		<result property="description" 		column="STRDESCRIPTION" />
+		<result property="company" 			column="STRCOMPANY" />
+		<result property="telephone" 		column="STRTELEPHONE" />
+		<result property="mobile" 			column="STRMOBILE" />
+		<result property="email" 			column="STREMAIL" />
+		<result property="accountStatus" 	column="BACCOUNTSTATUS" />
+		<result property="category" 		column="NCATEGORY" />
+		<result property="refIndex" 		column="NREFINDEX" />
+		<result property="role" 			column="NROLE" />
+		<result property="login" 			column="NLOGIN" />
+		<result property="lockout" 			column="NLOCKOUT" />
+		<result property="failCount" 		column="NFAILEDLOGIN" />
+		<result property="loginDate" 		column="TMLOGIN" />
+	</resultMap>
+	
+	<select id="selectAccountByUsername" parameterType="string" resultMap="accountResultMap">
+            SELECT LUSERINDEX, 
+                    STRID, 
+                    STRPASSWD, 
+                    SGROUPTYPE, 
+                    STRNAME, 
+                    STRDESCRIPTION, 
+                    STRCOMPANY, 
+                    STRTELEPHONE, 
+                    STRMOBILE, 
+                    STREMAIL, 
+                    BACCOUNTSTATUS, 
+                    NCATEGORY, 
+                    NREFINDEX, 
+                    NROLE, 
+                    NLOGIN, 
+                    IFNULL(NLOCKOUT, 0) AS NLOCKOUT,
+                    IFNULL(NFAILEDLOGIN, 0) AS NFAILEDLOGIN,
+                    DATE_FORMAT( TMLOGIN, '%Y-%m-%d %H:%i:%s') AS TMLOGIN
+            FROM   SYSTEM_USER
+            WHERE  STRID = #{string} 
+	</select>
+        
+	<select id="selectAccountByUserIndex" parameterType="int" resultMap="accountResultMap">
+            SELECT LUSERINDEX, 
+                    STRID, 
+                    STRPASSWD, 
+                    SGROUPTYPE, 
+                    STRNAME, 
+                    STRDESCRIPTION, 
+                    STRCOMPANY, 
+                    STRTELEPHONE, 
+                    STRMOBILE, 
+                    STREMAIL, 
+                    BACCOUNTSTATUS, 
+                    NCATEGORY, 
+                    NREFINDEX, 
+                    NROLE, 
+                    NLOGIN, 
+                    NLOCKOUT,
+                    NFAILEDLOGIN,
+                    TMLOGIN
+            FROM   SYSTEM_USER
+            WHERE  LUSERINDEX = #{userIndex}
+	</select>
+	
+	<resultMap type="AccountVO" 			id="accountResultForPathMap">
+		<result property="userIndex" 		column="LUSERINDEX" />
+		<result property="id" 				column="STRID" />
+		<result property="password" 		column="STRPASSWD" />
+		<result property="groupType" 		column="SGROUPTYPE" />
+		<result property="strName" 			column="STRNAME" />
+		<result property="description" 		column="STRDESCRIPTION" />
+		<result property="company" 			column="STRCOMPANY" />
+		<result property="telephone" 		column="STRTELEPHONE" />
+		<result property="mobile" 			column="STRMOBILE" />
+		<result property="email" 			column="STREMAIL" />
+		<result property="accountStatus" 	column="BACCOUNTSTATUS" />
+		<result property="category" 		column="NCATEGORY" />
+		<result property="refIndex" 		column="NREFINDEX" />
+		<result property="role" 			column="NROLE" />
+		<result property="login" 			column="NLOGIN" />
+		<result property="lockout" 			column="NLOCKOUT" />
+		<result property="failCount" 		column="NFAILEDLOGIN" />
+		<result property="loginDate" 		column="TMLOGIN" />
+		<result property="pathName" 		column="PATHNAME" />
+	</resultMap>
+	
+	<select id="selectAccountByUsernameForPath" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountResultForPathMap">
+		SELECT A.LUSERINDEX AS LUSERINDEX, A.STRID AS STRID, A.STRPASSWD AS STRPASSWD, A.SGROUPTYPE AS SGROUPTYPE, A.STRNAME AS USERNAME, 
+                       A.STRCOMPANY AS STRCOMPANY, A.STRDESCRIPTION AS STRDESCRIPTTON, A.STRTELEPHONE AS STRTELEPHONE, A.STRMOBILE AS STRMOBILE, 
+                       A.STREMAIL AS STREMAIL, A.BACCOUNTSTATUS AS BACCOUNTSTATUS, A.NLOGIN AS NLOGIN, A.NLOCKOUT AS NLOCKOUT, A.NCATEGORY AS NCATEGORY, 
+                       A.NREFINDEX AS NREFINDEX, A.NROLE AS NROLE, B.STRNAME AS PATHNAME
+		FROM (
+			SELECT LUSERINDEX, STRID, STRPASSWD, SGROUPTYPE, STRNAME, STRCOMPANY, STRDESCRIPTION, STRTELEPHONE, STRMOBILE, STREMAIL, BACCOUNTSTATUS, NLOGIN, NLOCKOUT, NCATEGORY, NREFINDEX, NROLE
+			FROM SYSTEM_USER 
+			WHERE STRID = #{id}  
+		) A,
+			(
+			SELECT 0 AS NCATEGORY, 0 AS NREFINDEX, #{defaultPath} AS STRNAME
+			UNION
+			SELECT 2 AS NCATEGORY, LNETWORKINDEX AS NREFINDEX, #{lnetworkName}||'('||STRNAME||')' AS STRNAME
+			FROM SYSTEM_NETWORK
+		 ) B
+		WHERE A.NCATEGORY = B.NCATEGORY
+		AND A.NREFINDEX = B.NREFINDEX		
+	</select>
+	
+	<select id="selectAccounts" resultMap="accountResultMap">
+		SELECT LUSERINDEX, 
+		       STRID, 
+		       STRPASSWD, 
+		       SGROUPTYPE, 
+		       STRNAME, 
+		       STRDESCRIPTION, 
+		       STRCOMPANY, 
+		       STRTELEPHONE, 
+		       STRMOBILE, 
+		       STREMAIL, 
+		       BACCOUNTSTATUS, 
+		       NCATEGORY, 
+		       NREFINDEX, 
+		       NROLE, 
+		       NLOGIN, 
+		       NLOCKOUT 
+		FROM   SYSTEM_USER 
+	</select>
+        
+        <resultMap type="AccountVO" 			id="mailSmsResultMap">
+		<result property="userIndex" 		column="LUSERINDEX" />
+		<result property="email" 		column="STREMAIL" />
+		<result property="mobile" 		column="STRMOBILE" />
+		<result property="id" 		column="STRID" />
+        </resultMap>
+        
+	<select id="selectAdminMailList" resultMap="mailSmsResultMap">
+		SELECT LUSERINDEX, STREMAIL, STRID FROM SYSTEM_USER
+                WHERE STREMAIL IS NOT NULL
+                AND LENGTH(STREMAIL) <![CDATA[ > ]]> 0
+                AND NROLE <![CDATA[ > ]]> 1
+                GROUP BY LUSERINDEX, STREMAIL
+	</select>
+        
+	<select id="selectUserMailList" resultMap="mailSmsResultMap">
+		SELECT LUSERINDEX, STREMAIL, STRID FROM SYSTEM_USER
+                WHERE STREMAIL IS NOT NULL
+                AND LENGTH(STREMAIL) <![CDATA[ > ]]> 0
+                AND NROLE = 1
+                GROUP BY LUSERINDEX, STREMAIL
+	</select>
+        
+	<select id="selectAdminSmsList" resultMap="mailSmsResultMap">
+		SELECT LUSERINDEX, STRMOBILE FROM SYSTEM_USER
+                WHERE STRMOBILE IS NOT NULL
+                AND LENGTH(STRMOBILE) <![CDATA[ > ]]> 0
+                AND NROLE <![CDATA[ > ]]> 1
+                GROUP BY LUSERINDEX, STRMOBILE
+	</select>
+        
+	<select id="selectUserSmsList" resultMap="mailSmsResultMap">
+		SELECT LUSERINDEX, STRMOBILE FROM SYSTEM_USER
+                WHERE STRMOBILE IS NOT NULL
+                AND LENGTH(STRMOBILE) <![CDATA[ > ]]> 0
+                AND NROLE = 1
+                GROUP BY LUSERINDEX, STRMOBILE
+	</select>
+
+	<select id="selectAccountList" resultMap="accountResultMap">
+		SELECT  LUSERINDEX,
+				SGROUPTYPE,
+				STRID 
+		FROM  SYSTEM_USER
+		ORDER BY STRID ASC 
+	</select>
+
+	<resultMap type="AccountVO" 			id="accountDetailResultMap">
+		<id property="userIndex" 			column="LUSERINDEX" />
+		<result property="id" 				column="STRID" />
+		<result property="password" 		column="STRPASSWD" />
+		<result property="groupType" 		column="SGROUPTYPE" />
+		<result property="name" 			column="USERNAME" />
+		<result property="stationName" 		column="STRNAME" />
+		<result property="description" 		column="STRDESCRIPTION" />
+		<result property="company" 			column="STRCOMPANY" />
+		<result property="telephone" 		column="STRTELEPHONE" />
+		<result property="mobile" 			column="STRMOBILE" />
+		<result property="email" 			column="STREMAIL" />
+		<result property="accountStatus" 	column="BACCOUNTSTATUS" />
+		<result property="category" 		column="NCATEGORY" />
+		<result property="refIndex" 		column="NREFINDEX" />
+		<result property="role" 			column="NROLE" />
+		<result property="lockout" 			column="NLOCKOUT" />
+		<result property="failCount" 		column="NFAILEDLOGIN" />
+		<result property="loginDate" 		column="TMLOGIN" />
+	</resultMap>
+	
+	<select id="selectAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountDetailResultMap">
+		SELECT A.STRID AS STRID, A.STRPASSWD AS STRPASSWD, A.STRNAME AS USERNAME, A.STRCOMPANY AS STRCOMPANY, A.STRDESCRIPTION AS STRDESCRIPTION, 
+                       A.STRTELEPHONE AS STRTELEPHONE, A.STRMOBILE AS STRMOBILE, A.STREMAIL AS STREMAIL, A.NLOCKOUT AS NLOCKOUT, A.NCATEGORY AS NCATEGORY, 
+                       A.NREFINDEX AS NREFINDEX, A.NROLE AS NROLE, B.STRNAME AS STRNAME
+		FROM (
+			SELECT STRID, STRPASSWD, STRNAME, STRCOMPANY, STRDESCRIPTION, STRTELEPHONE, STRMOBILE, STREMAIL, NLOCKOUT, NCATEGORY, NREFINDEX, NROLE
+			FROM SYSTEM_USER 
+			WHERE LUSERINDEX = #{userIndex}  
+		) A,
+                (
+			SELECT 0 AS NCATEGORY, 0 AS NREFINDEX, #{defaultPath} AS STRNAME
+			UNION
+			SELECT 2 AS NCATEGORY, LNETWORKINDEX AS NREFINDEX, #{lnetworkName} || '(' || STRNAME || ')' AS STRNAME
+			FROM SYSTEM_NETWORK
+		 ) B
+		WHERE A.NCATEGORY = B.NCATEGORY
+		AND A.NREFINDEX = B.NREFINDEX	   
+	</select>
+	
+	<update id="updateAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto" >
+		UPDATE SYSTEM_USER
+		SET STRID = #{id},
+                    SGROUPTYPE = #{groupType},
+                    NROLE = #{role},
+                    STRPASSWD = #{password},
+                    STRNAME = #{name},
+                    STRCOMPANY = #{company},
+                    STRDESCRIPTION = #{description},
+                    STRTELEPHONE = #{telephone},
+                    STRMOBILE = #{mobile},
+                    STREMAIL = #{email}
+		WHERE LUSERINDEX = #{userIndex}
+	</update>
+	
+	<update id="updateAdminExceptPassword" parameterType="com.kglory.tms.web.model.dto.AccountDto" >
+		UPDATE SYSTEM_USER
+		SET STRID = #{id},
+                    STRNAME = #{name},
+                    STRCOMPANY = #{company},
+                    STRDESCRIPTION = #{description},
+                    STRTELEPHONE = #{telephone},
+                    STRMOBILE = #{mobile},
+                    STREMAIL = #{email}
+		WHERE LUSERINDEX = #{userIndex}
+	</update>
+	
+	<update id="updateUserAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		UPDATE SYSTEM_USER
+		SET STRPASSWD = #{password},
+                    STRNAME = #{name},
+                    STRID = #{id},
+                    STRCOMPANY = #{company},
+                    STRDESCRIPTION = #{description},
+                    STRTELEPHONE = #{telephone},
+                    STRMOBILE = #{mobile},
+                    STREMAIL = #{email},
+                    NCATEGORY = #{category}, 
+		    NREFINDEX = #{refIndex},
+		    NLOCKOUT = #{lockout}
+		WHERE LUSERINDEX = #{userIndex}
+	</update>
+	
+	<update id="updateUserExceptPassword" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		UPDATE SYSTEM_USER
+		SET STRNAME = #{name},
+                    STRID = #{id},
+                    STRCOMPANY = #{company},
+                    STRDESCRIPTION = #{description},
+                    STRTELEPHONE = #{telephone},
+                    STRMOBILE = #{mobile},
+                    STREMAIL = #{email},
+                    NCATEGORY = #{category}, 
+		    NREFINDEX = #{refIndex},
+		    NLOCKOUT = #{lockout}
+		WHERE LUSERINDEX = #{userIndex}
+	</update>
+
+	<insert id="insertAdminAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		INSERT INTO SYSTEM_USER ( 
+					STRID, 
+					STRPASSWD, 
+					SGROUPTYPE, 
+					STRNAME, 
+					STRDESCRIPTION, 
+					STRCOMPANY, 
+					STRTELEPHONE, 
+					STRMOBILE, 
+					STREMAIL, 
+					BACCOUNTSTATUS, 
+					NCATEGORY, 
+					NREFINDEX, 
+					NROLE, 
+					NLOGIN, 
+					NLOCKOUT, 
+					NFAILEDLOGIN, 
+					TMLOGIN 
+					)
+		VALUES (
+				#{id}, 
+				#{password},
+				#{groupType}, 
+				#{name}, 
+				#{description},
+				#{company}, 
+				#{telephone}, 
+				#{mobile}, 
+				#{email}, 
+				NULL, 
+				#{category}, 
+				#{refIndex}, 
+				#{role}, 
+				1, 
+				0, 
+				NULL, 
+				NULL 
+				)
+				<selectKey order="AFTER" keyProperty="userIndex" resultType="long">
+					SELECT MAX(LUSERINDEX) FROM SYSTEM_USER
+				</selectKey>
+						
+	</insert>
+	
+	<insert id="insertUserAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		INSERT INTO SYSTEM_USER ( 
+					STRID, 
+					STRPASSWD, 
+					SGROUPTYPE, 
+					STRNAME, 
+					STRDESCRIPTION, 
+					STRCOMPANY, 
+					STRTELEPHONE, 
+					STRMOBILE, 
+					STREMAIL, 
+					BACCOUNTSTATUS, 
+					NCATEGORY, 
+					NREFINDEX, 
+					NROLE, 
+					NLOGIN, 
+					NLOCKOUT, 
+					NFAILEDLOGIN, 
+					TMLOGIN 
+					)
+		VALUES ( 
+				 #{id}, 
+				 #{password}, 
+				 #{groupType}, 
+				 #{name}, 
+				 #{description}, 
+				 #{company}, 
+				 #{telephone}, 
+				 #{mobile}, 
+				 #{email}, 
+				 NULL, 
+				 #{category}, 
+				 #{refIndex}, 
+				 #{role}, 
+				 1, 
+				 #{lockout}, 
+				 NULL, 
+				 NULL 
+				 )
+				 <selectKey order="AFTER" keyProperty="userIndex" resultType="long">
+					SELECT MAX(LUSERINDEX) FROM SYSTEM_USER
+				 </selectKey>		
+	</insert>
+	
+	<delete id="deleteAccountList" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		DELETE FROM SYSTEM_USER 
+		WHERE LUSERINDEX = #{userIndex}
+	</delete>
+
+	<select id="selectAccountUserPassword" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountDetailResultMap">
+		SELECT STRPASSWD
+		FROM SYSTEM_USER 
+		WHERE LUSERINDEX = #{userIndex}
+	</select>	
+	
+	<select id="isDuplicateAccountID" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountDetailResultMap">
+		SELECT STRID
+		FROM SYSTEM_USER
+		WHERE STRID = #{id}
+	</select>
+	
+	<insert id="insertGroupAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		INSERT INTO SYSTEM_USER_ACCGROUP ( 
+					STRNAME, 
+					NACCINDEXCOUNT, 
+					STRACCINDEX 
+					)
+		VALUES ( 
+				#{strName}, 
+				#{nacIndexCount}, 
+				#{strAccIndex} 
+				)
+				<selectKey order="AFTER" keyProperty="lIndex" resultType="long">
+					SELECT MAX(LINDEX) FROM SYSTEM_USER_ACCGROUP
+				</selectKey>
+	</insert>
+	
+	<resultMap type="AccountVO" 			id="accountGroupDetailResultMap">
+		<result property="lIndex" 			column="LINDEX" />
+		<result property="strName" 			column="STRNAME" />
+	</resultMap>
+	
+	<select id="selectAccountGroupList" resultMap="accountGroupDetailResultMap">
+		SELECT 	LINDEX,
+				STRNAME
+		FROM SYSTEM_USER_ACCGROUP 
+		ORDER BY STRNAME ASC 
+	</select>
+	
+	<select id="selectGroupDetailList" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountGroupDetailResultMap">
+		SELECT 	LINDEX,
+				STRNAME,
+				STRACCINDEX
+		FROM SYSTEM_USER_ACCGROUP 
+		WHERE LINDEX = #{lIndex}
+	</select>
+	
+	<update id="updateGroupAccountDetails" parameterType="com.kglory.tms.web.model.dto.AccountDto"> 
+		UPDATE SYSTEM_USER_ACCGROUP
+		SET  	 STRNAME = #{strName},
+			 NACCINDEXCOUNT = #{nacIndexCount},
+			 STRACCINDEX = #{strAccIndex}
+		WHERE LINDEX = #{lIndex}
+	</update>
+	
+	<delete id="deleteAccountGroupList" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+		DELETE FROM SYSTEM_USER_ACCGROUP 
+		WHERE LINDEX = #{lIndex}
+	</delete>
+	
+	<resultMap type="AccountVO" 			id="accountGroupResultMap">
+		<result property="lIndex" 			column="LINDEX" />
+		<result property="id" 				column="STRNAME" />
+	</resultMap>
+	
+	<select id="isDuplicateGroupName" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountGroupResultMap">
+		SELECT STRNAME
+		FROM SYSTEM_USER_ACCGROUP
+		WHERE STRNAME = #{id}
+	</select>
+	
+	<select id="selectTotalAdminList" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountResultMap">
+		SELECT SGROUPTYPE 
+		FROM SYSTEM_USER 
+		WHERE SGROUPTYPE = 0
+	</select>
+	
+	<select id="selectTotalUserList" parameterType="com.kglory.tms.web.model.dto.AccountDto" resultMap="accountResultMap">
+		SELECT SGROUPTYPE 
+		FROM SYSTEM_USER 
+		WHERE SGROUPTYPE = 2
+	</select>
+        
+    <update id="updateLoginSuccess" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+        UPDATE SYSTEM_USER
+        SET NLOCKOUT = 0,
+            NFAILEDLOGIN = 0,
+            TMLOGIN = NOW(),
+            NLOGIN = 2
+        WHERE LUSERINDEX = #{userIndex}
+    </update>
+    
+    <update id="updateLoginFail" parameterType="com.kglory.tms.web.model.dto.AccountDto">
+        UPDATE SYSTEM_USER
+        SET NLOCKOUT = #{lockout},
+            NFAILEDLOGIN = #{failCount},
+            TMLOGIN = NOW(),
+            NLOGIN = 2
+        WHERE LUSERINDEX = #{userIndex}
+    </update>
+    
+    <update id="updateAccountDefault" parameterType="com.kglory.tms.web.model.dto.AccountDto" >
+        UPDATE SYSTEM_USER
+        SET STRPASSWD = #{password},
+                STRNAME = #{name},
+                STRCOMPANY = #{company},
+                STRDESCRIPTION = #{description},
+                STRTELEPHONE = #{telephone},
+                STRMOBILE = #{mobile},
+                STREMAIL = #{email}
+        WHERE LUSERINDEX = #{userIndex}
+    </update>
+	
+    <update id="updateAccountDefaultExceptPassword" parameterType="com.kglory.tms.web.model.dto.AccountDto" >
+        UPDATE SYSTEM_USER
+        SET STRNAME = #{name},
+                STRCOMPANY = #{company},
+                STRDESCRIPTION = #{description},
+                STRTELEPHONE = #{telephone},
+                STRMOBILE = #{mobile},
+                STREMAIL = #{email}
+        WHERE LUSERINDEX = #{userIndex}
+    </update>
+        
+    <select id="selectAuthIpList" resultType="string" >
+        SELECT STRUSERIP FROM SYSTEM_HOST
+    </select>
+    
+    <delete id="deleteAuthIp">
+        DELETE FROM SYSTEM_HOST
+    </delete>
+    <insert id="insertAuthIp" parameterType="String">
+        INSERT INTO SYSTEM_HOST (STRUSERIP) VALUES (#{parameterName})
+    </insert>
+    
+    <resultMap type="AccountIpVO" id="accountIp">
+            <result property="id" 		column="ID" />
+            <result property="ip" 		column="IP" />
+    </resultMap>
+    
+    <select id="selectuserIpList" parameterType="String" resultType="string">
+        SELECT IP FROM SYSTEM_USER_IP WHERE ID = #{id}
+    </select>
+    
+    <insert id="insertUserIp" parameterType="com.kglory.tms.web.model.dto.AccountIpDto">
+        INSERT INTO SYSTEM_USER_IP (ID, IP) VALUES (#{id}, #{ip})
+    </insert>
+    
+    <delete id="deleteUserIp" parameterType="String">
+        DELETE FROM SYSTEM_USER_IP WHERE ID = #{id}
+    </delete>
+    
+    <update id="updateAdmin" parameterType="com.kglory.tms.web.model.dto.AccountDto" >
+        UPDATE SYSTEM_USER
+        SET STRPASSWD = #{password},
+                STRID = #{id}
+        WHERE LUSERINDEX = 1
+    </update>
+</mapper>

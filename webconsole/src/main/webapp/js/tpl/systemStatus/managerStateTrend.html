@@ -1,0 +1,138 @@
+<div class="tab-pane active padding-t5 padding-r15 padding-l15" id="tab111">
+	<!-- 그래프 생성 form begin -->
+	<form role="form" class="form-inline">
+		<div class="col-xs-10 padding-clear">
+			
+			<!-- 분석기간 선택 begin -->
+			<div class="form-group col-xs-12 padding-clear margin-t10">
+				<label class="control-label col-xs-2"><%= locale.search.period %></label>
+				<div class="col-xs-10" id="period"></div>
+			</div>
+			<!-- 분석기간 선택 end -->
+			
+		</div>
+		<div class="col-xs-2">
+			<button type="button" class="genGraph btn btn-default col-xs-12 margin-t10 "><%= locale.makeGraph %></button>
+		</div>
+	</form>
+	<!-- 그래프 생성 form end -->
+	
+	<div class="col-xs-12 border-solid-bottom margin-t10 margin-b10"></div>
+	
+	<!-- tab button begin -->
+	<div id="scroll-tab" style="border-bottom:none;margin-bottom:10px;">
+		<ul class="nav nav-tabs nav-tabs-popup-hidden" role="tablist">
+			<li class="active"><span><a href="#cpu-tab" role="tab" data-toggle="tab" id="tab-btn-cpu"><%= locale.cpuUsedRate%></a></span></li>
+			<li><span><a href="#memory-tab" role="tab" data-toggle="tab" id="tab-btn-memory"><%= locale.memUsedRate%></a></span></li>
+			<li><span><a href="#hdd-tab" role="tab" data-toggle="tab" id="tab-btn-hdd"><%= locale.hddUsedRate%></a></span></li>
+			<li><span><a href="#process-tab" role="tab" data-toggle="tab" id="tab-btn-process"><%= locale.processCount%></a></span></li>
+		</ul>		
+	</div>
+	<!-- tab button end -->
+	<div class="tab-content padding-bottom-clear" style="margin-top:-30px;">
+	
+		<div class="col-xs-12 text-right margin-b5 font-size-11 unit"></div>
+	
+		<!-- tab - CPU 사용률 추이 -->
+		<div class="tab-pane active" id="cpu-tab">
+			<div class="row">
+				<div class="col-xs-10">
+					<div class="cpuUsedPopupChart" style="height:184px;"></div>
+				</div>
+				<div class="col-xs-2 padding-left-clear pull-right"><!--class 가 모두 바뀌었습니다.-->					
+					<ul class="chart-subinfo float-clear"><!--이부분이 table 구조에서 ul구조로 변경되었습니다.-->
+						<li>
+							<span class="pull-left threat-text-lv5 font-size-11">Max </span>&nbsp;<span class="pull-right threat-text-lv5 font-size-11 cpuUsedMax"></span>
+						</li>
+						<li>
+							<span class="pull-left threat-text-lv1 font-size-11">Min </span>&nbsp;<span class="pull-right threat-text-lv1 font-size-11 cpuUsedMin"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Avg </span>&nbsp;<span class="pull-right font-size-11 cpuUsedAvg"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Last </span>&nbsp;<span class="pull-right font-size-11 cpuUsedLast"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- tab - Memory 사용률 추이 -->
+		<div class="tab-pane" id="memory-tab">
+			<div class="row">
+				<div class="col-xs-10">
+					<div class="memUsedPopupChart" style="height:184px;"></div>
+				</div>
+				<div class="col-xs-2 padding-left-clear pull-right"><!--class 가 모두 바뀌었습니다.-->
+					<ul class="chart-subinfo float-clear"><!--이부분이 table 구조에서 ul구조로 변경되었습니다.-->
+						<li>
+							<span class="pull-left threat-text-lv5 font-size-11">Max </span>&nbsp;<span class="pull-right threat-text-lv5 font-size-11 memUsedMax"></span>
+						</li>
+						<li>
+							<span class="pull-left threat-text-lv1 font-size-11">Min </span>&nbsp;<span class="pull-right threat-text-lv1 font-size-11 memUsedMin"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Avg </span>&nbsp;<span class="pull-right font-size-11 memUsedAvg"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Last </span>&nbsp;<span class="pull-right font-size-11 memUsedLast"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- tab - HDD 사용률 추이 -->
+		<div class="tab-pane" id="hdd-tab">
+			<div class="row">
+				<div class="col-xs-10">
+					<div class="hddUsedPopupChart" style="height:184px;"></div>
+				</div>
+				<div class="col-xs-2 padding-left-clear pull-right"><!--class 가 모두 바뀌었습니다.-->
+					<ul class="chart-subinfo float-clear"><!--이부분이 table 구조에서 ul구조로 변경되었습니다.-->
+						<li>
+							<span class="pull-left threat-text-lv5 font-size-11">Max </span>&nbsp;<span class="pull-right threat-text-lv5 font-size-11 hddUsedMax"></span>
+						</li>
+						<li>
+							<span class="pull-left threat-text-lv1 font-size-11">Min </span>&nbsp;<span class="pull-right threat-text-lv1 font-size-11 hddUsedMin"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Avg </span>&nbsp;<span class="pull-right font-size-11 hddUsedAvg"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Last </span>&nbsp;<span class="pull-right font-size-11 hddUsedLast"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- tab - Process 개수 추이 -->
+		<div class="tab-pane" id="process-tab">
+			<div class="row">
+				<div class="col-xs-10">
+					<div class="processNumPopupChart" style="height:184px;"></div>
+				</div>
+				<div class="col-xs-2 padding-left-clear pull-right"><!--class 가 모두 바뀌었습니다.-->
+					<ul class="chart-subinfo float-clear"><!--이부분이 table 구조에서 ul구조로 변경되었습니다.-->
+						<li>
+							<span class="pull-left threat-text-lv5 font-size-11">Max </span>&nbsp;<span class="pull-right threat-text-lv5 font-size-11 processNumMax"></span>
+						</li>
+						<li>
+							<span class="pull-left threat-text-lv1 font-size-11">Min </span>&nbsp;<span class="pull-right threat-text-lv1 font-size-11 processNumMin"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Avg </span>&nbsp;<span class="pull-right font-size-11 processNumAvg"></span>
+						</li>
+						<li>
+							<span class="pull-left font-size-11">Last </span>&nbsp;<span class="pull-right font-size-11 processNumLast"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+</div>

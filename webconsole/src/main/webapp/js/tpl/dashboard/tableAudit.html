@@ -1,0 +1,24 @@
+<!-- 감사로그 begin -->
+<div class="row">
+	<div class="col-xs-4">
+		<div class="col-xs-12 count_set2" >
+			<!--div class="count_top"><i class="fa fa-check"></i>&nbsp;<%=locale.dashboard.auditAction%></div-->
+			<div class="count_top"><span class="log-action"></span><%=locale.dashboard.auditAction%></div>
+			<div class="count audit_action cursor-pointer" id="auditAction"></div>
+		</div>
+		<div class="col-xs-12 count_set2">
+			<!--div class="count_top"><i class="fa fa-warning"></i>&nbsp;<%=locale.dashboard.auditWarning%></div-->
+			<div class="count_top"><span class="log-warning"></span><%=locale.dashboard.auditWarning%></div>
+			<div class="count audit_warning cursor-pointer" id="auditWarning"></div>
+		</div>
+		<div class="col-xs-12 count_set2">
+			<!--div class="count_top"><i class="fa fa-times-circle"></i>&nbsp;<%=locale.dashboard.auditError%></div-->
+			<div class="count_top"><span class="log-error"></span><%=locale.dashboard.auditError%></div>
+			<div class="count audit_error cursor-pointer" id="auditError"></div>
+		</div>
+	</div>
+	<div class="col-xs-8">
+		<ul class="dashboard-log-list nodotlist <%=tableClass%>" id="liItem">
+		</ul>
+	</div>
+</div>

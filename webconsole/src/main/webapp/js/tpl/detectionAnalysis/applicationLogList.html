@@ -1,0 +1,84 @@
+<!-- 검색결과 begin -->
+<!-- 건수 및 버튼 영역  begin -->
+<div class="row margin-t10">
+    <!-- 건수 표시 begin -->
+    <div class="col-xs-6">
+        <div class="col-xs-12">
+            <div class="pull-left minwidth-60 text-primary"><%= locale.searchSection %></div>
+            <div class="pull-left" id="listDate"></div>
+        </div>
+        <div class="col-xs-12">
+            <div class="pull-left minwidth-60 margin-t10 text-primary"><%= locale.totalCount %>&nbsp;</div>
+
+            <div class="pull-left margin-t10">
+                <strong class="chart-text-10" id="totalRowSize"></strong>
+                <!--
+            <span class="threat-bg-lv5 rect margin-r5 margin-l15"></span>High <strong><span id="severityHCount"></span></strong>
+                <span class="threat-bg-lv4 rect margin-r5 margin-l10"></span>Medium <strong><span id="severityMCount"></span></strong>
+                <span class="threat-bg-lv3 rect margin-r5 margin-l10"></span>Low <strong><span id="severityLCount"></span></strong>
+                <span class="threat-bg-lv2 rect margin-r5 margin-l10"></span>Info <strong><span id="severityICount"></span></strong>
+                -->
+            </div>
+        </div>
+    </div>
+    <!-- 건수 표시 end -->
+
+    <!-- 버튼 영역 begin -->
+    <div class="col-xs-6">
+        <form class="form-inline" role="form">
+            <div class="pull-right">
+                <div class="pull-left margin-l20 margin-r10">
+                    <div>					
+                        <input type="radio" class="radio" name="exportRange" id="exportRange2" value="currentPage" checked>&nbsp;<label for="exportRange2" class="label-for-button"><%= locale.currentPage %></label>&nbsp;&nbsp;
+<!--                        <input type="radio" class="radio" name="exportRange" id="exportRange1" value="all">&nbsp;<label for="exportRange1" class="label-for-button"><%= locale.dashboard.total %></label>&nbsp;-->
+                        <%= locale.download %>
+                    </div>
+                    <div class="margin-t5">
+                        <button type="button" class="btn btn-labeled btn-success-fill btnExport" data-format="excel"><span class="btn-label"><i class="fa fa-file-excel-o"></i></span>excel</button>
+                        <button type="button" class="btn btn-labeled btn-primary-fill btnExport" data-format="word"><span class="btn-label"><i class="fa fa-file-word-o"></i></span>word</button>
+                        <button type="button" class="btn btn-labeled btn-info-fill btnExport" data-format="html"><span class="btn-label"><i class="fa fa-file-code-o"></i></span>html</button>
+                        <div class="dropdown">
+                            <button id="set_column" type="button" class="btn btn-labeled btn-opt1-fill" data-toggle="dropdown"><span class="btn-label"><i class="fa fa-cogs"></i></span><%= locale.setColumn %></button>
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-target" role="menu" aria-labelledby="dropdownMenu1" style="padding: 10px;">
+                                <li role="presentation"><input type="checkbox" value="applicationLog_type" name="selColumn" class="selColumn">&nbsp;<label><%= locale.type %></label></li>
+                                <li role="presentation"><input type="checkbox" value="applicationLog_detectTime" name="selColumn" class="selColumn">&nbsp;<label><%= locale.detectionTime %></label></li>
+                                <li role="presentation"><input type="checkbox" value="applicationLog_srcIp" name="selColumn" class="selColumn">&nbsp;<label><%= locale.dwSourceIp %></label></li>
+                                <li role="presentation"><input type="checkbox" value="applicationLog_srcPort" name="selColumn" class="selColumn">&nbsp;<label><%= locale.nSourcePort %></label></li>
+                                <li role="presentation"><input type="checkbox" value="applicationLog_destIp" name="selColumn" class="selColumn">&nbsp;<label><%= locale.destinationIp %></label></li>
+                                <li role="presentation"><input type="checkbox" value="applicationLog_destPort" name="selColumn" class="selColumn">&nbsp;<label><%= locale.destinationPort %></label></li>
+                                <li><button id="tableRegist" type="button" class="btn btn-default"><%=locale.regist %> </button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 버튼 영역 begin -->
+</div>
+<!-- 건수 및 버튼 영역  end -->
+
+<!-- 최종5분평균 table begin -->
+<div class="progressbar margin-t10">
+    <table class="table table-striped table-hover table-vertical-line table-fixed" id="content_table">
+        <thead>
+            <tr>
+                <th id="applicationLog_type"><%= locale.type %></th>
+                <th id="applicationLog_detectTime" class="overflow-ellipsis" title="<%= locale.detectionTime %>"><%= locale.detectionTime %></th>
+                <th id="applicationLog_srcIp" class="overflow-ellipsis" title="<%= locale.dwSourceIp %>"><%= locale.dwSourceIp %></th>
+                <th id="applicationLog_srcPort" class="overflow-ellipsis" title="<%= locale.nSourcePort %>"><%= locale.nSourcePort %></th>
+                <th id="applicationLog_destIp" class="overflow-ellipsis" title="<%= locale.destinationIp %>"><%= locale.destinationIp %></th>
+                <th id="applicationLog_destPort" class="overflow-ellipsis" title="<%= locale.destinationPort %>"><%= locale.destinationPort %></th>
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
+</div>
+<!-- 최종5분평균 table end -->
+
+<!-- 더보기 begin -->
+<!-- 더보기 옵션 begin -->
+<div id="pageLayout">
+</div>
+<!-- 더보기 end -->
+<!-- 검색결과 end -->

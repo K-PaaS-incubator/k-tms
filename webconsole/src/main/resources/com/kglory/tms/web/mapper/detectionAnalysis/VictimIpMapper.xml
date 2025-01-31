@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.detectionAnalysis.VictimIpMapper">
+
+	<resultMap type="ChartVO" 			id="victimIpAttackCountGraphDataResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="sumData" 		column="SUM_VALUE" />
+	</resultMap>
+	
+	<select id="selectVictimIpAttackCountGraphData" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpAttackCountGraphDataResultMap">
+		SELECT TMSTART, GRAPH_VALUE
+		FROM (
+			SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+			FROM
+			(	
+				SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+				FROM (
+                                    SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                        DWEVENTNUM AS GRAPH_VALUE 
+				    FROM
+                                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                    </foreach>
+                                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                        AND LNETWORKINDEX = #{lnetworkIndex}
+                                    </if>
+                                    <if test="winBoundSelect == 3">
+                                        AND (WINBOUND = 259 or WINBOUND = 771) 
+                                    </if>
+                                    <if test="winBoundSelect == 2">
+                                        AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                    </if>
+                                    <if test="ipType == 4">
+                                    AND DWDESTINATIONIP = #{destinationIp}
+                                    </if>
+                                    <if test="ipType == 6">
+                                    AND DWDESTINATIONIP = #{strDestinationIp}
+                                    </if>
+				) B
+				GROUP BY TMSTART 
+			) C
+		) D
+		ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectVictimIpAttackCountGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpAttackCountGraphDataResultMap">
+		SELECT 
+                    MIN(GRAPH_VALUE) AS MIX_VALUE, 
+                    MAX(GRAPH_VALUE) AS MAX_VALUE
+		FROM (
+			SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+			FROM
+			(	
+				SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+				FROM (
+                                    SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                        DWEVENTNUM AS GRAPH_VALUE 
+				    FROM
+                                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                    </foreach>
+                                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                        AND LNETWORKINDEX = #{lnetworkIndex}
+                                    </if>
+                                    <if test="winBoundSelect == 3">
+                                        AND (WINBOUND = 259 or WINBOUND = 771) 
+                                    </if>
+                                    <if test="winBoundSelect == 2">
+                                        AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                    </if>
+                                    <if test="ipType == 4">
+                                    AND DWDESTINATIONIP = #{destinationIp}
+                                    </if>
+                                    <if test="ipType == 6">
+                                    AND DWDESTINATIONIP = #{strDestinationIp}
+                                    </if>
+				) B
+				GROUP BY TMSTART 
+			) C
+		) D
+	</select>
+        
+	<select id="selectVictimIpAttackCountGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpAttackCountGraphDataResultMap">
+		SELECT 
+                    GRAPH_VALUE AS SUM_VALUE 
+		FROM (
+			SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+			FROM
+			(	
+				SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+				FROM (
+                                    SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                        DWEVENTNUM AS GRAPH_VALUE 
+				    FROM
+                                    <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                    </foreach>
+                                    WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                    AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                    <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                        AND LNETWORKINDEX = #{lnetworkIndex}
+                                    </if>
+                                    <if test="winBoundSelect == 3">
+                                        AND (WINBOUND = 259 or WINBOUND = 771) 
+                                    </if>
+                                    <if test="winBoundSelect == 2">
+                                        AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                    </if>
+                                    <if test="ipType == 4">
+                                    AND DWDESTINATIONIP = #{destinationIp}
+                                    </if>
+                                    <if test="ipType == 6">
+                                    AND DWDESTINATIONIP = #{strDestinationIp}
+                                    </if>
+				) B
+			) C
+		) D
+	</select>
+        
+	<resultMap type="ChartVO" 			id="victimIpBpsGraphDataResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectVictimIpBpsGraphData" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpBpsGraphDataResultMap">
+	SELECT TMSTART, GRAPH_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPKTSIZE AS GRAPH_VALUE 
+				FROM
+				<foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+				</foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+				<if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+				<if test="ipType == 4">
+					AND DWDESTINATIONIP = #{destinationIp}
+				</if>
+				<if test="ipType == 6">
+					AND DWDESTINATIONIP = #{strDestinationIp}
+				</if>
+			) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectVictimIpBpsGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpBpsGraphDataResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPKTSIZE AS GRAPH_VALUE 
+				FROM
+				<foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+				</foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+				<if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+				<if test="ipType == 4">
+					AND DWDESTINATIONIP = #{destinationIp}
+				</if>
+				<if test="ipType == 6">
+					AND DWDESTINATIONIP = #{strDestinationIp}
+				</if>
+			) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	</select>
+        
+	<select id="selectVictimIpBpsGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpBpsGraphDataResultMap">
+	SELECT 
+            ROUND(GRAPH_VALUE / #{timeDiffSecond}, 2) AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPKTSIZE AS GRAPH_VALUE 
+				FROM
+				<foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+				</foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+				<if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+				<if test="ipType == 4">
+					AND DWDESTINATIONIP = #{destinationIp}
+				</if>
+				<if test="ipType == 6">
+					AND DWDESTINATIONIP = #{strDestinationIp}
+				</if>
+			) B
+		) C
+	) D
+	</select>
+        
+	<resultMap type="ChartVO"			id="victimIpPpsGraphDataResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectVictimIpPpsGraphData" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpPpsGraphDataResultMap">
+	SELECT TMSTART, GRAPH_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART,
+			SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPACKETCOUNTER AS GRAPH_VALUE
+				FROM
+				<foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+				</foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+				<if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+				<if test="ipType == 4">
+					AND DWDESTINATIONIP = #{destinationIp}
+				</if>
+				<if test="ipType == 6">
+					AND DWDESTINATIONIP = #{strDestinationIp}
+				</if>
+			) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectVictimIpPpsGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpPpsGraphDataResultMap">
+	SELECT  
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART,
+			SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPACKETCOUNTER AS GRAPH_VALUE
+				FROM
+				<foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+				</foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+				<if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+				<if test="ipType == 4">
+					AND DWDESTINATIONIP = #{destinationIp}
+				</if>
+				<if test="ipType == 6">
+					AND DWDESTINATIONIP = #{strDestinationIp}
+				</if>
+			) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	</select>
+        
+	<select id="selectVictimIpPpsGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.VictimIpSearchDto" resultMap="victimIpPpsGraphDataResultMap">
+	SELECT  
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART,
+			SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPACKETCOUNTER AS GRAPH_VALUE
+				FROM
+				<foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                    SELECT * FROM ${item.name}
+				</foreach>
+				WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+				<if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+				<if test="ipType == 4">
+					AND DWDESTINATIONIP = #{destinationIp}
+				</if>
+				<if test="ipType == 6">
+					AND DWDESTINATIONIP = #{strDestinationIp}
+				</if>
+			) B
+		) C
+	) D
+	</select>
+</mapper>

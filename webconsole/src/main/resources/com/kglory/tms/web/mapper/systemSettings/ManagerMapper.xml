@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.systemSettings.ManagerMapper">
+        <resultMap type="SystemVO" id="systemInfoMap">
+            <result property="timeSync" column="NUSETIMESYNC"></result>
+            <result property="timeSyncServer" column="STRTIMESERVERNAME"></result>
+            <result property="timeSyncPeriod" column="NTIMESYNCPERIOD"></result>
+            <result property="emailServer" column="STREMAILSERVER"></result>
+			<result property="emailSecurity" column="STREMAILSECURITY"></result>
+            <result property="emailPort" column="STREMAILPORT"></result>
+            <result property="emailUserId" column="STREMAILID"></result>
+            <result property="emailUserPwd" column="STREMAILPWD"></result>
+            <result property="modDate" column="MODDATE"></result>
+        </resultMap>
+        
+        <select id="selectSystemSettingInfo" resultMap="systemInfoMap">
+			SELECT NUSETIMESYNC, STRTIMESERVERNAME, NTIMESYNCPERIOD , STREMAILSERVER, MODDATE, STREMAILPORT, STREMAILSECURITY, IFNULL(STREMAILID, '') AS STREMAILID, IFNULL(STREMAILPWD, '') AS STREMAILPWD
+            FROM SYSTEM_CONFIG_OPTION
+            LIMIT 1
+        </select>
+
+        <update id="updateEmailServer" parameterType="com.kglory.tms.web.model.dto.SystemDto">
+			UPDATE SYSTEM_CONFIG_OPTION
+			SET    STREMAILSERVER = #{emailServer},
+				   STREMAILSECURITY = #{emailSecurity},
+				   STREMAILPORT = #{emailPort},
+				   STREMAILID = #{emailUserId},
+				   STREMAILPWD = #{emailUserPwd}
+        </update>
+        
+        <update id="updateManagerTimeSync" parameterType="com.kglory.tms.web.model.dto.ManagerSyslogDto">
+		UPDATE SYSTEM_CONFIG_OPTION
+		SET NUSETIMESYNC = #{nUseTimeSync, jdbcType=INTEGER},	
+                    STRTIMESERVERNAME = #{strTimeServerName, jdbcType=VARCHAR},
+                    NTIMESYNCPERIOD = #{nTimeSyncPeriod, jdbcType=INTEGER},
+                    MODDATE = NOW()
+	</update>
+        
+	<resultMap type="ManagerVO" 				id="managerIntegrityInfoMap">
+		<result property="nStartIntegrity"		column="NSTARTINTEGRITY"></result>
+		<result property="nAutoIntegrity" 		column="NAUTOINTEGRITY"></result>
+		<result property="nAutoIntegrityMin"	column="NAUTOINTEGRITYMIN"></result>
+	</resultMap>
+	
+	<select id="selectManagerIntegrityInfo" resultMap="managerIntegrityInfoMap">
+		SELECT NSTARTINTEGRITY, NAUTOINTEGRITY, NAUTOINTEGRITYMIN
+		FROM SYSTEM_CONFIG_OPTION
+	</select>
+	
+	
+	<resultMap type="ManagerIntegrityFileVO" id="managerIntegrityFileListMap">
+		<result property="integrityLIndex"		column="LINDEX"></result>
+		<result property="strFileName"			column="STRFILENAME"></result>
+		<result property="nCheck"		 		column="NCHECK"></result>
+	</resultMap>
+	
+	<update id="updateManagerIntegrityInfo" parameterType="com.kglory.tms.web.model.dto.ManagerIntegrityFileDto">
+		UPDATE SYSTEM_CONFIG_OPTION 
+		SET    NSTARTINTEGRITY = #{nStartIntegrity, jdbcType=DOUBLE},
+		       NAUTOINTEGRITY = #{nAutoIntegrity, jdbcType=DOUBLE},
+		       NAUTOINTEGRITYMIN = #{nAutoIntegrityMin, jdbcType=DOUBLE}
+	</update>
+	
+        <resultMap type="com.kglory.tms.web.model.dto.IntegrityFile" id="consoleIntegrityFileListMap">
+		<result property="integrityLIndex"		column="LINDEX"></result>
+		<result property="strFileName"			column="STRFILENAME"></result>
+		<result property="strPath"			column="STRPATH"></result>
+		<result property="fileHashcode"			column="FILE_HASHCODE"></result>
+		<result property="nCheck"		 		column="NCHECK"></result>
+	</resultMap>
+        
+        <select id="selectConsoleIntegrityFileList" resultMap="consoleIntegrityFileListMap">
+                SELECT LINDEX, STRFILENAME, STRPATH, FILE_HASHCODE, NCHECK
+                FROM SYSTEM_CONSOLE_INTEGRITY
+                ORDER BY STRFILENAME ASC
+        </select>
+	
+        <insert id="insertConsoleIntegrityFile" parameterType="com.kglory.tms.web.model.dto.ManagerIntegrityFileDto">
+		<foreach collection="fileList" item="item" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
+		INTO SYSTEM_CONSOLE_INTEGRITY (LINDEX, STRFILENAME, STRPATH, FILE_HASHCODE) 
+                VALUES (#{item.integrityLIndex}, #{item.strFileName}, #{item.strPath}, #{item.fileHashcode})
+		</foreach>
+        </insert>
+        
+        <insert id="insertConsoleIntegrityFileBatch" parameterType="com.kglory.tms.web.model.dto.IntegrityFile">
+		INSERT INTO SYSTEM_CONSOLE_INTEGRITY (LINDEX, STRFILENAME, STRPATH, FILE_HASHCODE) 
+                VALUES (#{integrityLIndex}, #{strFileName}, #{strPath}, #{fileHashcode})
+        </insert>
+        
+        <delete id="deleteConsoleIntegrityFile">
+                DELETE FROM SYSTEM_CONSOLE_INTEGRITY
+        </delete>
+	
+	<resultMap type="ManagerVO" id="dbManagementMap">
+		<result property="nRawPeriodic"	column="NRAWPERIODIC"></result>
+		<result property="nAuditPeriodic" column="NAUDITPERIODIC"></result>
+		<result property="nDiskUsage" column="NDISKUSAGE"></result>
+		<result property="nDiskWarn" column="NDISKWARN"></result>
+	</resultMap>
+
+	<select id="selectDbManagement" resultMap="dbManagementMap">
+		SELECT NRAWPERIODIC, NAUDITPERIODIC, NDISKUSAGE, NDISKWARN
+		FROM SYSTEM_DB_CONFIG
+	</select>
+	
+	<update id="updateDbManagement" parameterType="com.kglory.tms.web.model.dto.ManagerDto" timeout="10">
+		UPDATE SYSTEM_DB_CONFIG
+		SET NRAWPERIODIC = #{nRawPeriodicInput, jdbcType=DOUBLE},
+                    NAUDITPERIODIC = #{nAuditPeriodicInput, jdbcType=DOUBLE},
+                    NDISKUSAGE = #{nDiskUsage, jdbcType=DOUBLE},
+                    NDISKWARN = #{nDiskWarn, jdbcType=DOUBLE},
+                    TMUPDATESTATE = NOW()
+	</update>
+	
+	<resultMap type="ManagerSyslogVO" 			id="managerTimeSyncMap">
+		<result property="nUseTimeSync" 		column="NUSETIMESYNC"></result>
+		<result property="strTimeServerName" 	column="STRTIMESERVERNAME"></result>
+		<result property="nTimeSyncPeriod" 		column="NTIMESYNCPERIOD"></result>
+	</resultMap>
+	
+	<select id="selectManagerTimeSync" 			resultMap="managerTimeSyncMap">
+		SELECT	NUSETIMESYNC, 
+				STRTIMESERVERNAME,
+				NTIMESYNCPERIOD 
+		FROM SYSTEM_CONFIG_OPTION
+	</select>
+	
+	<resultMap type="ManagerBackupVO" 				id="dbBackupMap">
+		<result property="nDayConfigFlag" 			column="NDAYCONFIGFLAG"></result>
+		<result property="strDayBookTime"			column="STRDAYBOOKTIME"></result>
+		<result property="nDayBookDayBefore" 		column="NDAYBOOKDAYBEFORE"></result>
+		<result property="nDayFileFlag" 			column="NDAYFILEFLAG"></result>
+		<result property="strDayFileName"		 	column="STRDAYFILENAME"></result>
+		<result property="nDayTableDeleteFlag"		column="NDAYTABLEDELETEFLAG"></result>
+		<result property="nDayTableCheckValue" 		column="NDAYTABLECHECKVALUE"></result>
+		<result property="nMonthConfigFlag"			column="NMONTHCONFIGFLAG"></result>
+		<result property="strMonthBookTime"			column="STRMONTHBOOKTIME"></result>
+		<result property="nMonthBookDay"			column="NMONTHBOOKDAY"></result>
+		<result property="nMonthBookDayBefore" 		column="NMONTHBOOKDAYBEFORE"></result>
+		<result property="nMonthFileFlag" 			column="NMONTHFILEFLAG"></result>
+		<result property="strMonthFileName" 		column="STRMONTHFILENAME"></result>
+		<result property="nMonthTableDeleteFlag"	column="NMONTHTABLEDELETEFLAG"></result>
+		<result property="nMonthTableCheckValue"	column="NMONTHTABLECHECKVALUE"></result>
+		<result property="strBackupPathName"		column="STRBACKUPPATHNAME"></result>
+		<result property="nMinDriveFreeSize"		column="NMINDRIVEFREESIZE"></result>
+	</resultMap>
+
+	<select id="selectDbBackup" resultMap="dbBackupMap">
+		SELECT NDAYCONFIGFLAG,
+				STRDAYBOOKTIME,
+				NDAYBOOKDAYBEFORE,
+				NDAYFILEFLAG,
+				STRDAYFILENAME,
+				NDAYTABLEDELETEFLAG,
+				NDAYTABLECHECKVALUE,
+				NMONTHCONFIGFLAG,
+				STRMONTHBOOKTIME,
+				NMONTHBOOKDAY,
+				NMONTHBOOKDAYBEFORE,
+				NMONTHFILEFLAG,
+				STRMONTHFILENAME,
+				NMONTHTABLEDELETEFLAG,
+				NMONTHTABLECHECKVALUE,
+				STRBACKUPPATHNAME,
+				NMINDRIVEFREESIZE
+		FROM SYSTEM_DB_BACKUP
+	</select>
+	
+	<update id="updateDbBackup" parameterType="com.kglory.tms.web.model.dto.ManagerBackupDto">
+		UPDATE SYSTEM_DB_BACKUP
+		SET NDAYCONFIGFLAG 			= #{nDayConfigFlag},	
+			STRDAYBOOKTIME 			= #{strDayBookTime},	
+			NDAYBOOKDAYBEFORE 		= #{nDayBookDayBefore},	
+			STRBACKUPPATHNAME 		= #{strBackupPathName},
+			NDAYFILEFLAG 			= #{nDayFileFlag},
+			STRDAYFILENAME 			= #{strDayFileName},
+			NDAYTABLEDELETEFLAG             = #{nDayTableDeleteFlag},
+			NDAYTABLECHECKVALUE             = #{nDayTableCheckValue},
+			TMUPDATESTATE 			= NOW()
+	</update>
+	
+	
+	<select id="selectUpdatePath" resultType="String">
+		SELECT STRUPDATEPATH FROM SYSTEM_MANAGER
+	</select>
+	
+	<insert id="insertImDbBackup" parameterType="com.kglory.tms.web.model.dto.ImDbBackupDto">
+		INSERT INTO BACKUP_REQ_OPTION (
+			LINDEX, 
+			NDATA, 
+			TMFROM, 
+			TMTO, 
+			NFILEFLAG, 
+			STRFILENAME, 
+			NTABLEDEL, 
+			NTABLECHECKVALUE, 
+			TMREGDATE
+		) 
+		VALUES (
+			(SELECT NVL(MAX(LINDEX),0)+1 FROM BACKUP_REQ_OPTION), 
+			#{nData}, 
+			TO_DATE(#{tmFrom},'YYYY-MM-DD'), 
+			TO_DATE(#{tmTo},'YYYY-MM-DD'), 			
+			#{nFileFlag}, 
+			#{strFileName}, 
+			#{nTableDel},
+			#{nTableCheckValue}, 
+			NOW()
+		)
+		<selectKey order="AFTER" keyProperty="lIndex" resultType="long">
+			SELECT MAX(LINDEX) FROM BACKUP_REQ_OPTION
+		</selectKey>
+	</insert>
+	
+	<insert id="insertImDbBackupFile" parameterType="com.kglory.tms.web.model.dto.ImDbBackupDto">
+		INSERT INTO BACKUP_FILE_LIST (
+                        TMFROM, 
+			TMTO,
+                        NTABLEDEL, 
+			NTABLECHECKVALUE,
+			STRBACKUPFILEPATH,
+			TMREGDATE
+		) 
+		VALUES (
+                        #{tmFrom},
+                        #{tmTo},
+                        #{nTableDel},
+			#{nTableCheckValue},
+			#{strBackupFilePath},
+			NOW()
+		)
+		<selectKey order="AFTER" keyProperty="lIndex" resultType="long">
+			SELECT MAX(LINDEX) FROM BACKUP_FILE_LIST
+		</selectKey>
+	</insert>
+        
+	<resultMap type="ImDbBackupVO" 	id="dbBackupFileMap">
+		<result property="lIndex" column="LINDEX"></result>
+		<result property="tmFrom" column="TMFROM"></result>
+		<result property="tmTo" column="TMTO"></result>
+		<result property="nTableDel" column="NTABLEDEL"></result>
+		<result property="nTableCheckValue" column="NTABLECHECKVALUE"></result>
+		<result property="strFileName" column="STRBACKUPFILEPATH"></result>
+		<result property="tmregDate" column="TMREGDATE"></result>
+	</resultMap>
+        
+        <select id="selectDbBackupFileList" parameterType="com.kglory.tms.web.model.dto.ImDbBackupDto" resultMap="dbBackupFileMap">
+            SELECT LINDEX, DATE_FORMAT(TMFROM,'%Y-%m-%d') AS TMFROM, DATE_FORMAT(TMTO,'%Y-%m-%d') AS TMTO, NTABLEDEL, NTABLECHECKVALUE, 
+                    STRBACKUPFILEPATH, DATE_FORMAT( TMREGDATE, '%Y-%m-%d %H:%i:%s') AS TMREGDATE
+            FROM BACKUP_FILE_LIST
+            <where>
+                <if test="strBackupFilePath != null and strBackupFilePath != ''">
+                    UPPER(STRBACKUPFILEPATH) LIKE CONCAT('%' , UPPER(#{strBackupFilePath}) , '%')
+                </if>
+            </where>
+            ORDER BY TMREGDATE DESC
+            LIMIT #{rowSize} OFFSET #{startRowSize}
+        </select>
+        
+        <select id="selectDbBackupFileListTotal" parameterType="com.kglory.tms.web.model.dto.ImDbBackupDto" resultType="long">
+            SELECT IFNULL(COUNT(LINDEX), 0) AS TOTAL_ROW
+            FROM BACKUP_FILE_LIST
+            <where>
+                <if test="strBackupFilePath != null and strBackupFilePath != ''">
+                    UPPER(STRBACKUPFILEPATH) LIKE CONCAT('%' , UPPER(#{strBackupFilePath}) , '%')
+                </if>
+            </where>
+        </select>
+        
+        <select id="selectDbBackupFileDetail" parameterType="com.kglory.tms.web.model.dto.ImDbBackupDto" resultMap="dbBackupFileMap">
+            SELECT LINDEX, DATE_FORMAT(TMFROM,'%Y-%m-%d') AS TMFROM, DATE_FORMAT(TMTO,'%Y-%m-%d') AS TMTO, NTABLEDEL, 
+                    NTABLECHECKVALUE, STRBACKUPFILEPATH, DATE_FORMAT( TMREGDATE, '%Y-%m-%d %H:%i:%s') AS TMREGDATE
+            FROM BACKUP_FILE_LIST
+            WHERE LINDEX = #{lIndex}
+        </select>
+	
+</mapper>

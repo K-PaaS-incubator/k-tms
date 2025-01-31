@@ -1,0 +1,35 @@
+<!--view form-->
+<td class="align-center view" style="display: none;">
+	<input type="checkbox" value="" <%= model.nApplyType %> disabled>
+	<input type="hidden" name="lType1" value="<%= model.lType1 %>" />
+	<input type="hidden" name="lType2" value="<%= model.lType2 %>" />
+</td>
+<td class="line-height-18 view overflow-ellipsis" title="<%= model.strContent %>"><span class="<%= model.tabType %>"></span><%= model.strContent %></td>
+<td class="align-center view"><%= model.lType1 %>-<%= model.lType2 %></td>
+<td class="align-center view" style="display: none;"><input type="checkbox" value="" <%= model.secondType3 %> disabled></td>
+<td class="align-center view" style="display: none;"><input type="checkbox" value="" <%= model.secondType2 %> disabled></td>
+<td class="align-center view" style="display: none;"><input type="checkbox" value="" <%= model.secondType1 %> disabled></td>
+<td class="align-center view"><%= model.mailType %></td>
+<!--<td class="align-center view"><%= model.smsType %></td>-->
+
+<!--edit form-->
+<td class="align-center edit" style="display: none;"><input type="checkbox" class="editApply" name="used" value="1" <%= model.nApplyType %> ></td>
+<td class="line-height-18 edit overflow-ellipsis" title="<%= model.strContent %>"><span class="<%= model.tabType %>"></span><%= model.strContent %></td>
+<td class="align-center edit"><%= model.lType1 %>-<%= model.lType2 %></td>
+<td class="align-center edit" style="display: none;"><input type="checkbox" class="editEmergencyAlarm" name="emergencyAlarm" value="4" <%= model.secondType3 %>></td>
+<td class="align-center edit" style="display: none;"><input type="checkbox" class="editAudibilityAlarm" name="audibilityAlarm" value="8" <%= model.secondType2 %>></td>
+<td class="align-center edit" style="display: none;"><input type="checkbox" class="editProgramAlarm" name="programAlarm" value="16" <%= model.secondType1 %> ></td>
+<td class="align-center edit">
+	<select class="form-control editMail">
+		<option value=0 <%= model.mailType0 %>><%= locale.beNotInUse %></option>
+		<option value=1 <%= model.mailType1 %>><%= locale.admin %></option>
+		<option value=2 <%= model.mailType2 %>><%= locale.user %></option>
+	</select>
+</td>
+<!--<td class="align-center edit">
+	<select class="form-control editSms">
+		<option value=0 <%= model.smsType0 %>><%= locale.beNotInUse %></option>
+		<option value=1 <%= model.smsType1 %>><%= locale.admin %></option>
+		<option value=2 <%= model.smsType2 %>><%= locale.user %></option>
+	</select>
+</td>-->

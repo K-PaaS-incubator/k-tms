@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.monitor.SensorMonitorMapper">
+
+	<resultMap type="SensorMonitorVO" id="SensorMonitorResultMap">
+		<result property="lindex" column="LINDEX" />
+		<result property="strName" column="STRNAME" />
+		<result property="dblPps" column="DBLPPS" />
+		<result property="dblBps" column="DBLBPS" />
+		<result property="dblLps" column="DBLLPS" />
+		<result property="dblDpps1000" column="DBLDPPS1000" />
+		<result property="dblSession" column="DBLSESSION" />
+		<result property="dblMaliciousBps" column="DBLMALCIOUSBPS" />
+		<result property="dblMaliciousPps" column="DBLMALCIOUSPPS" />
+		<result property="dblTcpSynFrame" column="DBLTCPSYNFRAME" />
+		<result property="dblTcpSynBytes" column="DBLTCPSYNBYTES" />
+		<result property="dblTcpSynAckFrame" column="DBLTCPSYNACKFRAME" />
+		<result property="dblTcpSynAckBytes" column="DBLTCPSYNACKBYTES" />
+		<result property="dblTcpRstFrame" column="DBLTCPRSTFRAME" />
+		<result property="dblTcpRstBytes" column="DBLTCPRSTBYTES" />
+		<result property="dblTcpFinFrame" column="DBLTCPFINFRAME" />
+		<result property="dblTcpFinBytes" column="DBLTCPFINBYTES" />
+	</resultMap>
+	
+	<select id="selectLastSensorMonitoring" parameterType="com.kglory.tms.web.model.dto.SensorMonitoringDto" resultMap="SensorMonitorResultMap">
+            SELECT A.DBLPPS AS DBLPPS, 
+                    A.DBLBPS AS DBLBPS, 
+                    A.DBLLPS AS DBLLPS, 
+                    A.DBLDPPS1000 AS DBLDPPS1000, 
+                    A.DBLSESSION AS DBLSESSION, 
+                    A.DBLMALCIOUSBPS AS DBLMALCIOUSBPS, 
+                    A.DBLMALCIOUSPPS AS DBLMALCIOUSPPS,
+                    B.DBLTCPSYNFRAME AS DBLTCPSYNFRAME, 
+                    B.DBLTCPSYNBYTES AS DBLTCPSYNBYTES, 
+                    B.DBLTCPSYNACKFRAME AS DBLTCPSYNACKFRAME, 
+                    B.DBLTCPSYNACKBYTES AS DBLTCPSYNACKBYTES, 
+                    B.DBLTCPRSTFRAME AS DBLTCPRSTFRAME, 
+                    B.DBLTCPRSTBYTES AS DBLTCPRSTBYTES, 
+                    B.DBLTCPFINFRAME AS DBLTCPFINFRAME, 
+                    B.DBLTCPFINBYTES AS DBLTCPFINBYTES
+            FROM   ${sensorAliveTableName} A
+            LEFT JOIN ${sensorSessionTableName} B
+            ON DATE_FORMAT( A.TMCUR, '%Y-%m-%d %H:%i') = DATE_FORMAT( B.TMCUR, '%Y-%m-%d %H:%i')
+            WHERE  DATE_FORMAT( A.TMCUR, '%Y-%m-%d %H:%i') > DATE_FORMAT( DATE_SUB(NOW(), INTERVAL 5 MINUTE), '%Y-%m-%d %H:%i')
+            ORDER BY DATE_FORMAT( A.TMCUR, '%Y-%m-%d %H:%i'), DATE_FORMAT( B.TMCUR, '%Y-%m-%d %H:%i') DESC
+            LIMIT 1
+        </select>
+</mapper>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.securityPolicy.YaraPolicyMapper">
+     
+	<resultMap type="YaraRuleVo" 		id="yaraGroupMap">
+		<result property="groupIndex" 	column="LINDEX" />
+		<result property="groupName" 	column="STRNAME" />
+	</resultMap>
+        
+        <select id="getYaraGroupList" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraGroupMap">
+            SELECT LINDEX, STRNAME
+            FROM YARA_RULE_GROUP
+            <where>
+                <if test="groupIndex != null"> LINDEX = #{groupIndex} </if>
+            </where>
+            ORDER BY LINDEX
+        </select>
+        
+        <select id="getYaraGroupDetail" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraGroupMap">
+            SELECT LINDEX, STRNAME
+            FROM YARA_RULE_GROUP
+            WHERE LINDEX = #{groupIndex}
+        </select>
+        
+	<resultMap type="YaraRuleVo" 		id="yaraGroupPerCountMap">
+		<result property="groupIndex" 	column="LGROUPINDEX" />
+		<result property="ruleTotal" 	column="TOT" />
+	</resultMap>
+        
+        <select id="getYaraGroupPerCount" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraGroupPerCountMap">
+            SELECT LGROUPINDEX, TOT FROM
+                (
+                SELECT LGROUPINDEX, COUNT(LINDEX) AS TOT
+                FROM POLICY_YARA_RULE
+                <where>
+                    <if test="groupList != null"> 
+                        LGROUPINDEX IN 
+                        <foreach item="item" collection="groupList" open="(" separator="," close=")">
+                        #{item} 
+                        </foreach>
+                    </if>
+                    <if test="ruleName != null and ruleName != ''"> AND STRNAME LIKE CONCAT('%' , #{ruleName} , '%') </if>
+                </where>
+                GROUP BY LGROUPINDEX
+                UNION ALL
+                SELECT LGROUPINDEX, COUNT(LINDEX) AS TOT
+                FROM POLICY_YARA_USERRULE
+                <where>
+                    <if test="groupList != null"> 
+                        LGROUPINDEX IN 
+                        <foreach item="item" collection="groupList" open="(" separator="," close=")">
+                        #{item} 
+                        </foreach>
+                    </if>
+                    <if test="ruleName != null and ruleName != ''"> AND STRNAME LIKE CONCAT('%' , #{ruleName} , '%') </if>
+                </where>
+                GROUP BY LGROUPINDEX 
+                ) A
+            ORDER BY LGROUPINDEX
+        </select>
+        
+	<resultMap type="YaraRuleVo" 		id="yaraRuleListMap">
+		<result property="lIndex" 		column="LINDEX" />
+		<result property="groupIndex" 	column="LGROUPINDEX" />
+		<result property="groupName" 	column="GROUPNAME" />
+		<result property="ruleName" 	column="STRNAME" />
+		<result property="sSeverity" 	column="SSEVERITY" />
+		<result property="meta" 		column="STRMETA" />
+		<result property="strings" 		column="STRSTRINGS" />
+		<result property="condition" 	column="STRCONDITION" />
+		<result property="insertDate" 	column="TMINSERT" />
+		<result property="upDate" 		column="TMUPDATE" />
+		<result property="lUsed" 		column="LUSED" />
+	</resultMap>
+        
+        <select id="selectYaraRuleList" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraRuleListMap">
+            SELECT LINDEX, LGROUPINDEX, GROUPNAME, STRNAME, STRMETA, STRSTRINGS, STRCONDITION, TMINSERT, TMUPDATE, LUSED, SSEVERITY
+            FROM ( 
+                    SELECT A.LINDEX, A.LGROUPINDEX, B.STRNAME AS GROUPNAME, A.STRNAME, A.STRMETA, 
+                            A.STRSTRINGS, A.STRCONDITION, A.TMINSERT, A.TMUPDATE, A.LUSED, A.SSEVERITY
+                    FROM POLICY_YARA_RULE A, YARA_RULE_GROUP B
+                    WHERE
+                        A.LGROUPINDEX = B.LINDEX
+                        <if test="ruleName != null and ruleName != ''"> AND UPPER(A.STRNAME) LIKE CONCAT('%' , UPPER(#{ruleName}) , '%') </if>
+                        <if test="groupIndex != null"> AND A.LGROUPINDEX = #{groupIndex} </if>
+                        <if test="severityLevel != null"> AND A.SSEVERITY = #{severityLevel} </if>
+                    UNION ALL
+                    SELECT A.LINDEX, A.LGROUPINDEX, B.STRNAME AS GROUPNAME, A.STRNAME, A.STRMETA, 
+                            A.STRSTRINGS, A.STRCONDITION, A.TMINSERT, A.TMUPDATE, A.LUSED, A.SSEVERITY
+                    FROM POLICY_YARA_USERRULE A, YARA_RULE_GROUP B
+                    WHERE
+                        A.LGROUPINDEX = B.LINDEX
+                        <if test="ruleName != null and ruleName != ''"> AND UPPER(A.STRNAME) LIKE CONCAT('%' , UPPER(#{ruleName}) , '%') </if>
+                        <if test="groupIndex != null"> AND A.LGROUPINDEX = #{groupIndex} </if>
+                        <if test="severityLevel != null"> AND A.SSEVERITY = #{severityLevel} </if>
+                ) C
+            ORDER BY LGROUPINDEX, LINDEX ASC
+        </select>
+        
+        <select id="selectYaraVandorRuleList" resultMap="yaraRuleListMap">
+            SELECT LINDEX, LGROUPINDEX, GROUPNAME, STRNAME, STRMETA, STRSTRINGS, STRCONDITION, TMINSERT, TMUPDATE, LUSED, SSEVERITY
+            FROM ( 
+                    SELECT A.LINDEX, A.LGROUPINDEX, B.STRNAME AS GROUPNAME, A.STRNAME, A.STRMETA, 
+                            A.STRSTRINGS, A.STRCONDITION, A.TMINSERT, A.TMUPDATE, A.LUSED, A.SSEVERITY
+                    FROM POLICY_YARA_RULE A, YARA_RULE_GROUP B
+                    WHERE
+                        A.LGROUPINDEX = B.LINDEX
+                ) C
+            ORDER BY LGROUPINDEX, LINDEX ASC
+        </select>
+        
+        <select id="selectYaraUserRuleList" resultMap="yaraRuleListMap">
+            SELECT LINDEX, LGROUPINDEX, GROUPNAME, STRNAME, STRMETA, STRSTRINGS, STRCONDITION, TMINSERT, TMUPDATE, LUSED, SSEVERITY
+            FROM ( 
+                    SELECT A.LINDEX, A.LGROUPINDEX, B.STRNAME AS GROUPNAME, A.STRNAME, A.STRMETA, 
+                            A.STRSTRINGS, A.STRCONDITION, A.TMINSERT, A.TMUPDATE, A.LUSED, A.SSEVERITY
+                    FROM POLICY_YARA_USERRULE A, YARA_RULE_GROUP B
+                    WHERE
+                        A.LGROUPINDEX = B.LINDEX
+                ) C
+            ORDER BY LGROUPINDEX, LINDEX ASC
+        </select>
+        
+        <select id="selectYaraRuleDetailInfo" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraRuleListMap">
+            SELECT LINDEX, LGROUPINDEX, GROUPNAME, SSEVERITY, STRNAME, STRMETA, STRSTRINGS, STRCONDITION, TMINSERT, TMUPDATE, LUSED
+            FROM ( 
+                    SELECT A.LINDEX, A.LGROUPINDEX, B.STRNAME AS GROUPNAME, A.SSEVERITY, A.STRNAME, A.STRMETA, 
+                    A.STRSTRINGS, A.STRCONDITION, A.TMINSERT, A.TMUPDATE, A.LUSED
+                            FROM POLICY_YARA_RULE A, YARA_RULE_GROUP B
+                    WHERE A.LGROUPINDEX = B.LINDEX
+                    AND A.LINDEX = #{lIndex} AND A.LGROUPINDEX = #{groupIndex}
+                    UNION ALL
+                    SELECT A.LINDEX, A.LGROUPINDEX, B.STRNAME AS GROUPNAME, A.SSEVERITY, A.STRNAME, A.STRMETA, 
+                    A.STRSTRINGS, A.STRCONDITION, A.TMINSERT, A.TMUPDATE, A.LUSED
+                            FROM POLICY_YARA_USERRULE A, YARA_RULE_GROUP B
+                    WHERE A.LGROUPINDEX = B.LINDEX
+                    AND A.LINDEX = #{lIndex} AND A.LGROUPINDEX = #{groupIndex}
+                ) C
+            ORDER BY LINDEX ASC
+        </select>
+        
+        
+        <select id="selectYaraRuleLastIndex" resultType="Long">
+            SELECT IFNULL(MAX(LINDEX)+1, 1000000) AS LINDEX FROM POLICY_YARA_USERRULE
+        </select>
+
+        <insert id="insertYaraRule" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+            INSERT INTO POLICY_YARA_USERRULE 
+            (LINDEX, LGROUPINDEX, STRNAME, SSEVERITY, STRMETA, STRSTRINGS, STRCONDITION, TMINSERT, LUSED)
+            VALUES (#{lIndex}, #{groupIndex}, #{ruleName}, #{sSeverity}, #{meta}, #{strings}, #{condition}, NOW(), #{lUsed})
+        </insert>
+        
+        <update id="updateYaraRule" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+            UPDATE POLICY_YARA_RULE
+            <set>
+                TMUPDATE = NOW(),
+                <if test="lUsed != null"> LUSED = #{lUsed} </if>
+            </set>
+            WHERE LINDEX = #{lIndex}
+        </update>
+        
+        <update id="updateUserYaraRule" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+            UPDATE POLICY_YARA_USERRULE
+            <set>
+                TMUPDATE = NOW(),
+                <if test="groupIndex != null"> LGROUPINDEX = #{groupIndex}, </if>
+                <if test="ruleName != null"> STRNAME = #{ruleName}, </if>
+                <if test="sSeverity != null"> SSEVERITY = #{sSeverity},</if>
+                <if test="meta != null"> STRMETA = #{meta}, </if>
+                <if test="strings != null"> STRSTRINGS = #{strings}, </if>
+                <if test="condition != null"> STRCONDITION = #{condition}, </if>
+                <if test="lUsed != null"> LUSED = #{lUsed} </if>
+            </set>
+            WHERE LINDEX = #{lIndex}
+        </update>
+        
+        <insert id="insertYaraGroup" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+            <selectKey resultType="int" keyProperty="groupIndex" order="BEFORE">
+                SELECT (IFNULL(LINDEX, 98) + 1) AS LINDEX
+                FROM YARA_RULE_GROUP
+                ORDER BY LINDEX DESC
+                LIMIT 1;
+            </selectKey>
+            INSERT INTO YARA_RULE_GROUP (LINDEX, STRNAME) VALUES (#{groupIndex}, #{groupName})
+        </insert>
+        
+        <update id="updateYaraGroup" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+            UPDATE YARA_RULE_GROUP
+            <set>
+                <if test="groupName != null"> STRNAME = #{groupName} </if>
+            </set>
+            WHERE LINDEX = #{groupIndex}
+        </update>
+        
+        <delete id="deleteYaraRuleGroupType" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+                DELETE FROM YARA_RULE_GROUP
+                WHERE LINDEX = #{groupIndex}
+        </delete>
+
+        <delete id="deleteYaraRuleList" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+                DELETE FROM POLICY_YARA_USERRULE
+                WHERE LGROUPINDEX = #{groupIndex}
+        </delete>
+
+        <delete id="deleteYaraUserRule" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto">
+                DELETE FROM POLICY_YARA_USERRULE
+                WHERE LINDEX = #{lIndex}	
+        </delete>
+		
+	<resultMap type="YaraRuleVo" 		id="yaraGroupTypeMap">
+		<result property="groupIndex" 	column="LINDEX" />
+		<result property="groupName" 	column="STRNAME" />
+	</resultMap>
+			
+	<select id="selectYaraRuleGroupType" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraGroupTypeMap">
+		SELECT 	LINDEX,
+				STRNAME
+		FROM YARA_RULE_GROUP
+	</select>
+	
+	<resultMap type="YaraRuleVo" 			id="yaraTargetVsensorMap">
+		<result property="lIndex" 			column="LINDEX" />
+		<result property="lvsensorIndex" 	column="LVSENSORINDEX" />
+		<result property="lUsed" 			column="LUSED" />
+		<result property="strName" 			column="STRNAME" />
+	</resultMap>
+	
+	<select id="isDuplicateYaraRuleName" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraRuleListMap">
+		SELECT STRNAME
+		FROM   POLICY_YARA_USERRULE
+		WHERE  STRNAME = #{ruleName}	
+	</select>	
+		
+	<resultMap type="YaraRuleVo" 		id="yaraGroupMaxIndexMap">
+		<result property="lIndex" 		column="LINDEX" />
+	</resultMap>	
+        <select id="selectYaraGroupIndex" parameterType="com.kglory.tms.web.model.dto.YaraRuleDto" resultMap="yaraGroupMaxIndexMap">
+               SELECT IFNULL(MAX(LINDEX)+1, 100) AS LINDEX FROM YARA_RULE_GROUP
+        </select>
+</mapper>

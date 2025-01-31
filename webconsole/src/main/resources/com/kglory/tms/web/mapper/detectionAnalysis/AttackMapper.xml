@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.detectionAnalysis.AttackMapper">
+	
+	<resultMap type="ChartVO" 			id="attackGraphDataResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="sumData" 		column="SUM_VALUE" />
+	</resultMap>
+	
+	<select id="selectAttackAttackCountGraphData" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackGraphDataResultMap">
+	SELECT TMSTART, GRAPH_VALUE
+	FROM (
+            SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+            FROM
+            (	
+	        SELECT TMSTART, SUM(GRAPH_VALUE)  AS GRAPH_VALUE
+	        FROM (
+	        	SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                DWEVENTNUM AS GRAPH_VALUE 
+		        FROM   
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                            SELECT * FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                        AND LCODE = #{lCode}
+                        <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+                        <if test="winBoundSelect == 3">
+                                AND (WINBOUND = 259 or WINBOUND = 771) 
+                        </if>
+                        <if test="winBoundSelect == 2">
+                                AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                        </if>
+                ) B
+                GROUP BY TMSTART
+            ) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectAttackAttackCountGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackGraphDataResultMap">
+	SELECT 
+                MIN(GRAPH_VALUE) AS MIX_VALUE, 
+                MAX(GRAPH_VALUE) AS MAX_VALUE 
+	FROM (
+            SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+            FROM
+            (	
+	        SELECT TMSTART, SUM(GRAPH_VALUE)  AS GRAPH_VALUE
+	        FROM (
+	        	SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                DWEVENTNUM AS GRAPH_VALUE 
+		        FROM   
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                            SELECT * FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                        AND LCODE = #{lCode}
+                        <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+                        <if test="winBoundSelect == 3">
+                                AND (WINBOUND = 259 or WINBOUND = 771) 
+                        </if>
+                        <if test="winBoundSelect == 2">
+                                AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                        </if>
+                ) B
+                GROUP BY TMSTART
+            ) C
+	) D
+	</select>
+        
+	<select id="selectAttackAttackCountGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackGraphDataResultMap">
+	SELECT 
+                GRAPH_VALUE AS SUM_VALUE 
+	FROM (
+            SELECT TMSTART, IFNULL(GRAPH_VALUE,0) GRAPH_VALUE
+            FROM
+            (	
+	        SELECT TMSTART, SUM(GRAPH_VALUE)  AS GRAPH_VALUE
+	        FROM (
+	        	SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                DWEVENTNUM AS GRAPH_VALUE 
+		        FROM   
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                            SELECT * FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                        AND LCODE = #{lCode}
+                        <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+                        <if test="winBoundSelect == 3">
+                                AND (WINBOUND = 259 or WINBOUND = 771) 
+                        </if>
+                        <if test="winBoundSelect == 2">
+                                AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                        </if>
+                ) B
+            ) C
+	) D
+	</select>
+        
+	<resultMap type="ChartVO" 			id="attackBpsGraphDataResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectAttackBpsGraphData" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackBpsGraphDataResultMap">
+	SELECT TMSTART, GRAPH_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE)  AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPKTSIZE AS GRAPH_VALUE  
+				FROM   
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                        AND LCODE = #{lCode} 
+                        <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+		        <if test="winBoundSelect == 3">
+                                AND (WINBOUND = 259 or WINBOUND = 771) 
+                        </if>
+                        <if test="winBoundSelect == 2">
+                                AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                        </if>
+			) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectAttackBpsGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackBpsGraphDataResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE)  AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPKTSIZE AS GRAPH_VALUE  
+				FROM   
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                        AND LCODE = #{lCode} 
+                        <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+		        <if test="winBoundSelect == 3">
+                                AND (WINBOUND = 259 or WINBOUND = 771) 
+                        </if>
+                        <if test="winBoundSelect == 2">
+                                AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                        </if>
+			) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	</select>
+        
+	<select id="selectAttackBpsGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackBpsGraphDataResultMap">
+	SELECT 
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE)  AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPKTSIZE AS GRAPH_VALUE  
+				FROM   
+                        <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                        </foreach>
+                        WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                        AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                        AND LCODE = #{lCode} 
+                        <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                            AND LNETWORKINDEX = #{lnetworkIndex}
+                        </if>
+		        <if test="winBoundSelect == 3">
+                                AND (WINBOUND = 259 or WINBOUND = 771) 
+                        </if>
+                        <if test="winBoundSelect == 2">
+                                AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                        </if>
+			) B
+		) C
+	) D
+	</select>
+	
+	<resultMap type="ChartVO" 			id="attackPpsGraphDataResultMap">
+		<result property="time" 		column="TMSTART" />
+		<result property="ddata" 		column="GRAPH_VALUE" />
+		<result property="minDData" 	column="MIX_VALUE" />
+		<result property="maxDData" 	column="MAX_VALUE" />
+		<result property="avgData" 		column="AVG_VALUE" />
+	</resultMap>
+	
+	<select id="selectAttackPpsGraphData" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackPpsGraphDataResultMap">
+	SELECT TMSTART, GRAPH_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPACKETCOUNTER AS GRAPH_VALUE 
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+                                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                AND LCODE = #{lCode}
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="winBoundSelect == 3">
+                                    AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                    AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+                        ) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	ORDER BY TMSTART ASC
+	</select>
+        
+	<select id="selectAttackPpsGraphDataMinMax" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackPpsGraphDataResultMap">
+	SELECT 
+            MIN(GRAPH_VALUE) AS MIX_VALUE, 
+            MAX(GRAPH_VALUE) AS MAX_VALUE
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPACKETCOUNTER AS GRAPH_VALUE 
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+                                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                AND LCODE = #{lCode}
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="winBoundSelect == 3">
+                                        AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                        AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+                        ) B
+			GROUP BY TMSTART 
+		) C
+	) D
+	</select>
+        
+	<select id="selectAttackPpsGraphDataAvg" parameterType="com.kglory.tms.web.model.dto.AttackDto" resultMap="attackPpsGraphDataResultMap">
+	SELECT 
+            GRAPH_VALUE / #{timeDiffSecond} AS AVG_VALUE 
+	FROM (
+		SELECT TMSTART, IFNULL(GRAPH_VALUE, 0) GRAPH_VALUE
+		FROM
+		(	
+			SELECT TMSTART, SUM(GRAPH_VALUE) AS GRAPH_VALUE
+			FROM (
+				SELECT DATE_FORMAT( TMSTART, '%Y-%m-%d %H:%i') AS TMSTART, 
+                                    DWPACKETCOUNTER AS GRAPH_VALUE 
+				FROM
+                                <foreach item="item" index="index" collection="tableNames"  open="(" separator="UNION ALL" close=") A">
+                                        SELECT * FROM ${item.name}
+                                </foreach>
+                                WHERE TMSTART <![CDATA[ >= ]]> CAST( #{startDateInput} AS DATETIME)
+                                AND TMSTART <![CDATA[ < ]]> CAST( #{endDateInput} AS DATETIME)
+                                AND LCODE = #{lCode}
+                                <if test="lnetworkIndex != null and lnetworkIndex > 0">
+                                    AND LNETWORKINDEX = #{lnetworkIndex}
+                                </if>
+                                <if test="winBoundSelect == 3">
+                                        AND (WINBOUND = 259 or WINBOUND = 771) 
+                                </if>
+                                <if test="winBoundSelect == 2">
+                                        AND (WINBOUND = 258 or WINBOUND = 768 or WINBOUND = 770 or WINBOUND = 0) 
+                                </if>
+                        ) B
+		) C
+	) D
+	</select>
+</mapper>

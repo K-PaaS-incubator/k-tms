@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kglory.tms.web.mapper.securityPolicy.DetectionPolicyMapper">
+
+	<resultMap type="DetectionPolicyVO" 		id="detectionPolicyVOMap">
+		<result property="rNum" 				column="RNUM" />
+		<result property="lCode" 				column="LCODE" />
+		<result property="sAlive" 				column="SALIVE" />
+		<result property="sClassType" 			column="SCLASSTYPE" />
+		<result property="strDescription" 		column="STRDESCRIPTION" />
+		<result property="sSeverity" 			column="SSEVERITY" />
+		<result property="strSigRule" 			column="STRSIGRULE" />
+		<result property="lUsed" 				column="LUSED" />
+		<result property="lResponse" 			column="LRESPONSE" />
+		<result property="lThresholdTime" 		column="LTHRESHOLDTIME" />
+		<result property="lThresholdNum" 		column="LTHRESHOLDNUM" />
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX" />
+		<result property="strAttackType" 		column="STRATKTYPE" />
+		<result property="strFalsePositive" 	column="STRFALSEPOSITIVE" />
+		<result property="strSolution" 			column="STRSOLUTION" />
+		<result property="strReference" 		column="STRREFERENCE" />
+		<result property="strCveId" 			column="STRCVEID" />
+		<result property="strbId" 				column="STRBID" />
+		<result property="strVul" 				column="STRVUL" />
+		<result property="strNotVul" 			column="STRNOTVUL" />
+		<result property="strSummary" 			column="STRSUMMARY" />
+		<result property="strFalsePositive" 	column="STRFALSEPOSITIVE" />
+		<result property="strSolution" 			column="STRSOLUTION" />
+		<result property="strReference" 		column="STRREFERENCE" />
+		<result property="strhelpDescription" 	column="STRHELPDESCRIPTION" />
+		<result property="strAddrsPoof" 		column="STRADDRSPOOF" />
+		<result property="totalRowSize" 		column="TOTAL_ROWS" />
+		<result property="strServiceGroup" 		column="STRSERVICEGROUP" />
+	</resultMap>
+
+	<select id="selectSignaturePerGroup" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+                SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, STRSERVICEGROUP 
+                FROM (
+                    SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, STRSERVICEGROUP
+                            FROM POLICY_SIGNATURE 
+                    UNION 
+                    SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, STRSERVICEGROUP
+                    FROM POLICY_USERSIG
+                ) A
+                WHERE LCODE > -1
+                AND SCLASSTYPE = #{nClassType}
+                <if test="attackNameInput != null and  attackNameInput != ''">
+                AND UPPER(STRDESCRIPTION) LIKE CONCAT('%' , UPPER(#{attackNameInput}) , '%')
+                </if>
+                <if test="attackTypeSelect != null and attackTypeSelect != ''">
+                AND SCLASSTYPE = #{attackTypeSelect}
+                </if>
+                <if test="severityLevel != null">
+                AND SSEVERITY = #{severityLevel}
+                </if>
+                <if test="protocol != null and protocol != ''">
+                AND UPPER(STRSERVICEGROUP) = UPPER(#{protocol})
+                </if>
+                <if test="thresholdNum != null and thresholdNum != ''">
+                AND	LTHRESHOLDNUM = #{thresholdNum}
+                </if>
+                <if test="thresholdTime != null and thresholdTime != ''">
+                AND	LTHRESHOLDTIME = #{thresholdTime}
+                </if>
+                ORDER BY SCLASSTYPE DESC, STRDESCRIPTION ASC
+	</select>
+
+	<select id="selectDetectionPolicy" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+                SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, LRESPONSE, LUSED, STRSERVICEGROUP
+                FROM (
+                        SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, LRESPONSE, LUSED, STRSERVICEGROUP
+                        FROM (
+                            SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, LRESPONSE, LUSED, STRSERVICEGROUP
+                            FROM POLICY_SIGNATURE 
+                            UNION 
+                            SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, SSEVERITY, SALIVE, STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, LRESPONSE, LUSED, '' AS STRSERVICEGROUP
+                            FROM POLICY_USERSIG
+                        ) A
+                        WHERE LCODE > -1 
+                        <if test="attackNameInput != null and attackNameInput != ''">
+                        AND UPPER(STRDESCRIPTION) LIKE CONCAT('%' , UPPER(#{attackNameInput}) , '%')
+                        </if>
+                        <if test="attackTypeSelect != null and attackTypeSelect != ''">
+                        AND SCLASSTYPE = #{attackTypeSelect}
+                        </if>
+                        <if test="severityLevel != null and severityLevel !=''">
+                        AND SSEVERITY = #{severityLevel}
+                        </if>
+                        <if test="protocol != null and protocol != ''">
+                        AND STRSIGRULE LIKE CONCAT('%' , #{protocol} , '%' )
+                        </if>
+                        <if test="thresholdNum != null and thresholdNum != ''">
+                        AND	LTHRESHOLDNUM = #{thresholdNum}
+                        </if>
+                        <if test="thresholdTime != null and thresholdTime != ''">
+                        AND	LTHRESHOLDTIME = #{thresholdTime}
+                        </if>
+                        <if test="cveId != null and cveId != ''">
+                        AND STRCVEID LIKE CONCAT('%' , #{cveId} , '%')
+                        </if>
+                        ORDER BY SCLASSTYPE ASC, LCODE ASC
+                ) B
+		<if test="startRowSize != null and rowSize != null">  
+		LIMIT #{rowSize} OFFSET #{startRowSize}
+		</if>
+	</select>	
+	
+	<select id="selectDetectionPolicyDetail" parameterType="DetectionPolicyVO" resultMap="detectionPolicyVOMap">
+            SELECT LCODE, STRDESCRIPTION, SCLASSTYPE, (SELECT STRNAME FROM SYSTEM_SIGCLASSTYPE WHERE NCLASSTYPE = SCLASSTYPE) AS STRATKTYPE, 
+                    SSEVERITY, SALIVE, STRSIGRULE, LUSED, LRESPONSE, LTHRESHOLDNUM, LTHRESHOLDTIME, STRSUMMARY
+            FROM(
+                SELECT A.LCODE, 
+                       A.STRDESCRIPTION, 
+                       A.SCLASSTYPE, 
+                       A.SSEVERITY, 
+                       A.SALIVE, 
+                       A.STRSIGRULE, 
+                       A.LUSED,
+                       A.LRESPONSE,
+                       A.LTHRESHOLDNUM, 
+                       A.LTHRESHOLDTIME,
+                        B.STRSUMMARY
+                FROM   POLICY_SIGNATURE A
+                LEFT JOIN SYSTEM_SIGHELP B
+                ON A.LCODE = B.LCODE
+                UNION
+                SELECT A.LCODE, 
+                       A.STRDESCRIPTION, 
+                       A.SCLASSTYPE, 
+                       A.SSEVERITY, 
+                       A.SALIVE, 
+                       A.STRSIGRULE, 
+                       A.LUSED,
+                       A.LRESPONSE,
+                       A.LTHRESHOLDNUM, 
+                       A.LTHRESHOLDTIME,
+                        B.STRSUMMARY
+                FROM   POLICY_USERSIG A
+                LEFT JOIN SYSTEM_SIGHELP B
+                ON A.LCODE = B.LCODE
+            ) C
+            WHERE  LCODE = #{lCode}
+	</select>
+	
+	<select id="selectDetectionPolicyHelp" parameterType="DetectionPolicyVO" resultMap="detectionPolicyVOMap">
+      	SELECT LCODE, IFNULL(STRDESCRIPTION, '') AS STRDESCRIPTION, IFNULL(STRFALSEPOSITIVE, '') AS STRFALSEPOSITIVE, IFNULL(STRSOLUTION, '') AS STRSOLUTION, 
+            IFNULL(STRREFERENCE, '') AS STRREFERENCE, IFNULL(STRCVEID, '') AS STRCVEID, IFNULL(STRBID, '') AS STRBID, IFNULL(STRVUL, '') AS STRVUL, 
+            IFNULL(STRNOTVUL, '') AS STRNOTVUL, IFNULL(STRSUMMARY, '') AS STRSUMMARY, IFNULL(STRADDRSPOOF, '') AS STRADDRSPOOF
+      	FROM SYSTEM_SIGHELP
+        WHERE LCODE = #{lCode}
+	</select>
+        
+	<update id="updateDetectionPolicy" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE 	POLICY_SIGNATURE
+		SET    	LUSED = #{lUsed},
+                        LRESPONSE = #{lResponse},
+                        STRDESCRIPTION = #{strDescription},
+                        LTHRESHOLDNUM = #{lThresholdNumValue},
+                        LTHRESHOLDTIME = #{lThresholdTimeValue}
+		WHERE 	LCODE = #{lCode} 	
+	</update>
+	
+	<update id="updateDetectionPolicySummary" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE SYSTEM_SIGHELP
+		SET STRSUMMARY = #{strSummary: CLOB}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<update id="updateUserSignatureDetail" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE POLICY_USERSIG
+		SET SALIVE = #{sAlive},
+                    SSEVERITY = #{sSeverity},
+                    SCLASSTYPE = #{sClassType},
+                    STRDESCRIPTION = #{strDescription},
+                    STRSIGRULE = #{strTitle},
+                    LUSED = #{lUsed},
+                    LRESPONSE = #{lResponse},
+                    STRDESCRIPTION = #{strDescription},
+                    LTHRESHOLDNUM = #{lThresholdNumValue},
+                    LTHRESHOLDTIME = #{lThresholdTimeValue}
+		WHERE LCODE = #{lCode} 
+	</update>
+	
+	<update id="updateUserSignatureSummary" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE SYSTEM_SIGHELP 
+		SET STRTITLE = #{strDescription},
+		STRATKTYPE = #{strName},
+		BSEVERITY = #{sSeverity},
+		STRSUMMARY = #{strSummary:CLOB}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<update id="updateUserSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE SYSTEM_SIGHELP	
+		SET STRSUMMARY = #{strSummary: CLOB},
+			STRDESCRIPTION = #{strDescription: CLOB},
+			STRSOLUTION = #{strSolution: CLOB},
+			STRREFERENCE = #{strReference: CLOB},
+			STRCVEID = #{strCveId},
+			STRBID = #{strbId},
+			STRVUL = #{strVul: CLOB},
+			STRFALSEPOSITIVE = #{strFalsePositive: CLOB},
+			STRNOTVUL = #{strNotVul: CLOB},
+			STRADDRSPOOF = #{strAddrsPoof: CLOB}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<update id="updateUserSignatureHelp" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE SYSTEM_SIGHELP	
+		SET STRDESCRIPTION = #{strDescription: CLOB},
+			STRSOLUTION = #{strSolution: CLOB},
+			STRREFERENCE = #{strReference: CLOB},
+			STRCVEID = #{strCveId},
+			STRBID = #{strbId},
+			STRVUL = #{strVul: CLOB},
+			STRFALSEPOSITIVE = #{strFalsePositive: CLOB},
+			STRNOTVUL = #{strNotVul: CLOB},
+			STRADDRSPOOF = #{strAddrsPoof: CLOB}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<resultMap type="DetectionPolicyVO" 	id="attackTypeMap">
+		<result property="strName" 			column="STRNAME" />
+		<result property="nClassType" 		column="NCLASSTYPE" />
+	</resultMap>
+	
+	<select id="selectAttackTypeSelect" 	resultMap="attackTypeMap">
+		SELECT STRNAME, NCLASSTYPE, TOTALROWSIZE FROM (
+                    SELECT A.STRNAME, A.NCLASSTYPE, COUNT(A.NCLASSTYPE) AS TOTALROWSIZE
+                    FROM SYSTEM_SIGCLASSTYPE A, POLICY_SIGNATURE B
+                    WHERE A.NCLASSTYPE != 5 AND A.NCLASSTYPE = B.SCLASSTYPE
+                    AND A.NCLASSTYPE <![CDATA[ < ]]> 99
+                    GROUP BY A.STRNAME, A.NCLASSTYPE
+                    UNION ALL
+                    SELECT A.STRNAME, A.NCLASSTYPE, IFNULL(COUNT(B.SCLASSTYPE), 0) AS TOTALROWSIZE
+                    FROM SYSTEM_SIGCLASSTYPE A LEFT JOIN POLICY_USERSIG B
+                    ON A.NCLASSTYPE = B.SCLASSTYPE
+                    WHERE A.NCLASSTYPE <![CDATA[ >= ]]> 99
+                    GROUP BY A.STRNAME, A.NCLASSTYPE) C
+                ORDER BY NCLASSTYPE
+	</select> 
+	
+	<insert id="insertUserSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		INSERT INTO POLICY_USERSIG (LCODE,SALIVE,SCLASSTYPE,STRDESCRIPTION,SSEVERITY,STRSIGRULE, LTHRESHOLDNUM, LTHRESHOLDTIME, LRESPONSE, LUSED)
+		VALUES (#{lCode},#{sAlive},#{sClassType},#{strDescription},#{sSeverity},#{strTitle}, #{lThresholdNumValue}, #{lThresholdTimeValue}, #{lResponse}, #{lUsed})
+	</insert>
+
+	<insert id="insertPolicySignatureSummary" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		INSERT INTO SYSTEM_SIGHELP (LCODE,STRTITLE,STRATKTYPE,BSEVERITY,STRSUMMARY)
+		VALUES ( #{lCode}, #{strDescription}, #{strAttackType}, #{sSeverity}, #{strSummary:CLOB})	
+	</insert>
+
+	<insert id="insertUserSignatureSummary" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		INSERT INTO SYSTEM_SIGHELP (LCODE,STRTITLE,STRATKTYPE,BSEVERITY,STRSUMMARY)
+		VALUES ( #{lCode}, #{strDescription}, #{strName}, #{sSeverity}, #{strSummary:CLOB})	
+	</insert>
+	
+	<select id="selectSignatureHelplCode" parameterType="long" resultMap="detectionPolicyVOMap">
+		SELECT 	LCODE
+		FROM SYSTEM_SIGHELP
+		WHERE LCODE = #{lCode}
+	</select>  
+	
+	<insert id="insertUserSignatureHelpDetail" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		INSERT INTO SYSTEM_SIGHELP (LCODE)
+		VALUES (#{lCode})	
+	</insert>
+	
+	<select id="selectSignatureHelp" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="deployTargetVOMap">
+		SELECT LCODE
+		FROM SYSTEM_SIGHELP 
+		WHERE LCODE = #{lCode}
+	</select>
+	
+	<update id="updateUserSignatureHelpDetail" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE SYSTEM_SIGHELP	
+		SET STRSUMMARY = #{strSummary:CLOB},
+			STRDESCRIPTION = #{strDescription: CLOB},
+			STRSOLUTION = #{strSolution: CLOB},
+			STRREFERENCE = #{strReference: CLOB},
+			STRCVEID = #{strCveId},
+			STRBID = #{strbId},
+			STRVUL = #{strVul: CLOB},
+			STRFALSEPOSITIVE = #{strFalsePositive: CLOB},
+			STRNOTVUL = #{strNotVul: CLOB},
+			STRADDRSPOOF = #{strAddrsPoof: CLOB}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<insert id="insertUserSignatureHelp" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		INSERT INTO SYSTEM_SIGHELP (LCODE, STRTITLE, BSEVERITY, STRATKTYPE)
+		VALUES (#{lCode}, #{strDescription}, #{sSeverity}, #{strName})			
+	</insert> 
+	
+	<delete id="deleteUserSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		DELETE FROM POLICY_USERSIG
+		WHERE LCODE = #{lCode}
+	</delete>
+	
+	<delete id="deleteUserSignatureHelp" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		DELETE FROM SYSTEM_SIGHELP
+		WHERE LCODE = #{lCode}
+	</delete>	
+	
+	<resultMap type="DetectionPolicyVO" 		id="deployTargetVOMap">
+		<result property="lCode" 				column="LCODE" />
+		<result property="sClassType" 			column="SCLASSTYPE" />
+		<result property="sSeverity" 			column="SSEVERITY" />
+		<result property="lUsed" 				column="LUSED" />
+		<result property="lResponse" 			column="LRESPONSE" />
+		<result property="lThresholdTime" 		column="LTHRESHOLDTIME" />
+		<result property="lThresholdNum" 		column="LTHRESHOLDNUM" />
+		<result property="lvsensorIndex" 		column="LVSENSORINDEX" />
+		<result property="strName"				column="STRNAME" />
+	</resultMap>
+	
+        
+	<insert id="mergeUserSignature" parameterType="com.kglory.tms.web.model.vo.DetectionPolicyVO">
+		<![CDATA[
+               	MERGE INTO POLICY_USERSIG USING DUAL ON (LCODE = #{lCode})
+               	WHEN MATCHED THEN
+               	UPDATE 	SET
+                		SALIVE = #{sAlive},
+                       	SCLASSTYPE = #{sClassType},
+                       	STRDESCRIPTION = #{strDescription},
+                       	SSEVERITY = #{sSeverity},
+                       	STRSIGRULE = #{strSigRule},
+                       	LUSED = #{lUsed},
+                       	LRESPONSE = #{lResponse},
+                       	LTHRESHOLDTIME = #{lThresholdTime},
+                       	LTHRESHOLDNUM = #{lThresholdNum},
+                       	LVSENSORINDEX = #{lvsensorIndex}
+               	WHEN NOT MATCHED THEN
+				INSERT (LCODE,SALIVE,SCLASSTYPE,STRDESCRIPTION,SSEVERITY,STRSIGRULE,
+                                           LVSENSORINDEX,LUSED,LRESPONSE,LTHRESHOLDTIME,LTHRESHOLDNUM)
+				VALUES (#{lCode},#{sAlive},#{sClassType},#{strDescription},#{sSeverity},#{strSigRule},
+                                           #{lvsensorIndex},#{lUsed},#{lResponse},#{lThresholdTime},#{lThresholdNum})
+           ]]>
+	</insert>
+        
+	<insert id="mergeVendorSignature" parameterType="com.kglory.tms.web.model.vo.DetectionPolicyVO">
+		MERGE INTO POLICY_SIGNATURE USING DUAL ON (LCODE = #{lCode})
+	    WHEN MATCHED THEN
+	    UPDATE SET
+	    SALIVE = #{sAlive},
+	    SCLASSTYPE = #{sClassType},
+	    STRDESCRIPTION = #{strDescription},
+	    SSEVERITY = #{sSeverity},
+	    STRSIGRULE = #{strSigRule},
+	    LUSED = #{lUsed},
+	    LRESPONSE = #{lResponse},
+	    LTHRESHOLDTIME = #{lThresholdTime},
+	    LTHRESHOLDNUM = #{lThresholdNum},
+	    LVSENSORINDEX = #{lvsensorIndex},
+	    STRSERVICEGROUP = #{strServiceGroup}
+	    WHEN NOT MATCHED THEN
+		INSERT (LCODE,SALIVE,SCLASSTYPE,STRDESCRIPTION,SSEVERITY,STRSIGRULE,LVSENSORINDEX, LUSED,LRESPONSE,LTHRESHOLDTIME,LTHRESHOLDNUM,STRSERVICEGROUP)
+		VALUES (#{lCode},#{sAlive},#{sClassType},#{strDescription},#{sSeverity},#{strSigRule},#{lvsensorIndex},#{lUsed},#{lResponse},#{lThresholdTime},#{lThresholdNum},#{strServiceGroup})
+	</insert>
+        
+        <select id="isSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultType="long">
+            SELECT LCODE FROM (
+                SELECT LCODE FROM POLICY_SIGNATURE
+                UNION ALL
+                SELECT LCODE FROM POLICY_USERSIG
+            )
+            WHERE LCODE = #{lCode}
+        </select>
+        
+        <update id="updateImportVendorSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+            UPDATE POLICY_SIGNATURE SET
+                SALIVE = #{sAlive},
+                SCLASSTYPE = #{sClassType},
+                STRDESCRIPTION = #{strDescription},
+                SSEVERITY = #{sSeverity},
+                STRSIGRULE = #{strSigRule},
+                LUSED = #{lUsed},
+                LRESPONSE = #{lResponse},
+                LTHRESHOLDTIME = #{lThresholdTime},
+                LTHRESHOLDNUM = #{lThresholdNum},
+                STRSERVICEGROUP = #{strServiceGroup}
+            WHERE LCODE = #{lCode}
+        </update>
+        
+        <update id="updateImportUserSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+            UPDATE POLICY_USERSIG SET
+                SALIVE = #{sAlive},
+                SCLASSTYPE = #{sClassType},
+                STRDESCRIPTION = #{strDescription},
+                SSEVERITY = #{sSeverity},
+                STRSIGRULE = #{strSigRule},
+                LUSED = #{lUsed},
+                LRESPONSE = #{lResponse},
+                LTHRESHOLDTIME = #{lThresholdTime},
+                LTHRESHOLDNUM = #{lThresholdNum},
+                STRSERVICEGROUP = #{strServiceGroup}
+            WHERE LCODE = #{lCode}
+        </update>
+        
+        <insert id="insertImportVendorSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+            INSERT INTO POLICY_SIGNATURE (LCODE,SALIVE,SCLASSTYPE,STRDESCRIPTION,SSEVERITY,STRSIGRULE, LUSED,LRESPONSE,LTHRESHOLDTIME,LTHRESHOLDNUM,STRSERVICEGROUP)
+            VALUES (#{lCode},#{sAlive},#{sClassType},#{strDescription},#{sSeverity},#{strSigRule},#{lUsed},#{lResponse},#{lThresholdTime},#{lThresholdNum},#{strServiceGroup})
+        </insert>
+        
+        <insert id="insertImportUserSignature" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+            INSERT INTO POLICY_USERSIG (LCODE,SALIVE,SCLASSTYPE,STRDESCRIPTION,SSEVERITY,STRSIGRULE, LUSED,LRESPONSE,LTHRESHOLDTIME,LTHRESHOLDNUM,STRSERVICEGROUP)
+            VALUES (#{lCode},#{sAlive},#{sClassType},#{strDescription},#{sSeverity},#{strSigRule},#{lUsed},#{lResponse},#{lThresholdTime},#{lThresholdNum},#{strServiceGroup})
+        </insert>
+	
+	<resultMap type="DetectionPolicyVO" 	id="signatureNameDuplicateVOMap">
+		<result property="strDescription" 	column="STRDESCRIPTION"></result>
+	</resultMap>
+	
+	<select id="isDuplicateSignatureName" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="signatureNameDuplicateVOMap">
+		SELECT STRDESCRIPTION
+		FROM POLICY_USERSIG
+		WHERE STRDESCRIPTION = #{strDescription}
+	</select>
+	
+	<insert id="insertSignatureClassType" 	parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+            <selectKey resultType="long" keyProperty="nClassType" order="BEFORE">
+                SELECT MAX(NCLASSTYPE) + 1 FROM SYSTEM_SIGCLASSTYPE
+            </selectKey>
+		INSERT INTO SYSTEM_SIGCLASSTYPE (NCLASSTYPE, STRNAME)
+		VALUES ( #{nClassType}, #{strName} )
+	</insert>
+	
+	<resultMap type="DetectionPolicyVO" 	id="signatureClassTypeMap">
+		<result property="nClassType" 		column="NCLASSTYPE"></result>
+		<result property="strName" 			column="STRNAME"></result>
+	</resultMap>
+	
+	<select id="isDuplicateSignatureClassTypeName" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="signatureClassTypeMap">
+		SELECT STRNAME
+		FROM SYSTEM_SIGCLASSTYPE
+		WHERE STRNAME = #{strName}
+	</select>
+        
+	<select id="selectSignatureClassType" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="signatureClassTypeMap">
+		SELECT 	NCLASSTYPE,
+				STRNAME
+		FROM SYSTEM_SIGCLASSTYPE
+		ORDER BY NCLASSTYPE ASC
+	</select>
+	
+	<delete id="deleteSignatureClassType" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		DELETE FROM SYSTEM_SIGCLASSTYPE
+		WHERE NCLASSTYPE = #{nClassType}
+	</delete>
+	
+	<select id="selectIntrusionDetectionResponse" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+		SELECT  LCODE, LUSED, LRESPONSE, LTHRESHOLDTIME, LTHRESHOLDNUM 
+                FROM   POLICY_SIGNATURE
+                WHERE  LCODE = #{lCode} 
+	</select>
+	
+	<select id="selectIntrusionDetectionUserResponse" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+		SELECT  LCODE, LUSED, LRESPONSE, LTHRESHOLDTIME, LTHRESHOLDNUM 
+                FROM   POLICY_USERSIG
+                WHERE  LCODE = #{lCode} 
+	</select>
+	
+	<update id="updateIntrusionDetectionResponse" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE POLICY_SIGNATURE
+		SET LTHRESHOLDTIME = #{lThresholdTimeValue},
+			LTHRESHOLDNUM = #{lThresholdNumValue},
+			LUSED =  #{lUsedValue},
+			LRESPONSE = #{lResponse}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<update id="updateIntrusionDetectionUserResponse" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto">
+		UPDATE POLICY_USERSIG
+		SET LTHRESHOLDTIME = #{lThresholdTimeValue},
+			LTHRESHOLDNUM = #{lThresholdNumValue},
+			LUSED =  #{lUsedValue},
+			LRESPONSE = #{lResponse}
+		WHERE LCODE = #{lCode}
+	</update>
+	
+	<select id="selectIntrusionDetectionNclassType" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+		SELECT 	SCLASSTYPE,
+				STRDESCRIPTION
+		FROM POLICY_SIGNATURE
+		WHERE LCODE = #{lCode}
+	</select>
+	
+	<select id="selectIntrusionDetectionUserNclassType" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+		SELECT 	SCLASSTYPE,
+				STRDESCRIPTION
+		FROM POLICY_USERSIG
+		WHERE LCODE = #{lCode}
+	</select>
+	
+	<select id="isDuplicatelCode" parameterType="com.kglory.tms.web.model.dto.DetectionPolicyDto" resultMap="detectionPolicyVOMap">
+		SELECT LCODE
+		FROM POLICY_USERSIG
+		WHERE LCODE = #{lCode}
+	</select>
+	
+	<select id="selectUserSignatureIndex" resultMap="detectionPolicyVOMap">
+        SELECT IFNULL(LCODE, 1000000)+1 AS LCODE
+        FROM POLICY_USERSIG
+        ORDER BY LCODE DESC
+        LIMIT 1
+	</select>
+	
+	<select id="selectSclassTypeName" parameterType="long" resultMap="detectionPolicyVOMap">
+		SELECT 	NCLASSTYPE,
+				STRNAME
+		FROM SYSTEM_SIGCLASSTYPE
+		WHERE NCLASSTYPE = #{sClassType}
+	</select> 
+        
+        <resultMap type="DetectionPolicyVO" id="deployWriteMap">
+            <result property="lCode" 			column="LCODE" />
+            <result property="strAlive" 		column="SALIVE" />
+            <result property="sClassType" 		column="SCLASSTYPE" />
+            <result property="sSeverity" 		column="SSEVERITY" />
+            <result property="strSeverity" 		column="STRSEVERITY" />
+            <result property="strUsed" 			column="LUSED" />
+            <result property="lResponse" 		column="LRESPONSE" />
+            <result property="lThresholdTime" 		column="LTHRESHOLDTIME" />
+            <result property="lThresholdNum" 		column="LTHRESHOLDNUM" />
+            <result property="strDescription" 		column="STRDESCRIPTION" />
+            <result property="strSigRule"		column="STRSIGRULE" />
+            <result property="strServiceGroup"		column="STRSERVICEGROUP" />
+        </resultMap>
+        
+        <select id="selectVendorWritePolicy" resultMap="deployWriteMap">
+            SELECT LCODE, (CASE SALIVE WHEN 0 THEN 'dead' ELSE 'alive' END) AS SALIVE, SCLASSTYPE, STRDESCRIPTION, SSEVERITY,
+                (CASE SSEVERITY WHEN 0 THEN 'info' WHEN 1 THEN 'low' WHEN 3 THEN 'medium' WHEN 5 THEN 'high' ELSE '' END) AS STRSEVERITY, 
+                STRSIGRULE, (CASE LUSED WHEN 0 THEN 'off' ELSE 'on' END) AS LUSED, LRESPONSE, LTHRESHOLDTIME, LTHRESHOLDNUM, STRSERVICEGROUP
+            FROM POLICY_SIGNATURE
+            ORDER BY LCODE ASC
+        </select>
+        
+        <select id="selectUserWritePolicy" resultMap="deployWriteMap">
+            SELECT LCODE, (CASE SALIVE WHEN 0 THEN 'dead' ELSE 'alive' END) AS SALIVE, SCLASSTYPE, STRDESCRIPTION, SSEVERITY,
+                (CASE SSEVERITY WHEN 0 THEN 'info' WHEN 1 THEN 'low' WHEN 3 THEN 'medium' WHEN 5 THEN 'high' ELSE '' END) AS STRSEVERITY, 
+                STRSIGRULE, (CASE LUSED WHEN 0 THEN 'off' ELSE 'on' END) AS LUSED, LRESPONSE, LTHRESHOLDTIME, LTHRESHOLDNUM, STRSERVICEGROUP
+            FROM POLICY_USERSIG
+            ORDER BY LCODE ASC
+        </select>
+	
+</mapper>

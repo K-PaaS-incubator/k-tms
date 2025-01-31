@@ -1,0 +1,18 @@
+<td name="graphItemCheckTd" id="graphItemCheckTd" class="align-center"><input type="checkbox" id="graphItemCheck" name="graphItemCheck" value="<%= model.nProtocol %>"></td>
+<td class="align-center width-number"><%= model.rNum %></td>
+<!-- <td class="width-ranking"><span id="prevRNum" class="<%=model.prevRNumImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevRNum%>"></span><%=model.prevRNumValue%></td>span의 title부분에 변화량 값을 넣어주세요 -->
+<td><%= model.strName %></td>
+<td class="align-center <%= isHighLight('bps') %>"><button type="button" class="btn-intable-chart bpsPopup"></button></td>
+<td class="align-right <%= isHighLight('bps') %>">
+<span class="<%=model.prevBpsImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevBps%>"></span><%= model.bpsView %></td>
+<td class="align-right <%= isHighLight('bps') %>">
+<span class="<%=model.prevIngressBpsImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevIngressBps%>"></span><%= model.ingressBpsView %></td>
+<td class="align-right <%= isHighLight('bps') %>">
+<span class="<%=model.prevEgressBpsImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevEgressBps%>"></span><%= model.egressBpsView %></td>
+<td class="align-center <%= isHighLight('pps') %>"><button type="button" class="btn-intable-chart ppsPopup"></button></td>
+<td class="align-right <%= isHighLight('pps') %>">
+<span class="<%=model.prevPpsImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevPps%>"></span><%= model.ppsView %></td>
+<td class="align-right <%= isHighLight('pps') %>">
+<span class="<%=model.prevIngressPpsImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevIngressPps%>"></span><%= model.ingressPpsView %></td>
+<td class="align-right <%= isHighLight('pps') %>">
+<span class="<%=model.prevEgressPpsImg%> pull-left" data-toggle="tooltip" data-placement="left" title="<%=locale.variation%> : <%=model.prevEgressPps%>"></span><%= model.egressPpsView %></td>
